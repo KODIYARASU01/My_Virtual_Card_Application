@@ -48,7 +48,7 @@ const Products = () => {
       values.ProductDescription = stripHtmlTags(ProductDescription);
       setFormSubmitLoader(true);
       await axios
-        .post("https://super-admin-pannel.onrender.com/productDetail", values, {
+        .post("https://my-virtual-card-application.onrender.com/productDetail", values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,

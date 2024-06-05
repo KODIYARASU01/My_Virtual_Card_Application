@@ -92,7 +92,7 @@ const onUploadBanner=async()=>{
       values.Description = stripHtmlTags(Description);
       setFormSubmitLoader(true);
       await axios
-        .post("https://super-admin-pannel.onrender.com/basicDetail", values, {
+        .post("https://my-virtual-card-application.onrender.com/basicDetail", values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,

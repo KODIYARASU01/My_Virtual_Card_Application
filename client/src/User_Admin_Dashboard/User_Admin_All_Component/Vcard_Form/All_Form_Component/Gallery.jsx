@@ -37,7 +37,7 @@ const Gallery = () => {
       });
       setFormSubmitLoader(true);
       await axios
-        .post("https://super-admin-pannel.onrender.com/galleryDetail", values, {
+        .post("https://my-virtual-card-application.onrender.com/galleryDetail", values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,

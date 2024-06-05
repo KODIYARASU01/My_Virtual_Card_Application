@@ -11,7 +11,7 @@ let [VCardCount,setVCardCount]=useState();
 
 
   useEffect(()=>{
-    axios.get('https://super-admin-pannel.onrender.com/basicDetail/specific/KODI01',   {
+    axios.get('https://my-virtual-card-application.onrender.com/basicDetail/specific/KODI01',   {
       headers: {
         Authorization: `Bearer ${userData.token}`,
       },

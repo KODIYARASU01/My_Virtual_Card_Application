@@ -219,7 +219,7 @@ const UserAdmin = () => {
   };
   let userDetails=JSON.parse(localStorage.getItem('datas'));
   useEffect(()=>{
-    axios.get(`https://super-admin-pannel.onrender.com/auth/register/${userDetails.id}`).then((res)=>{
+    axios.get(`https://my-virtual-card-application.onrender.com/auth/register/${userDetails.id}`).then((res)=>{
       setUserData(res.data.data);
     }).catch((error)=>{
       console.log(error.response.data.message)
