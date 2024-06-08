@@ -10,6 +10,7 @@ let app = express();
 import RegisterRoute from './Routes/Register.route.js';
 import LoginRoute from './Routes/Login.route.js';
 import BasicDetailRoute from './Routes/BasicDetail.route.js';
+import TemplateRoute from './Routes/VCardTemplate.route.js';
 import ServiceDetailRoute from './Routes/Services.route.js';
 import ProductDetailRoute from './Routes/Product.route.js';
 import GalleryDetailRoute from './Routes/Gallery.route.js';
@@ -36,6 +37,7 @@ app.get("/", (req, res) => {
 app.use('/auth',RegisterRoute);
 app.use('/auth',LoginRoute);
 app.use('/basicDetail',BasicDetailRoute);
+app.use('/templateDetail',TemplateRoute);
 app.use('/serviceDetail',ServiceDetailRoute);
 app.use('/productDetail',ProductDetailRoute);
 app.use('/galleryDetail',GalleryDetailRoute);

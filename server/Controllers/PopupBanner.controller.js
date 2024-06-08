@@ -52,94 +52,97 @@ export const GetPopupBannerData = async (req, res) => {
   }
 };
 
-// // //Read or get Specific User all Data  :
-// export const readSpecificUserData = async (req, res) => {
-//   try {
-//     let getSpecificData = await TestimonialDetails.find({ user: req.user.id });
+// //Read or get Specific User all Data  :
+export const readSpecificUserData = async (req, res) => {
+  try {
+    let getSpecificData = await PopupBannerModel.find({ user: req.user.userName });
 
-//     if (!getSpecificData) {
-//       res.status(400).json({ message: "Testimonial Data Not Found" });
-//     } else {
-//       res
-//         .status(201)
-//         .json({ message: "Testimonial Data Fetched", data: getSpecificData });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
-// // //Read or get Specific User all Data  :
-// export const getSpecificIdData = async (req, res) => {
-//   try {
-//     let {id}=req.params;
-//     let getSpecificData = await TestimonialDetails.findById(id );
+    if (!getSpecificData) {
+      res.status(400).json({ message: "Data Not Found!" });
+    } else if(getSpecificData.length <=0){
+      res.status(400).json({ message: "Data not been inserted!..Empty Data" });
+    }
+     else {
+      res
+        .status(201)
+        .json({ message: "Data Fetched!",length:getSpecificData.length, data: getSpecificData });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+// //Read or get Specific User all Data  :
+export const getSpecificIdData = async (req, res) => {
+  try {
+    let {id}=req.params;
+    let getSpecificData = await PopupBannerModel.findById(id );
 
-//     if (!getSpecificData) {
-//       res.status(400).json({ message: "Testimonial Data Not Found" });
-//     } else {
-//       res
-//         .status(201)
-//         .json({ message: "Testimonial Data Fetched", data: getSpecificData });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
-// //Update Specific document user data:
+    if (!getSpecificData) {
+      res.status(400).json({ message: " Data Not Found!" });
+    } else {
+      res
+        .status(201)
+        .json({ message: " Data Fetched!", data: getSpecificData });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+//Update Specific document user data:
 
-// export const updateSpecificUserData = async (req, res) => {
-//   try {
-//     let { id } = req.params;
-//     let data = req.body;
-//     let updateSpecificData = await TestimonialDetails.findByIdAndUpdate(id, data);
+export const updateSpecificUserData = async (req, res) => {
+  try {
+    let { id } = req.params;
+    let data = req.body;
+    let updateSpecificData = await PopupBannerModel.findByIdAndUpdate(id, data);
 
-//     if (!updateSpecificData) {
-//       res.status(400).json({ message: "Testimonial Data Not Found" });
-//     } else {
-//       res
-//         .status(201)
-//         .json({ message: "Testimonial Data Updated", data: updateSpecificData });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
+    if (!updateSpecificData) {
+      res.status(400).json({ message: " Data Not Found!" });
+    } else {
+      res
+        .status(201)
+        .json({ message: "Data Updated!", data: updateSpecificData });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-// //Delete Specific User Bssic detail All data deleted By using user Id:
-// export const deleteSpecificUserAllData = async (req, res) => {
-//   try {
-//     let deleteSpecificData = await TestimonialDetails.deleteMany({
-//       user: req.user.id,
-//     });
+//Delete Specific User Bssic detail All data deleted By using user Id:
+export const deleteSpecificUserAllData = async (req, res) => {
+  try {
+    let deleteSpecificData = await PopupBannerModel.deleteMany({
+      user: req.user.userName,
+    });
 
-//     if (!deleteSpecificData) {
-//       res.status(400).json({ message: "Testimonial Data Not Found" });
-//     } else {
-//       res
-//         .status(201)
-//         .json({ message: "Testimonial Data Deleted", data: deleteSpecificData });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
+    if (!deleteSpecificData) {
+      res.status(400).json({ message: "Data Not Found" });
+    } else {
+      res
+        .status(201)
+        .json({ message: "Data Deleted", data: deleteSpecificData });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-// //Delete Spcific user  Document in Basic Detail:
+//Delete Spcific user  Document in Basic Detail:
 
-// export const deleteSpecificUserData = async (req, res) => {
-//   try {
-//     let { id } = req.params;
+export const deleteSpecificUserData = async (req, res) => {
+  try {
+    let { id } = req.params;
 
-//     let deleteSpecificData = await TestimonialDetails.findByIdAndDelete(id);
+    let deleteSpecificData = await PopupBannerModel.findByIdAndDelete(id);
 
-//     if (!deleteSpecificData) {
-//       res.status(400).json({ message: "Testimonial Data Not Found" });
-//     } else {
-//       res
-//         .status(201)
-//         .json({ message: "Testimonial Data Deleted", data: deleteSpecificData });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
+    if (!deleteSpecificData) {
+      res.status(400).json({ message: "Data Not Found" });
+    } else {
+      res
+        .status(201)
+        .json({ message: "Data Deleted", data: deleteSpecificData });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};

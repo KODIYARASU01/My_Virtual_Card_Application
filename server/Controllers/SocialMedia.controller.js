@@ -44,7 +44,7 @@ export const GetSocialMediaData = async (req, res) => {
         .status(201)
         .json({
           message: "Data Fetched!",
-          count: datas.length,
+          length: datas.length,
           data: datas,
         });
     }
@@ -53,78 +53,78 @@ export const GetSocialMediaData = async (req, res) => {
   }
 };
 
+//Read or get Specific User all Data  :
+export const getSpecificUserAllData = async (req, res) => {
+  try {
+    let getSpecificData = await SocialMediaModel.find({ user: req.user.userName });
+
+    if (!getSpecificData) {
+      res.status(400).json({ message: "Data Not Found!" });
+    } else {
+      res
+        .status(201)
+        .json({ message: "Data Fetched!",length:getSpecificData.length, data: getSpecificData });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 // //Read or get Specific User all Data  :
-// export const readSpecificUserData = async (req, res) => {
-//   try {
-//     let getSpecificData = await SocialMediaDetails.find({ user: req.user.id });
+export const getSpecificIdData = async (req, res) => {
+  try {
+    let {id}=req.params;
+    let getSpecificData = await SocialMediaModel.findById(id );
 
-//     if (!getSpecificData) {
-//       res.status(400).json({ message: "Specific Data Not Found" });
-//     } else {
-//       res
-//         .status(201)
-//         .json({ message: "Specific Data Fetched", data: getSpecificData });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
+    if (!getSpecificData) {
+      res.status(400).json({ message: "Data Not Found!" });
+    } else {
+      res
+        .status(201)
+        .json({ message: "Data Fetched!", data: getSpecificData });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+//Update Specific document user data:
 
-// // //Read or get Specific User all Data  :
-// export const getSpecificIdData = async (req, res) => {
-//   try {
-//     let {id}=req.params;
-//     let getSpecificData = await SocialMediaDetails.find(id );
+export const updateSpecificUserData = async (req, res) => {
+  try {
+    let { id } = req.params;
+    let data = req.body;
+    let updateSpecificData = await SocialMediaModel.findByIdAndUpdate(id, data);
 
-//     if (!getSpecificData) {
-//       res.status(400).json({ message: "Specific Data Not Found" });
-//     } else {
-//       res
-//         .status(201)
-//         .json({ message: "Specific Data Fetched", data: getSpecificData });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
-// //Update Specific document user data:
-
-// export const updateSpecificUserData = async (req, res) => {
-//   try {
-//     let { id } = req.params;
-//     let data = req.body;
-//     let updateSpecificData = await SocialMediaDetails.findByIdAndUpdate(id, data);
-
-//     if (!updateSpecificData) {
-//       res.status(400).json({ message: "Specific Data Not Found" });
-//     } else {
-//       res
-//         .status(201)
-//         .json({ message: "Specific Data Updated", data: updateSpecificData });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
+    if (!updateSpecificData) {
+      res.status(400).json({ message: "Data Not Found!" });
+    } else {
+      res
+        .status(201)
+        .json({ message: "Data Updated!", data: updateSpecificData });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 
 
-// //Delete Specific User Bssic detail All data deleted By using user Id:
-// export const deleteSpecificUserAllData=async(req,res)=>{
-//   try {
-//     let deleteSpecificData = await SocialMediaDetails.deleteMany({ user: req.user.id });
+//Delete Specific User Bssic detail All data deleted By using user Id:
+export const deleteSpecificUserAllData=async(req,res)=>{
+  try {
+    let deleteSpecificData = await SocialMediaModel.deleteMany({ user: req.user.userName });
 
-//     if (!deleteSpecificData) {
-//       res.status(400).json({ message: "Specific Data Not Found" });
-//     } else {
-//       res
-//         .status(201)
-//         .json({ message: "Specific Data Deleted", data: deleteSpecificData });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
+    if (!deleteSpecificData) {
+      res.status(400).json({ message: "Data Not Found!" });
+    } else {
+      res
+        .status(201)
+        .json({ message: "Data Deleted!", data: deleteSpecificData });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 
 //Delete Spcific user  Document in Basic Detail:
@@ -133,14 +133,14 @@ export const deleteSpecificUserData=async(req,res)=>{
   try {
     let {id}=req.params;
     
-    let deleteSpecificData = await SocialMediaDetails.findByIdAndDelete(id);
+    let deleteSpecificData = await SocialMediaModel.findByIdAndDelete(id);
 
     if (!deleteSpecificData) {
-      res.status(400).json({ message: "Specific Data Not Found" });
+      res.status(400).json({ message: "Data Not Found!" });
     } else {
       res
         .status(201)
-        .json({ message: "Specific Data Deleted", data: deleteSpecificData });
+        .json({ message: "Data Deleted!", data: deleteSpecificData });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });

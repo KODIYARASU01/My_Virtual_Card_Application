@@ -40,7 +40,7 @@ export const GetProductData = async (req, res) => {
     } else {
       res.status(201).json({
         message: "Data Fetched!",
-
+length:datas.length,
         data: datas,
       });
     }
@@ -50,16 +50,16 @@ export const GetProductData = async (req, res) => {
 };
 
 //   // //Read or get Specific User all Data  :
-  export const readSpecificUserData = async (req, res) => {
+  export const readSpecificUserAllData = async (req, res) => {
     try {
-      let getSpecificData = await ProductModel.find({ user: req.user.id });
+      let getSpecificData = await ProductModel.find({ user: req.user.userName });
 
       if (!getSpecificData) {
-        res.status(400).json({ message: "Specific Data Not Found" });
+        res.status(400).json({ message: "Data Not Found!" });
       } else {
         res
           .status(201)
-          .json({ message: "Specific Data Fetched", data: getSpecificData });
+          .json({ message: " Data Fetched!",length:getSpecificData.length, data: getSpecificData });
       }
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -72,11 +72,11 @@ export const GetProductData = async (req, res) => {
       let getSpecificData = await ProductModel.findById(id );
 
       if (!getSpecificData) {
-        res.status(400).json({ message: "Specific Data Not Found" });
+        res.status(400).json({ message: "Data Not Found!" });
       } else {
         res
           .status(201)
-          .json({ message: "Specific Data Fetched", data: getSpecificData });
+          .json({ message: "Data Fetched!", data: getSpecificData });
       }
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -91,11 +91,11 @@ export const GetProductData = async (req, res) => {
       let updateSpecificData = await ProductModel.findByIdAndUpdate(id, data);
 
       if (!updateSpecificData) {
-        res.status(400).json({ message: "Specific Data Not Found" });
+        res.status(400).json({ message: "Data Not Found!" });
       } else {
         res
           .status(201)
-          .json({ message: "Specific Data Updated", data: updateSpecificData });
+          .json({ message: "Data Updated!", data: updateSpecificData });
       }
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -110,11 +110,11 @@ export const GetProductData = async (req, res) => {
       });
 
       if (!deleteSpecificData) {
-        res.status(400).json({ message: "Specific Data Not Found" });
+        res.status(400).json({ message: "Data Not Found!" });
       } else {
         res
           .status(201)
-          .json({ message: "Specific Data Deleted", data: deleteSpecificData });
+          .json({ message: "Data Deleted!", length:deleteSpecificData.length, data: deleteSpecificData });
       }
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -130,11 +130,11 @@ export const GetProductData = async (req, res) => {
       let deleteSpecificData = await ProductModel.findByIdAndDelete(id);
 
       if (!deleteSpecificData) {
-        res.status(400).json({ message: "Specific Data Not Found" });
+        res.status(400).json({ message: "Data Not Found!" });
       } else {
         res
           .status(201)
-          .json({ message: "Specific Data Deleted", data: deleteSpecificData });
+          .json({ message: "Data Deleted!", data: deleteSpecificData });
       }
     } catch (error) {
       res.status(400).json({ error: error.message });

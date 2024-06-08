@@ -49,7 +49,7 @@ export const GetGalleryData = async (req, res) => {
 };
 
 // //Read or get Specific User all Data  :
-export const readSpecificUserData = async (req, res) => {
+export const readSpecificUserAllData = async (req, res) => {
   try {
     let getSpecificData = await GalleryModel.find({ user: req.user.userName });
 
@@ -58,7 +58,7 @@ export const readSpecificUserData = async (req, res) => {
     } else {
       res
         .status(201)
-        .json({ message: " Data Fetched!", data: getSpecificData });
+        .json({ message: " Data Fetched!", length:getSpecificData.length, data: getSpecificData });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -88,7 +88,7 @@ export const updateSpecificUserData = async (req, res) => {
   try {
     let { id } = req.params;
     let data = req.body;
-    let updateSpecificData = await GalleryModel.findByIdAndUpdate({ user: req.user.userName }, data);
+    let updateSpecificData = await GalleryModel.findByIdAndUpdate(id, data);
 
     if (!updateSpecificData) {
       res.status(400).json({ message: " Data Not Found!" });

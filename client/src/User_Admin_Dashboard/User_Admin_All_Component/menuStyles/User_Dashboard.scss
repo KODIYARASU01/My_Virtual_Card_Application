@@ -4,7 +4,7 @@
   height: 100%;
 
   padding: 1rem;
-
+z-index: 10;
   margin: 0px auto;
 
   .dashboard_content_box {
@@ -13,7 +13,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     overflow: hidden;
-
+z-index: -100;
 
 
     .row_1 {
@@ -190,6 +190,7 @@
       width: 100%;
       // padding: 1rem;
       position: absolute;
+      z-index: -10;
       bottom: 0%;
       right: 0%;
     }
@@ -200,6 +201,7 @@
 
   @media screen and (max-width:750px){
     padding: 1rem 0rem 0rem  0rem;
+    z-index: -10;
   }
 }
 

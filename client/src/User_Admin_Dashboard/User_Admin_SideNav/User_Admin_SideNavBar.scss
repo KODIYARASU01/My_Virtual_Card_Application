@@ -10,7 +10,8 @@
   gap: 10px;
   position: absolute;
   padding: 0.5rem 0px;
-
+  z-index: 1000;
+// background-color: #fff;/
   .search {
     width: 100%;
     padding: 10px 2rem;
@@ -56,7 +57,7 @@
     justify-content: flex-start;
     // gap: 0.5rem;
     // padding: 1rem 0px;
-
+    z-index: 1000;
     .menu {
       width: 90%;
       height: 100%;

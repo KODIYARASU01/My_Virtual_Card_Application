@@ -38,7 +38,7 @@ export const GetServiceData = async (req, res) => {
     } else {
       res.status(201).json({
         message: "Data Fetched!",
-
+length:datas.length,
         data: datas,
       });
     }
@@ -48,7 +48,7 @@ export const GetServiceData = async (req, res) => {
 };
 
 //   // //Read or get Specific User all Data  :
-  export const readSpecificUserData = async (req, res) => {
+  export const getSpecificUserAllData = async (req, res) => {
     try {
       let getSpecificData = await ServiceData.find({ user: req.user.userName });
 
@@ -57,7 +57,7 @@ export const GetServiceData = async (req, res) => {
       } else {
         res
           .status(201)
-          .json({ message: "Data Fetched!", data: getSpecificData });
+          .json({ message: "Data Fetched!",length:getSpecificData.length, data: getSpecificData });
       }
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -112,7 +112,8 @@ export const GetServiceData = async (req, res) => {
       } else {
         res
           .status(201)
-          .json({ message: "All Data Deleted!", data: deleteSpecificData });
+          .json({ message: "All Data Deleted!",length:deleteSpecificData.length, 
+            data: deleteSpecificData });
       }
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -128,11 +129,11 @@ export const GetServiceData = async (req, res) => {
       let deleteSpecificData = await ServiceData.findByIdAndDelete(id);
 
       if (!deleteSpecificData) {
-        res.status(400).json({ message: "Specific Data Not Found" });
+        res.status(400).json({ message: "Data Not Found!" });
       } else {
         res
           .status(201)
-          .json({ message: "Specific Data Deleted", data: deleteSpecificData });
+          .json({ message: "Data Deleted!", data: deleteSpecificData });
       }
     } catch (error) {
       res.status(400).json({ error: error.message });

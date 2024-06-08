@@ -10,7 +10,7 @@ overflow: hidden;
   height: 100vh;
   top: 0%;
   left:0%;
-  z-index: 1100;
+  z-index: 900;
   cursor: not-allowed;  
 
 /* HTML: <div class="loader"></div> */
@@ -47,7 +47,7 @@ animation: l16 3s infinite;
 
 
     .content_left {
-      z-index: 600;
+      z-index: 900;
       height: 100%;
       overflow: hidden;
       flex: 1;

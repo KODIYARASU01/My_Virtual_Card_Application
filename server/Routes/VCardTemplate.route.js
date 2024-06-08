@@ -1,16 +1,16 @@
 import express from 'express';
-import { GetServiceData, PostServiceData,  
+import { getTemplateData, postTemplateData,  
     getSpecificUserAllData,
     getSpecificIdData,
     updateSpecificUserData,
     deleteSpecificUserAllData,
-    deleteSpecificUserData } from '../Controllers/Service.controller.js';
+    deleteSpecificUserData } from '../Controllers/VCardTemplate.controller.js';
 import { verifyToken } from '../Middleware/verifyToken.js';
 let router=express.Router();
 
 
-router.get('/',verifyToken,GetServiceData);
-router.post('/',verifyToken,PostServiceData);
+router.get('/',verifyToken,getTemplateData);
+router.post('/',verifyToken,postTemplateData);
  //Read Specific user all Data:
  router.get("/specificAll/:userName", verifyToken, getSpecificUserAllData);
  //Read Specific ID Data:

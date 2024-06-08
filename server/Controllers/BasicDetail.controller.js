@@ -6,10 +6,10 @@ import BasicDetails from "../Models/BasicDetail.model.js";
 //Get Async allback function..All user basicdata fetching :
 export const getBasicAllData = async (req, res) => {
   try {
-    let postDatas = await BasicDetails.find();
+    let getDatas = await BasicDetails.find();
     return res
       .status(201)
-      .json({ message: "Data Fetched sucessfully!", data: postDatas });
+      .json({ message: "Data Fetched sucessfully!",length:getDatas.length, data: getDatas });
   } catch (error) {
     return res.status(401).json({ message: error.message });
   }
@@ -49,7 +49,7 @@ export const postBasicAllData = async (req, res) => {
   };
 
   //Read or get Specific User basic Data  :
-export const readSpecificUserData = async (req, res) => {
+export const readSpecificUserAllData = async (req, res) => {
   try {
     let getSpecificData = await BasicDetails.find({ user: req.user.userName});
 
@@ -64,13 +64,30 @@ export const readSpecificUserData = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+  //Read or get Specific User basic Data  :
+  export const readSpecificIdUserData = async (req, res) => {
+    try {
+      let {id}=req.params;
+      let getSpecificIdData = await BasicDetails.findById(id);
+  
+      if (!getSpecificIdData) {
+        res.status(400).json({ message: "Data Not Found!" });
+      } else {
+        res
+          .status(201)
+          .json({ message: "Data Fetched!", length:getSpecificIdData.length, data: getSpecificIdData });
+      }
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
 //Update Specific document user data:
 
 export const updateSpecificUserData = async (req, res) => {
   try {
     let { id } = req.params;
     let data = req.body;
-    let updateSpecificData = await BasicDetails.findOneAndUpdate({ user: req.user.userName}, data);
+    let updateSpecificData = await BasicDetails.findOneAndUpdate(id, data);
 
     if (!updateSpecificData) {
       res.status(400).json({ message: "Data Not Found!" });

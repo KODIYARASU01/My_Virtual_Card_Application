@@ -2,7 +2,7 @@ import express from "express";
 import {
   GetProductData,
   PostProductData,
-  readSpecificUserData,
+  readSpecificUserAllData,
   updateSpecificUserData,
   getSpecificIdData,
   deleteSpecificUserAllData,
@@ -14,13 +14,13 @@ let router = express.Router();
 router.get("/", verifyToken, GetProductData);
 router.post("/", verifyToken, PostProductData);
 //Read Specific user all Data:
-router.get("/specific/:id", verifyToken, readSpecificUserData);
+router.get("/specificAll/:userName", verifyToken, readSpecificUserAllData);
 //Read Specific ID Data:
-router.get("/specificId/:id", verifyToken, getSpecificIdData);
+router.get("/specific/:id", verifyToken, getSpecificIdData);
 //Update Specific user Single Data:
 router.put("/update/:id", verifyToken, updateSpecificUserData);
 //Delete Specific user all Data in Basic Detail:
-router.delete("/deleteAll/:id", verifyToken, deleteSpecificUserAllData);
+router.delete("/deleteAll/:userName", verifyToken, deleteSpecificUserAllData);
 //Delete Specific user document Data in Basic Detail:
 router.delete("/delete/:id", verifyToken, deleteSpecificUserData);
 
