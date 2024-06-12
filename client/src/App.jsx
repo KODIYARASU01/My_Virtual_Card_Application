@@ -31,6 +31,8 @@ import BasicForm from "./User_Admin_Dashboard/User_Admin_All_Component/Vcard_For
 import Register from "./Authentication/Register/Register";
 import Login from "./Authentication/Login/Login";
 import NewCardDesign3 from "./All_VCards/NewCardDesign3";
+import ForgotPassword from "./Authentication/ForgotPassword/ForgotPassword";
+import ResetPassword from "./Authentication/ResetPassword/ResetPassword";
 
 const App = () => {
   let [SideNavActions, setSideNavActions] = useState(false);
@@ -429,6 +431,8 @@ const App = () => {
                 )
               }
             />
+             <Route path="/forgot_password" element={<ForgotPassword />} />
+             <Route path="/reset_password/:id/:token" element={<ResetPassword />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/new_card3" element={<NewCardDesign3/>}/>
             <Route path="/sadmin" element={<SuperAdmin />}>

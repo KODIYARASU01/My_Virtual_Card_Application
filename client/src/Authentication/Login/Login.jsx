@@ -85,7 +85,6 @@ const Login = () => {
     console.log("Captcha value:", value);
   }
 
-  console.log(email,password)
   return (
     <>
       <div className="login_container">
@@ -208,7 +207,13 @@ const Login = () => {
                     )}
                   </div>
                 </div>
-<div className="form_group capcha">
+             
+                <div className="forgot_password">
+                  <Link to='/forgot_password'>
+                     <small>Forgot Password ?</small>
+                  </Link>
+                </div>
+<div className="capcha">
 <ReCAPTCHA
     sitekey="6LdlmuYpAAAAAOOHZqQQExlLSFlXG5rQsXMF48wI"
     onChange={onChange}
@@ -230,18 +235,18 @@ const Login = () => {
                 </div>
 
                 <div className="admin_actions">
-                  <Link to="/sadmin/dashboard">
+                  {/* <Link to="/sadmin/dashboard">
                     <button>
                       Super Admin Login
                       <i className="bx bx-log-in-circle bx-flashing"></i>
                     </button>
-                  </Link>
-                  <Link onClick={()=>{formik.values.email='aristostech@gmail.com',formik.values.password='123456'}}>
+                  </Link> */}
+                  {/* <Link onClick={()=>{formik.values.email='aristostech@gmail.com',formik.values.password='123456'}}>
                     <button>
                       User Login{" "}
                       <i className="bx bx-log-in-circle bx-flashing"></i>
                     </button>
-                  </Link>
+                  </Link> */}
                 </div>
                 <div className="or">
                   <p>or Continue</p>

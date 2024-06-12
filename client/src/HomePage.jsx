@@ -8,14 +8,23 @@ import rocket from './assets/animations/rocket.gif';
 import message from './assets/animations/message.gif'
 // import slide_1_image from "./assets/Website_page_images/home_page_images.png";
 // import slide_1_image from "./assets/Website_page_images/home_page_right_image.svg";
-import vcard1 from "./assets/Digicards/1.png";
-import vcard2 from "./assets/Digicards/2.png";
-import vcard3 from "./assets/Digicards/3.png";
-import vcard4 from "./assets/Digicards/4.png";
-import vcard5 from "./assets/Digicards/5.png";
-import vcard6 from "./assets/Digicards/6.png";
-import vcard7 from "./assets/Digicards/7.png";
-import vcard8 from "./assets/Digicards/8.png";
+// import vcard1 from "./assets/Digicards/1.png";
+// import vcard2 from "./assets/Digicards/2.png";
+// import vcard3 from "./assets/Digicards/3.png";
+// import vcard4 from "./assets/Digicards/4.png";
+// import vcard5 from "./assets/Digicards/5.png";
+// import vcard6 from "./assets/Digicards/6.png";
+// import vcard7 from "./assets/Digicards/7.png";
+
+
+import vcard1 from './assets/Digicards/vmob-1.png';
+import vcard2 from './assets/Digicards/vmob-2.png';
+import vcard3 from './assets/Digicards/vmob-3.png';
+import vcard4 from './assets/Digicards/vmob-4.png';
+import vcard5 from './assets/Digicards/vmob-5.png';
+import vcard6 from './assets/Digicards/vmob-6.png';
+import vcard7 from './assets/Digicards/vmob-7.png';
+// import vcard8 from './assets/Digicards/vmob-8.png';
 
 import view1 from "./assets/view/1.svg";
 import view2 from "./assets/view/2.svg";
@@ -238,7 +247,7 @@ const HomePage = () => {
   let interval = useRef();
 
   const startTimer = () => {
-    const countdownDate = new Date("June 10, 2024 00:00:00").getTime();
+    const countdownDate = new Date("June 14, 2024 00:00:00").getTime();
     interval = setInterval(() => {
       const now = new Date().getTime();
       const distance = countdownDate - now;
@@ -303,9 +312,9 @@ const HomePage = () => {
 
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
-    let scrollAmount = 0;
-    const scrollStep = 0.3; // Adjust the speed of the scroll
-    const delay = 0; // Adjust the delay for the scrolling effect
+    let scrollAmount = 3;
+    const scrollStep = 0.4; // Adjust the speed of the scroll
+    const delay = 5; // Adjust the delay for the scrolling effect
 
     const scrollHorizontally = () => {
       scrollAmount += scrollStep;
@@ -403,6 +412,12 @@ const HomePage = () => {
             />
           </a>
         </m.div>
+        {/* Up Arrow icon */}
+        <div className="up"  onClick={() => scrollToSection(HomeRef)}>
+        {/* <small>Bring me Top</small> */}
+        <i className='bx bx-chevrons-up bx-fade-down' ></i>
+      
+        </div>
         <m.div className="slide_1_page" ref={HomeRef}>
         <ul class="slide_1_background">
             <li></li>
@@ -504,7 +519,7 @@ const HomePage = () => {
               className="left"
               variants={left_slide_1Anime}
               initial="hide"
-              whileInView="show"
+              animate="show"
             >
               <m.div className="title" variants={left_slide_1Anime}>
                 <h3>Design Your Digital Identity:</h3>
@@ -543,7 +558,7 @@ const HomePage = () => {
               {/* //Timer_Box */}
 
               <m.div className="offer_container" variants={left_slide_1Anime}>
-                <img src={offer_sale_gif} alt="" />
+                {/* <img src={offer_sale_gif} alt="" /> */}
                 <m.div className="offer_box">
                   <m.div className="box">
                     <m.div className="time_box">
@@ -638,11 +653,11 @@ const HomePage = () => {
               className="right"
               variants={right_slide_1Anime}
               initial="hide"
-              whileInView="show"
+              animate="show"
             >
-              <m.img src={slide_1_image} alt="" variants={right_slide_1Anime} />
+              <m.img src={slide_1_image} alt=""/>
            <div className="message_gif">
-<img src={message} alt="message" />
+<img src={message} alt="message"     variants={right_slide_1Anime}/>
 
            </div>
               <m.div className="extra_designs">
@@ -689,7 +704,7 @@ const HomePage = () => {
             className="title"
             variants={title_slide_2Anime}
             initial="hide"
-            whileInView="show"
+            animate="show"
           >
             <m.h2 variants={title_slide_2Anime}>
               Explore Our Range of vCard Templates!
@@ -710,7 +725,7 @@ const HomePage = () => {
             }}
             variants={vcard_slide_2Anime}
             initial="hide"
-            whileInView="show"
+            animate="show"
           >
             <m.div className="vcard" variants={vcard_slide_2Anime}>
               <m.img src={vcard1} alt="vcard" />
@@ -733,9 +748,9 @@ const HomePage = () => {
             <m.div className="vcard" variants={vcard_slide_2Anime}>
               <m.img src={vcard7} alt="vcard" />
             </m.div>
-            <m.div className="vcard" variants={vcard_slide_2Anime}>
+            {/* <m.div className="vcard" variants={vcard_slide_2Anime}>
               <m.img src={vcard8} alt="vcard" />
-            </m.div>
+            </m.div> */}
           </m.div>
         </m.div>
         {/* Slide_3 */}
@@ -745,7 +760,7 @@ const HomePage = () => {
             className="slide_3_title"
             variants={title_slide_3Anime}
             initial="hide"
-            whileInView="show"
+            animate="show"
           >
             <m.div className="heading" variants={title_slide_3Anime}>
               <m.h2>
@@ -763,7 +778,7 @@ const HomePage = () => {
             className="slide_3_container_box"
             variants={box_slide_3Anime}
             initial="hide"
-            whileInView="show"
+            animate="show"
           >
             <m.div className="box" variants={box_slide_3Anime}>
               <div className="icon">
@@ -884,7 +899,7 @@ const HomePage = () => {
             className="slide_4_title"
             variants={title_slide_4Anime}
             initial="hide"
-            whileInView="show"
+            animate="show"
           >
             <m.h2 variants={title_slide_4Anime}>
               Create your perfect <span>VCards with us!</span>
@@ -895,7 +910,7 @@ const HomePage = () => {
               className="row_1"
               variants={left_cardShow_slide_4Anime}
               initial="hide"
-              whileInView="show"
+              animate="show"
             >
               <m.div className="left" variants={left_cardShow_slide_4Anime}>
                 <img src={view1} alt="view" />
@@ -914,7 +929,7 @@ const HomePage = () => {
               className="row_2"
               variants={left_cardShow_slide_4Anime}
               initial="hide"
-              whileInView="show"
+              animate="show"
             >
               <m.div className="right" variants={left_cardShow_slide_4Anime}>
                 <h3>Unleash Your Digital Presence with Custom vCards</h3>
@@ -934,7 +949,7 @@ const HomePage = () => {
               className="row_3"
               variants={right_cardShow_slide_4Anime}
               initial="hide"
-              whileInView="show"
+              animate="show"
             >
               <m.div className="left" variants={left_cardShow_slide_4Anime}>
                 <img src={view3} alt="view" />
@@ -961,7 +976,7 @@ const HomePage = () => {
             className="slide_5_title"
             variants={title_slide_5Anime}
             initial="hide"
-            whileInView="show"
+            animate="show"
           >
             <h2>
               Making a vCard is easy with <span>My Virtual Card</span>
@@ -971,7 +986,7 @@ const HomePage = () => {
             className="slide_5_box_container"
             variants={numberBox_slide_5Anime}
             initial="hide"
-            whileInView="show"
+            animate="show"
           >
             <m.div className="box_1" variants={numberBox_slide_5Anime}>
               <div className="icon">
@@ -1064,7 +1079,7 @@ const HomePage = () => {
                 className="left"
                 variants={left_nfc_slide_5Anime}
                 initial="hide"
-                whileInView="show"
+                animate="show"
               >
                 <m.div className="header" variants={left_nfc_slide_5Anime}>
                   <h3>
@@ -1088,7 +1103,7 @@ const HomePage = () => {
                 className="right"
                 variants={right_nfc_slide_5Anime}
                 initial="hide"
-                whileInView="show"
+                animate="show"
               >
                 <m.img src={nfc} alt="nfc" />
                 <Lottie
@@ -1153,7 +1168,7 @@ const HomePage = () => {
               </svg>
             </div> */}
         <m.div className="slide_6_page" ref={PricingRef}>
-          <m.div className="plan_heading" initial="hide" whileInView="show">
+          <m.div className="plan_heading" initial="hide" animate="show">
             <Lottie
               options={cartOptions}
               style={{
@@ -1177,7 +1192,7 @@ const HomePage = () => {
             className="plan_container_box"
             variants={plan_box_slide_5Anime}
             initial="hide"
-            whileInView="show"
+            animate="show"
           >
             {/* plan1 */}
             <m.div
@@ -1207,7 +1222,7 @@ const HomePage = () => {
               </m.div>
               <m.div className="plan_price">
                 <h2>
-                  ₹ 299 <small>/Yearly</small>
+                  ₹ 365 <small>/Yearly</small>
                 </h2>
               </m.div>
               <m.div className="card_count">
@@ -1225,7 +1240,7 @@ const HomePage = () => {
                 className="plan_addon_service"
                 variants={plan_content_slide_5Anime}
                 initial="hide"
-                whileInView="show"
+                animate="show"
               >
                 {plan_service_list.map((data, index) => {
                   return (
@@ -1271,7 +1286,7 @@ const HomePage = () => {
               </div>
               <div className="plan_price">
                 <h2>
-                  ₹ 499 <small>/Yearly</small>
+                  ₹ 799 <small>/Yearly</small>
                 </h2>
               </div>
               <div className="card_count">
@@ -1289,7 +1304,7 @@ const HomePage = () => {
                 className="plan_addon_service"
                 variants={plan_content_slide_5Anime}
                 initial="hide"
-                whileInView="show"
+                animate="show"
               >
                 {plan_service_list.map((data, index) => {
                   return (
@@ -1335,7 +1350,7 @@ const HomePage = () => {
               </div>
               <div className="plan_price">
                 <h2>
-                  ₹ 999 <small>/Yearly</small>
+                  ₹ 1499 <small>/Yearly</small>
                 </h2>
               </div>
               <div className="card_count">
@@ -1353,7 +1368,7 @@ const HomePage = () => {
                 className="plan_addon_service"
                 variants={plan_content_slide_5Anime}
                 initial="hide"
-                whileInView="show"
+                animate="show"
               >
                 {plan_service_list.map((data, index) => {
                   return (
@@ -1378,7 +1393,7 @@ const HomePage = () => {
         <m.div
           className="slide_7_page"
           initial="hide"
-          whileInView="show"
+          animate="show"
           ref={FAQRef}
         >
           <m.div className="slide_7_title">
@@ -1514,7 +1529,7 @@ const HomePage = () => {
               className="left"
               variants={form_left_slide_8Anime}
               initial="hide"
-              whileInView="show"
+              animate="show"
             >
               <m.div className="title" variants={form_left_slide_8Anime}>
                 <h4>Get In Touch !</h4>

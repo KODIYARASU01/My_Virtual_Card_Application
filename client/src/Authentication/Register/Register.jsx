@@ -41,11 +41,11 @@ const Register = () => {
   let formik = useFormik({
     initialValues: {
       profile: "",
-      userName:"",
+      userName: "",
       firstName: "",
       lastName: "",
       email: "",
-      
+
       password: "",
     },
     validateOnBlur: false,
@@ -56,16 +56,17 @@ const Register = () => {
       await axios
         .post("https://my-virtual-card-application.onrender.com/auth/register", values)
         .then((response) => {
-       
           toast.success(response.data.message);
           setRegisterLoader(false);
           setTimeout(() => {
+            toast.success(response.data.emailMessage);
+          }, 1500);
+          setTimeout(() => {
             navigate("/login");
-           
-          }, 2000);
+          }, 3000);
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           toast.error(error.response.data.message);
           setRegisterLoader(false);
         });
@@ -256,14 +257,11 @@ const Register = () => {
                     ) : (
                       <>
                         Register
-                      <div className="rocket">
-                      <i className="bx bx-log-in bx-flashing"></i>
-                    </div>
+                        <div className="rocket">
+                          <i className="bx bx-log-in bx-flashing"></i>
+                        </div>
                       </>
-                    
                     )}
-
-                    
                   </button>
                 </div>
                 <div className="or">

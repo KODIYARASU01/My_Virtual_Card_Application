@@ -71,3 +71,9 @@ export const LoginUser = async (req, res) => {
     }
   };
   
+  //Forgot Password:
+
+  export const forgotPassword=async(req,res)=>{
+
+  };
+  

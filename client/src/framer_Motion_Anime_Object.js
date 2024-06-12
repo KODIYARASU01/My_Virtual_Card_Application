@@ -1,49 +1,51 @@
   //Animation:
 
+import { delay } from "framer-motion";
+
   export let topNavAnime = {
-    hide: { x: -700, opacity: 0, transition: { delay: 0.1 } },
+    hide: { x: 0, opacity: 0, transition: { delay: 0.1 } },
     show: { x: 0, opacity: 1, transition: { delay: 0.1 } },
     righthide: {
-      y: -300,
-      opacity: 0,
-      transition: { staggerChildren: 0.1, type: "spring" },
+      y: 0,
+      opacity: 1,
+      transition: { staggerChildren: 0.1},
     },
     rightshow: {
       y: 0,
       opacity: 1,
-      transition: { staggerChildren: 0.1, type: "spring" },
+      transition: { staggerChildren: 0.1 },
     },
   };
   export let left_slide_1Anime = {
-    hide: { x: -300, opacity: 0, transition: { staggerChildren: 0.3 } },
+    hide: { x: 0, opacity: 0, transition: { staggerChildren: 0.1 } },
     show: {
       x: 0,
       opacity: 1,
-      transition: { staggerChildren: 0.3, type: "spring" },
+      transition: { staggerChildren: 0.1 },
     },
   };
   export let right_slide_1Anime = {
     hide: {
-      x: 300,
+      x: 0,
       opacity: 0,
-      transition: { staggerChildren: 0.4 },
+      transition: { staggerChildren: 0.2 },
     },
     show: {
       x: 0,
       opacity: 1,
-      transition: { staggerChildren: 0.4, type: "spring" },
+      transition: { staggerChildren: 0.2},
     },
   };
   export let title_slide_2Anime = {
     hide: {
-      x: -300,
+      x: 0,
       opacity: 0,
-      transition: { staggerChildren: 0.3, type: "spring" },
+      transition: { staggerChildren: 0.3 },
     },
     show: {
       x: 0,
       opacity: 1,
-      transition: { staggerChildren: 0.3, type: "spring", delay: 0.3 },
+      transition: { staggerChildren: 0.3, delay: 0.3 },
     },
   };
   export let vcard_slide_2Anime = {
