@@ -19,8 +19,9 @@ import Terms_Conditions from "./All_Form_Component/Terms&Conditions";
 import Manage_Session from "./All_Form_Component/Manage_Session";
 import axios from "axios";
 import SuperAdmin_context from "../../../SuperAdmin_Context/SuperAdmin_context";
+import Plan from "./All_Form_Component/Plan";
 const VCard_Form = () => {
-let{userName}=useContext(SuperAdmin_context)
+let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
   let navigate = useNavigate();
   let [userData, setUserData] = useState("jayakumar");
   let [ShowForm, setShowForm] = useState("Basic Detail");
@@ -31,7 +32,7 @@ let{userName}=useContext(SuperAdmin_context)
   let userDetails = JSON.parse(localStorage.getItem("datas"));
   useEffect(() => {
     axios
-      .get(`https://my-virtual-card-application.onrender.comannel.onrender.com/auth/register/${userDetails.id}`)
+      .get(`http://localhost:3001annel.onrender.com/auth/register/${userDetails.id}`)
       .then((res) => {
         setUserData(res.data.data);
       })
@@ -66,6 +67,16 @@ let{userName}=useContext(SuperAdmin_context)
             >
               <i className="bx bxs-user" style={{ color: "blue" }}></i>
               <small>Basic Detail</small>
+            </div>
+            <div
+              className="menu_item"
+              onClick={handleFormShow}
+              id={ShowForm === "Choose Your Plan" ? "menu_active" : ""}
+            >
+              {/* <i className="bx bxs-spreadsheet" style={{ color: "green" }}></i> */}
+              <img width="24" height="24" src="https://img.icons8.com/3d-fluency/94/cash-in-hand.png" alt="cash-in-hand"/>
+
+              <small>Choose Your Plan</small>
             </div>
             <div
               className="menu_item"
@@ -203,6 +214,7 @@ let{userName}=useContext(SuperAdmin_context)
           </div>
           <div className="all_form_inputs">
             {ShowForm === "Basic Detail" ? <BasicForm /> : ""}
+            {ShowForm === "Choose Your Plan" ? <Plan /> : ""}
             {ShowForm === "VCard Templates" ? <Select_Template /> : ""}
             {ShowForm === "Services" ? <Services /> : ""}
             {ShowForm === "Products" ? <Products /> : ""}

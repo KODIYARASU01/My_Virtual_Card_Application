@@ -1,7 +1,13 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-
+// Import necessary functions from the url and path modules
+import { fileURLToPath } from 'url';
+import path from 'path';
+// Convert the URL of the current module to a filename
+const __filename = fileURLToPath(import.meta.url); 
+// Extract the directory name from the filename
+const __dirname = path.dirname(__filename);
 import dotenv from "dotenv";
 dotenv.config();
 import mongoose from "mongoose";
@@ -17,7 +23,7 @@ import GalleryDetailRoute from './Routes/Gallery.route.js';
 import TestimonialDetailRoute from './Routes/Testimonial.route.js';
 import SocialMediaDetailRoute from './Routes/SocialMedia.route.js';
 import PopupBannerDetailRoute from './Routes/PopupBanner.route.js'
-
+import PlanDetailRoute from './Routes/Plan.route.js'
 //Port initializing:
 let PORT = process.env.PORT || 3000;
 //Cors Policy connect frontend and backend with same port:
@@ -27,6 +33,7 @@ app.use(express.json({limit:'30mb'}));
 //This will help you to allow file upload size limit
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+app.use(express.static(path.join(__dirname,'public')));
 
 app.get("/", (req, res) => {
   console.log(req.path);
@@ -35,6 +42,7 @@ app.get("/", (req, res) => {
 
 // Api All Routes:
 app.use('/auth',RegisterRoute);
+app.use('/currentplan',PlanDetailRoute);
 app.use('/auth',LoginRoute);
 app.use('/basicDetail',BasicDetailRoute);
 app.use('/templateDetail',TemplateRoute);

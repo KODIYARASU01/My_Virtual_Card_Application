@@ -190,7 +190,7 @@ const User_Admin_TopNavBar = () => {
               </Link>
            
             </div>
-            {SideNavActions ? "" : <h4>VirtualCard.in</h4>}
+            {SideNavActions ? "" : <h4>MyVirtualCard.in</h4>}
             <div
               className="icon"
               onClick={() => setSideNavActions(!SideNavActions)}

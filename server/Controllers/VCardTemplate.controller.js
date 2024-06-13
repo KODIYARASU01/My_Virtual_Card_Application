@@ -4,7 +4,7 @@ import Current_VCardTemplate from "../Models/VCardTemplate.model.js";
 
 export const postTemplateData = async (req, res) => {
   try {
-    if (!req.body.currentTemplate) {
+    if (req.body.currentTemplate === null) {
       return res.status(401).json({ message: "Select Your VCard Template!" });
     } else {
       let data = {

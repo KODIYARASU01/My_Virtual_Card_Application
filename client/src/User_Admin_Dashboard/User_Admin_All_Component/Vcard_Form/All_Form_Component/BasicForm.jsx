@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import "./form_styles/BasicForm.scss";
 import { Editor } from "primereact/editor";
 import "primereact/resources/themes/saga-blue/theme.css"; // Choose a theme
@@ -21,11 +21,13 @@ const BasicForm = () => {
   const [VCardName, setVCardName] = useState();
   const [Occupation, setOccupation] = useState();
   const [Description, setDescription] = useState();
-  console.log(Description)
+
   const [Profile, setProfile] = useState();
 
   let [Banner, setBanner] = useState();
- 
+  let[BannerName,setBannerName]=useState('');
+
+ let BannerRef=useRef();
   let [FirstName, setFirstName] = useState();
   let [LastName, setLastName] = useState();
   let [Email, setEmail] = useState();
@@ -51,21 +53,27 @@ const BasicForm = () => {
 
     setProfile(base64);
   };
-  // const onUploadBanner = async (e) => {
-  //   let base64 = await convertToBase64Banner(e.target.files[0]);
+  const onUploadBanner = async (e) => {
+    let base64 = await convertToBase64Banner(e.target.files[0]);
 
-  //   setBanner(base64);
-  // };
-const onUploadBanner=async()=>{
-  setBanner(e.target.files[0])
-};
+    setBanner(base64);
+  };
+// const onUploadBanner=async()=>{
+//   setBanner(BannerRef.current.files[0]);
+//   setBannerName(BannerRef.current.files[0].name);
+
+//   // const formData=new FormData();
+//   // formData.append('Banner',Banner);
+//   // formData.append('BannerName',BannerName)
+// };
   let formik = useFormik({
     initialValues: {
       VCardName: "",
       Occupation: "",
       Description: "",
       Profile: undefined,
-      Banner: undefined,
+      Banner: null,
+      BannerName:'',
       FirstName: "",
       LastName: "",
       Email: "",
@@ -84,15 +92,15 @@ const onUploadBanner=async()=>{
     validate:BasicDetailValidate,
  
     onSubmit: async (values) => {
-      let formData=new FormData();
-      formData.append('Banner',Banner)
+    //  values.Banner=new FormData().append('Banner',Banner);
+    //  values.BannerName=new FormData().append('BannerName',BannerName);
 
       values = await Object.assign(values, { Profile: Profile || "" });
       values = await Object.assign(values, { Banner: Banner || "" });
       values.Description = stripHtmlTags(Description);
       setFormSubmitLoader(true);
       await axios
-        .post("https://my-virtual-card-application.onrender.com/basicDetail", values, {
+        .post("http://localhost:3001/basicDetail", values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -109,13 +117,12 @@ const onUploadBanner=async()=>{
         });
     },
   });
-
   return (
     <>
       <div className="basicform_container">
         <Toaster position="top-right"/>
         <div className="form1_container_box">
-          <form encType="multipart/form-data" onSubmit={formik.handleSubmit}>
+          <form encType="multipart/form-data" onSubmit={formik.handleSubmit} method="POST">
             <div className="form_group">
               <label htmlFor="VCardName">
                 VCard Name <sup>*</sup>
@@ -187,7 +194,7 @@ const onUploadBanner=async()=>{
                 <label htmlFor="Banner">
                   <img
                     src={
-                      Banner != undefined
+                      Banner != null
                         ? Banner
                         : "https://img.freepik.com/free-photo/cement-wall-floor-copy-space_53876-30237.jpg?t=st=1716040667~exp=1716044267~hmac=37c1f0faf9137d781a0aa0d1436b486b6e0a620fec789a836ab08533c16cbeeb&w=826"
                     }
@@ -199,6 +206,7 @@ const onUploadBanner=async()=>{
                 <small>Allowed file types: png, jpg, jpeg.</small>
                 <input
                   type="file"
+                  ref={BannerRef}
                   onChange={onUploadBanner}
                   // {...formik.getFieldProps('Banner')}
                   name="Banner"

@@ -8,8 +8,7 @@ let TemplateSchema=new mongoose.Schema({
         ref:'User'
     },
     currentTemplate:{
-        type:Boolean,
-        default:false,
+        type:Number,
         required:[true,'Select Your VCard Template!']
     }
 },

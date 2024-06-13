@@ -37,7 +37,7 @@ const Gallery = () => {
       });
       setFormSubmitLoader(true);
       await axios
-        .post("https://my-virtual-card-application.onrender.com/galleryDetail", values, {
+        .post("http://localhost:3001/galleryDetail", values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -124,7 +124,7 @@ const Gallery = () => {
           
             <div className="form_submit_actions">
               <div className="save">
-              <button type="submit">
+              <button type="submit" disabled={FormSubmitLoader}>
                 Save
               </button>
               </div>

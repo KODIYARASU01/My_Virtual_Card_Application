@@ -61,7 +61,7 @@ export const RegisterUser = async (req, res) => {
         const transporter = nodemailer.createTransport({
           service: "SMPT",
           host: process.env.SMTP_HOST, // Correctly specify the SMTP host
-          port: process.env.SMTP_PORT == 465, // Use 465 for SSL or 587 for TLS
+          port: process.env.SMTP_PORT, // Use 465 for SSL or 587 for TLS
           secure: true, // Use true for 465, false for other ports
           auth: {
             user: process.env.GMAIL, // your Gmail address
@@ -150,7 +150,7 @@ export const ForgotPassword = async (req, res) => {
           html: `
           <h3>Hello,${checkUser.firstName} &nbsp; ${checkUser.lastName}</h3>
           <p>If you forgot your old password u don't worry about it we will help you to update your new password with registered same email Addesss!</p>
-          <small><b>Reset Your Password ?</b><a href='https://myvirtualcard.in/reset_password/${checkUser._id}/${token}'>Click Here!</a></small>
+          <small><b>Reset Your Password ?</b><a href='http://localhost:5173/reset_password/${checkUser._id}/${token}'>Click Here!</a></small>
           `, // html body
         };
 
@@ -209,7 +209,7 @@ export const ResetPassword = async (req, res) => {
               html: `
           <h3>Hello,${checkUser.firstName} &nbsp; ${checkUser.lastName}</h3>
           <p>Your old password reseted sucessfully and updated your new password with your email address..Now you ready to login with latest new password..</p>
-          <small><b>Ready to Login ?</b><a href='https://myvirtualcard.in/login'>Click Here to Login!</a></small>
+          <small><b>Ready to Login ?</b><a href='http://localhost:5173/login'>Click Here to Login!</a></small>
           `, // html body
             };
 

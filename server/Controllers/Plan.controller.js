@@ -1,39 +1,38 @@
-import GalleryModel from "../Models/Gallery.model.js";
+import currentPlan from "../Models/Plan.model.js";
 
-//Post basic detail data to database:
-
-export const PostGalleryData = async (req, res) => {
+//Post plan detail data to database:
+export const PostPlanData = async (req, res) => {
   try {
     if (
-        !req.body.GalleryImage
+        !req.body.PlanPrice
     ) {
       return res
         .status(401)
-        .json({ message: "All * fields are Mandatory" });
+        .json({ message: "Plan Not been Choosen!" });
     } else {
       
       let data = {
         user: req.user.userName,
-        GalleryImage: req.body.GalleryImage,
-        GalleryURL: req.body.GalleryURL,
+        currentPlan: req.body.currentPlan,
+        PlanPrice: req.body.PlanPrice,
       };
 
-      const result = await GalleryModel.create(data);
+      const result = await currentPlan.create(data);
 
       return res
         .status(201)
-        .json({ message: "Data saved!", data:result });
+        .json({ message: "Plan saved!", data:result });
     }
   } catch (error) {
     res.status(400).json({error:error.message});
   }
 };
 
-//Read or get all user basicDetail data  from database:
+//Read or get all user plan data  from database:
 
-export const GetGalleryData = async (req, res) => {
+export const GetPlanData = async (req, res) => {
   try {
-    let datas = await GalleryModel.find({});
+    let datas = await currentPlan.find({});
     if (!datas) {
       res.status(400).json({ message: "Data not found" });
     } else {
@@ -52,7 +51,7 @@ export const GetGalleryData = async (req, res) => {
 // //Read or get Specific User all Data  :
 export const readSpecificUserAllData = async (req, res) => {
   try {
-    let getSpecificData = await GalleryModel.find({ user: req.user.userName });
+    let getSpecificData = await currentPlan.find({ user: req.user.userName });
 
     if (!getSpecificData) {
       res.status(400).json({ message: " Data Not Found!" });
@@ -69,7 +68,7 @@ export const readSpecificUserAllData = async (req, res) => {
 export const getSpecificIdData = async (req, res) => {
   try {
     let {id}=req.params;
-    let getSpecificData = await GalleryModel.findById(id );
+    let getSpecificData = await currentPlan.findById(id );
 
     if (!getSpecificData) {
       res.status(400).json({ message: "Data Not Found" });
@@ -89,7 +88,7 @@ export const updateSpecificUserData = async (req, res) => {
   try {
     let { id } = req.params;
     let data = req.body;
-    let updateSpecificData = await GalleryModel.findByIdAndUpdate(id, data);
+    let updateSpecificData = await currentPlan.findByIdAndUpdate(id, data);
 
     if (!updateSpecificData) {
       res.status(400).json({ message: " Data Not Found!" });
@@ -106,7 +105,7 @@ export const updateSpecificUserData = async (req, res) => {
 //Delete Specific User Bssic detail All data deleted By using user Id:
 export const deleteSpecificUserAllData = async (req, res) => {
   try {
-    let deleteSpecificData = await GalleryModel.deleteMany({
+    let deleteSpecificData = await currentPlan.deleteMany({
       user: req.user.userName,
     });
 
@@ -128,7 +127,7 @@ export const deleteSpecificUserData = async (req, res) => {
   try {
     let { id } = req.params;
 
-    let deleteSpecificData = await GalleryModel.findByIdAndDelete(id);
+    let deleteSpecificData = await currentPlan.findByIdAndDelete(id);
 
     if (!deleteSpecificData) {
       res.status(400).json({ message: "Data Not Found!" });

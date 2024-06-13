@@ -11,7 +11,7 @@ let [VCardCount,setVCardCount]=useState();
 
 
   useEffect(()=>{
-    axios.get('https://my-virtual-card-application.onrender.com/basicDetail/specific/KODI01',   {
+    axios.get('http://localhost:3001/basicDetail',   {
       headers: {
         Authorization: `Bearer ${userData.token}`,
       },
@@ -52,7 +52,7 @@ let [VCardCount,setVCardCount]=useState();
                     <th className="fw-bold">VCARD NAME</th>
                     <th className="fw-bold">PREVIEW URL</th>
 
-                    <th className="fw-bold">SUBSCRIBERS</th>
+                    <th className="fw-bold">PLAN</th>
 
                     <th className="fw-bold">STATUS</th>
                     <th className="fw-bold">CREATED AT</th>
@@ -63,7 +63,7 @@ let [VCardCount,setVCardCount]=useState();
                   {VCardCount !=undefined ? VCardCount.map((data,index)=>{
                     return(
                       <tr key={index}>
-                      <td className="fw-bold">{data.FirstName}</td>
+                      <td className="fw-bold">{data.VCardName}</td>
                       <td className="fw-bold">dsfs</td>
                       <td className="fw-bold">df</td>
   

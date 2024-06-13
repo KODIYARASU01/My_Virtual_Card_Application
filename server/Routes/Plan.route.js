@@ -1,14 +1,13 @@
 import express from 'express';
-import { GetGalleryData, PostGalleryData,readSpecificUserAllData,getSpecificIdData,updateSpecificUserData,deleteSpecificUserAllData,deleteSpecificUserData } from '../Controllers/Gallery.controller.js';
+import { GetPlanData, PostPlanData,readSpecificUserAllData,getSpecificIdData,updateSpecificUserData,deleteSpecificUserAllData,deleteSpecificUserData } from '../Controllers/Plan.controller.js';
 import { verifyToken } from '../Middleware/verifyToken.js';
 let router=express.Router();
-import multer from 'multer';
-// Configure Multer
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
-router.get('/',verifyToken,GetGalleryData);
-router.post('/',verifyToken,PostGalleryData);
+
+
+
+router.get('/',verifyToken,GetPlanData);
+router.post('/',verifyToken,PostPlanData);
  //Read Specific user all Data:
  router.get("/specificAll/:userName", verifyToken, readSpecificUserAllData);
  //Read Specific user all Data:

@@ -54,7 +54,7 @@ const Register = () => {
     onSubmit: async (values) => {
       setRegisterLoader(true);
       await axios
-        .post("https://my-virtual-card-application.onrender.com/auth/register", values)
+        .post("http://localhost:3001/auth/register", values)
         .then((response) => {
           toast.success(response.data.message);
           setRegisterLoader(false);

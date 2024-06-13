@@ -24,6 +24,7 @@ export const postBasicAllData = async (req, res) => {
       Description: req.body.Description,
       Profile:  req.body.Profile,
       Banner: req.body.Banner,
+      BannerName:req.body.BannerName,
       FirstName:  req.body.FirstName,
       LastName:  req.body.LastName,
       Email:  req.body.Email,

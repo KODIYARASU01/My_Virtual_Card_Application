@@ -41,7 +41,7 @@ const Testimonial = () => {
       values.ClientFeedback = stripHtmlTags(ClientFeedback);
       setFormSubmitLoader(true);
       await axios
-        .post("https://my-virtual-card-application.onrender.com/testimonialDetail", values, {
+        .post("http://localhost:3001/testimonialDetail", values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,

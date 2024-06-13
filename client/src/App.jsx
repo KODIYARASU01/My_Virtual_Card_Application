@@ -91,6 +91,9 @@ const App = () => {
   let [profession, setProfession] = useState();
   let [summary, setSummary] = useState();
 
+  //Plan:
+  let [currentPlan, setCurrentPlan] = useState(null);
+  let [PlanPrice, setPlanPrice] = useState();
   //Contact Detail form States:
 
   let [Email1, setEmail1] = useState();
@@ -225,6 +228,10 @@ const App = () => {
             setLoader5,
             ServiceId,
             setServiceId,
+            currentPlan, 
+            setCurrentPlan,
+            PlanPrice, 
+            setPlanPrice,
             userToken,
             setUserToken,
             UserDetails,

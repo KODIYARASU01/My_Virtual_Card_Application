@@ -10,13 +10,15 @@ import {
   deleteSpecificUserData,
 } from "../Controllers/BasicDetail.controller.js";
 import { verifyToken } from "../Middleware/verifyToken.js";
+import upload from "../Multer/config.js";
 
 let router = express.Router();
 
 //Get all basicDetails:
-router.get("/", verifyToken, getBasicAllData);
 
-router.post("/", verifyToken, postBasicAllData);
+
+router.get("/", verifyToken, getBasicAllData);
+router.post("/",verifyToken, upload.single('Banner'), postBasicAllData);
 //Read Specific user all Data:
 router.get("/specificAll/:userName", verifyToken, readSpecificUserAllData);
 //Read Specific user all Data:

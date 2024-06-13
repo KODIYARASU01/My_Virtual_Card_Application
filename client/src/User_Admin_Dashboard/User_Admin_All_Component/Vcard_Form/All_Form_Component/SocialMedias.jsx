@@ -39,7 +39,7 @@ const SocialMedias = () => {
     onSubmit: async (values) => {
       setFormSubmitLoader(true);
       await axios
-        .post("https://my-virtual-card-application.onrender.com/socialMediaDetail", values, {
+        .post("http://localhost:3001/socialMediaDetail", values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
