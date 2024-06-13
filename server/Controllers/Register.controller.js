@@ -132,7 +132,7 @@ export const ForgotPassword = async (req, res) => {
         const transporter = nodemailer.createTransport({
           service: "SMPT",
           host: process.env.SMTP_HOST, // Correctly specify the SMTP host
-          port: process.env.SMTP_PORT == 465, // Use 465 for SSL or 587 for TLS
+          port: process.env.SMTP_PORT, // Use 465 for SSL or 587 for TLS
           secure: true, // Use true for 465, false for other ports
           auth: {
             user: process.env.GMAIL, // your Gmail address
@@ -192,8 +192,8 @@ export const ResetPassword = async (req, res) => {
             );
             const transporter = nodemailer.createTransport({
               service: "SMPT",
-              host: "mail.myvirtualcard.in", // Correctly specify the SMTP host
-              port: 465, // Use 465 for SSL or 587 for TLS
+              host: process.env.SMTP_HOST, // Correctly specify the SMTP host
+              port: process.env.SMTP_PORT, // Use 465 for SSL or 587 for TLS
               secure: true, // Use true for 465, false for other ports
               auth: {
                 user: process.env.GMAIL, // your Gmail address
