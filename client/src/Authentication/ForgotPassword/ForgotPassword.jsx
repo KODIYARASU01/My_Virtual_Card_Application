@@ -58,6 +58,7 @@ const ForgotPassword = () => {
       
         })
         .catch((error) => {
+          console.log(error)
           toast.error(error.response.data.message);
           setLoginLoader(false);
         });
@@ -79,7 +80,7 @@ const ForgotPassword = () => {
             </div>
             <div className="right_form">
               <div className="form_title">
-                <h4>Reset Your Password!</h4>
+                <h4>Enter Your Email Address!</h4>
                 {/* <p>Please enter login details below</p> */}
               </div>
 

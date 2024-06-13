@@ -60,13 +60,15 @@ export const RegisterUser = async (req, res) => {
 
         const transporter = nodemailer.createTransport({
           service: "SMPT",
-          host: "mail.myvirtualcard.in", // Correctly specify the SMTP host
-          port: 465, // Use 465 for SSL or 587 for TLS
+          host: process.env.SMTP_HOST, // Correctly specify the SMTP host
+          port: process.env.SMTP_PORT == 465, // Use 465 for SSL or 587 for TLS
           secure: true, // Use true for 465, false for other ports
           auth: {
             user: process.env.GMAIL, // your Gmail address
             pass: process.env.GMAIL_PASSWORD, // your Gmail password
           },
+          logger: true, // Add this line
+          debug: true,  // Add this line
         });
 
         let message = {
@@ -99,13 +101,7 @@ export const RegisterUser = async (req, res) => {
             return res.status(500).json({ message: error.message });
           });
         await createUser.save();
-        let MailGenerator = new mailgen({
-          theme: "default",
-          product: {
-            name: "My Virtual Card Application",
-            link: "https://myvirtualcard.in/",
-          },
-        });
+     
 
         // res.status(201).json({
         //   message: "User Registered Sucessfully",
@@ -135,13 +131,15 @@ export const ForgotPassword = async (req, res) => {
         });
         const transporter = nodemailer.createTransport({
           service: "SMPT",
-          host: "mail.myvirtualcard.in", // Correctly specify the SMTP host
-          port: 465, // Use 465 for SSL or 587 for TLS
+          host: process.env.SMTP_HOST, // Correctly specify the SMTP host
+          port: process.env.SMTP_PORT == 465, // Use 465 for SSL or 587 for TLS
           secure: true, // Use true for 465, false for other ports
           auth: {
             user: process.env.GMAIL, // your Gmail address
             pass: process.env.GMAIL_PASSWORD, // your Gmail password
           },
+          logger: true, // Add this line
+          debug: true,  // Add this line
         });
 
         let message = {
@@ -159,7 +157,7 @@ export const ForgotPassword = async (req, res) => {
         // send mail with defined transport object
         transporter
           .sendMail(message)
-          .then((info) => {
+          .then(() => {
             res.status(201).json({ message: "Check your Registered Email Address!" });
           })
           .catch((error) => {
