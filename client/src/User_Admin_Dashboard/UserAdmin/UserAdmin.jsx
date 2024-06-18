@@ -1,4 +1,4 @@
-import React, { useContext, useState ,useEffect} from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "./UserAdmin.scss";
 
 import SuperAdmin_context from "../../SuperAdmin_Context/SuperAdmin_context";
@@ -9,19 +9,23 @@ import User_Dashboard from "../User_Admin_All_Component/User_Dashboard";
 import User_VCards from "../User_Admin_All_Component/User_VCards";
 import VCard_Form from "../User_Admin_All_Component/Vcard_Form/VCard_Form";
 import axios from "axios";
-import { Link,Navigate,useNavigate,useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 // import { Flip, toast, ToastContainer } from "react-toastify";
-import { Toaster,toast } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
+import VCard_Form_Edit from "../User_Admin_All_Component/Vcard_Form/VCard_Form_Edit";
 const UserAdmin = () => {
-  let navigate=useNavigate();
+
+  let {Index}=useParams()
+  let navigate = useNavigate();
 
   let {
+  
     userData,
     setUserData,
     userName,
-    FormSubmitLoader, 
-    setFormSubmitLoader ,
+    FormSubmitLoader,
+    setFormSubmitLoader,
     SideNavActions,
     setSideNavActions,
     profileOpen,
@@ -201,41 +205,44 @@ const UserAdmin = () => {
     let input = document.querySelector(".changePassInput");
     setShowPass(false);
     input.type = "password";
-  };
-   //LogOut user
-   let handleSignOut = async (e) => {
+  }
+  //LogOut user
+  let handleSignOut = async (e) => {
     e.preventDefault();
     try {
       localStorage.removeItem("datas");
-      toast.success('LogOut successfully')
+      toast.success("LogOut successfully");
       setTimeout(() => {
         setUser(null);
-        <Navigate to='/'/>
-        window.location.pathname='/'
+        <Navigate to="/" />;
+        window.location.pathname = "/";
       }, 2000);
     } catch (err) {
-     console.log(err)
+      console.log(err);
     }
   };
-  let userDetails=JSON.parse(localStorage.getItem('datas'));
-  useEffect(()=>{
-    axios.get(`http://localhost:3001/auth/register/${userDetails.id}`).then((res)=>{
-      setUserData(res.data.data);
-    }).catch((error)=>{
-      console.log(error.response.data.message)
-    })
-  },[navigate]);
+  let userDetails = JSON.parse(localStorage.getItem("datas"));
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/auth/register/${userDetails.id}`)
+      .then((res) => {
+        setUserData(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+      });
+  }, [navigate]);
   return (
     <>
       <div className="userAdmin_container">
-      {FormSubmitLoader ? (
-            <div className="form_submit_loader">
-              <div className="form_loader"></div>
-            </div>
-          ) : (
-            ""
-          )}
-     <Toaster position="top-right"/>
+        {FormSubmitLoader ? (
+          <div className="form_submit_loader">
+            <div className="form_loader"></div>
+          </div>
+        ) : (
+          ""
+        )}
+        <Toaster position="top-right" />
         <div className="top_navBar">
           <User_Admin_TopNavBar />
         </div>
@@ -261,12 +268,20 @@ const UserAdmin = () => {
             ) : (
               ""
             )}
+
             {window.location.pathname === `/${userName}/uadmin/vcard_form` ? (
               <VCard_Form />
             ) : (
+              ''
+            )}
+            {window.location.pathname ==
+            `/${userName}/uadmin/vcard_form_edit/${userName}/${Index}` ? (
+              <VCard_Form_Edit />
+            ) : (
               ""
             )}
-                {window.location.pathname === `/${userName}/uadmin/account_setting` ? (
+            {window.location.pathname ===
+            `/${userName}/uadmin/account_setting` ? (
               <UserAccountSetting />
             ) : (
               ""
@@ -315,8 +330,6 @@ const UserAdmin = () => {
             )}
             {window.location.pathname === `/server${userName}/sadmin/cms` ? <CMS /> : ""}
             {window.location.pathname === `/server${userName}/sadmin/settings` ? <Setting /> : ""} */}
-
-        
           </div>
 
           {/* //User Profile : */}
@@ -325,7 +338,10 @@ const UserAdmin = () => {
             <div className="user_details">
               <div className="profile">
                 <img
-                  src={userData.profile ||"https://img.freepik.com/free-photo/androgynous-avatar-non-binary-queer-person_23-2151100226.jpg?t=st=1715790254~exp=1715793854~hmac=ba7343c32c0eb17b5cadcdddf5f5ea1b4cc7510ce54d4436095344458fedb8ca&w=740"}
+                  src={
+                    userData.profile ||
+                    "https://img.freepik.com/free-photo/androgynous-avatar-non-binary-queer-person_23-2151100226.jpg?t=st=1715790254~exp=1715793854~hmac=ba7343c32c0eb17b5cadcdddf5f5ea1b4cc7510ce54d4436095344458fedb8ca&w=740"
+                  }
                   alt="logo"
                 />
               </div>
@@ -339,7 +355,7 @@ const UserAdmin = () => {
                 className="list"
                 onClick={() => {
                   (window.location.pathname = `/${userName}/uadmin/account_setting`),
-                  // navigate(`${userData.firstName}/uadmin/account_setting`)
+                    // navigate(`${userData.firstName}/uadmin/account_setting`)
                     setProfileOpen(false);
                 }}
               >
@@ -347,7 +363,7 @@ const UserAdmin = () => {
 
                 <p>Account Setting</p>
               </div>
-           
+
               <div
                 className="list"
                 onClick={() => {
@@ -363,8 +379,7 @@ const UserAdmin = () => {
                 className="list"
                 // onClick={() => {
                 //   setProfileOpen(false);
-             
-           
+
                 // }}
                 onClick={handleSignOut}
               >

@@ -1,10 +1,12 @@
 import React,{useContext} from 'react'
 import './User_Admin_SideNavBar.scss';
 import SuperAdmin_context from "../../SuperAdmin_Context/SuperAdmin_context";
-import { NavLink } from 'react-router-dom';
+import { NavLink,useParams} from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 const User_Admin_SideNavBar = () => {
-  let {SideNavActions,setSideNavActions,profileOpen,setProfileOpen,searchQuery,setSearchQuery,userName}=useContext(SuperAdmin_context);
+
+  let {Index}=useParams();
+  let {   SideNavActions,setSideNavActions,profileOpen,setProfileOpen,searchQuery,setSearchQuery,userName}=useContext(SuperAdmin_context);
 
   let menuList=document.querySelectorAll('#menuName');
 
@@ -33,7 +35,7 @@ const User_Admin_SideNavBar = () => {
        
         </div>
         <div className="menu">
-          <NavLink onClick={()=>window.location.pathname=`/${userName}/uadmin/user_vcard`} className={window.location.pathname === `/${userName}/uadmin/user_vcard` || window.location.pathname === `/${userName}/uadmin/vcard_form`  ?    'activeMenu' : ''}>
+          <NavLink onClick={()=>window.location.pathname=`/${userName}/uadmin/user_vcard`} className={window.location.pathname === `/${userName}/uadmin/user_vcard` || window.location.pathname === `/${userName}/uadmin/vcard_form` || window.location.pathname === `/${userName}/uadmin/vcard_form_edit/${userName}/${Index}` ?    'activeMenu' : ''}>
           
             <i className='bx bxs-home-heart h-auto  d-flex align-self-center justify-content-center text-success'></i>
         <p className={SideNavActions ? 'menuNamesHide':''}id='menuName'>VCards</p>

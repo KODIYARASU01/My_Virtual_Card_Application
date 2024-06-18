@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import axios from 'axios'
 import { Navigate, useNavigate } from "react-router-dom";
 import SuperAdmin_context from "./SuperAdmin_Context/SuperAdmin_context";
 import SuperAdmin from "./Admin_Container/SuperAdmin/SuperAdmin";
@@ -33,12 +34,14 @@ import Login from "./Authentication/Login/Login";
 import NewCardDesign3 from "./All_VCards/NewCardDesign3";
 import ForgotPassword from "./Authentication/ForgotPassword/ForgotPassword";
 import ResetPassword from "./Authentication/ResetPassword/ResetPassword";
+import VCard_Form_Edit from "./User_Admin_Dashboard/User_Admin_All_Component/Vcard_Form/VCard_Form_Edit";
 
 const App = () => {
   let [SideNavActions, setSideNavActions] = useState(false);
   let [profileOpen, setProfileOpen] = useState(false);
   let [searchQuery, setSearchQuery] = useState("");
   let [confirmPassToggle, setConfirmPassToggle] = useState(false);
+  let [Index,setIndex]=useState([])
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   let [userToken, setUserToken] = useState("");
@@ -192,13 +195,22 @@ const App = () => {
     else{
       setUserName('Jayakumar')
     }
-  }, [navigate]);
 
+  }, [navigate]);
+// useEffect(()=>{
+  
+//   axios.get('http://localhost:3001/currentplan').then((res)=>{
+//  console.log(res)
+//   }).catch((error)=>{
+//     console.log(error)
+//   })
+// },[])
   return (
     <>
       <div className="App_container">
         <SuperAdmin_context.Provider
           value={{
+            Index,setIndex,
             userData,
             setUserData,
             FormSubmitLoader,
@@ -483,18 +495,23 @@ const App = () => {
               <Route
                 path={`/${userName}/uadmin/vcard_form`}
                 element={<VCard_Form />}
-              >
+              />
+                    <Route
+                path={`/${userName}/uadmin/vcard_form_edit/:userName/:Index`}
+                element={<VCard_Form_Edit />}
+              />
                 <Route
                   path={`/${userName}/uadmin/vcard_form/basic_form`}
                   element={<BasicForm />}
                 />
-              </Route>
+         
 
               <Route
                 path={`/${userName}/uadmin/account_setting`}
                 element={<UserAccountSetting />}
               />
             </Route>
+           
           </Routes>
         </SuperAdmin_context.Provider>
       </div>

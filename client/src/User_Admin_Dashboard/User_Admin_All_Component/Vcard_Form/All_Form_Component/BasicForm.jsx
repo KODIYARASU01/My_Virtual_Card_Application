@@ -15,7 +15,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Toaster, toast } from "react-hot-toast";
 const BasicForm = () => {
-  let { FormSubmitLoader, setFormSubmitLoader,userName } =
+  let { FormSubmitLoader, setFormSubmitLoader, userName } =
     useContext(SuperAdmin_context);
   let [BasicDetailLoader, setBasicDetailLoader] = useState(false);
   const [VCardName, setVCardName] = useState();
@@ -25,9 +25,9 @@ const BasicForm = () => {
   const [Profile, setProfile] = useState();
 
   let [Banner, setBanner] = useState();
-  let[BannerName,setBannerName]=useState('');
+  let [BannerName, setBannerName] = useState("");
 
- let BannerRef=useRef();
+  let BannerRef = useRef();
   let [FirstName, setFirstName] = useState();
   let [LastName, setLastName] = useState();
   let [Email, setEmail] = useState();
@@ -58,14 +58,14 @@ const BasicForm = () => {
 
     setBanner(base64);
   };
-// const onUploadBanner=async()=>{
-//   setBanner(BannerRef.current.files[0]);
-//   setBannerName(BannerRef.current.files[0].name);
+  // const onUploadBanner = async () => {
+  //   setBanner(BannerRef.current.files[0]);
+  //   // setBannerName(BannerRef.current.files[0].name);
 
-//   // const formData=new FormData();
-//   // formData.append('Banner',Banner);
-//   // formData.append('BannerName',BannerName)
-// };
+  //   // const formData=new FormData();
+  //   // formData.append('Banner',Banner);
+  //   // formData.append('BannerName',BannerName)
+  // };
   let formik = useFormik({
     initialValues: {
       VCardName: "",
@@ -73,7 +73,7 @@ const BasicForm = () => {
       Description: "",
       Profile: undefined,
       Banner: null,
-      BannerName:'',
+      BannerName: "",
       FirstName: "",
       LastName: "",
       Email: "",
@@ -89,11 +89,28 @@ const BasicForm = () => {
     },
     validateOnChange: false,
     validateOnBlur: false,
-    validate:BasicDetailValidate,
- 
+    validate: BasicDetailValidate,
+
     onSubmit: async (values) => {
-    //  values.Banner=new FormData().append('Banner',Banner);
-    //  values.BannerName=new FormData().append('BannerName',BannerName);
+      //  values.Banner=new FormData().append('Banner',Banner);
+      //  values.BannerName=new FormData().append('BannerName',BannerName);
+      // values.Banner= new FormData().append("Banner", values.Banner);
+      
+      // formData.append("VCardName", values.VCardName);
+      // formData.append("Occupation", values.Occupation);
+      // formData.append("Description", values.Description);
+      // formData.append("Profile", values.Profile);
+      // formData.append("FirstName", values.FirstName);
+      // formData.append("LastName", values.LastName);
+      // formData.append("Email", values.Email);
+      // formData.append("AlternateEmail", values.AlternateEmail);
+      // formData.append("AlternateMobileNumber", values.AlternateMobileNumber);
+      // formData.append("Location", values.Location);
+      // formData.append("JobTitle", values.JobTitle);
+      // formData.append("InquiryToggleSwitch", values.InquiryToggleSwitch);
+      // formData.append("QRToggleSwitch", values.QRToggleSwitch);
+      // formData.append("AppoinmentToggleSwitch", values.AppoinmentToggleSwitch);
+      // formData.append("ContactToggleSwitch", values.ContactToggleSwitch);
 
       values = await Object.assign(values, { Profile: Profile || "" });
       values = await Object.assign(values, { Banner: Banner || "" });
@@ -111,8 +128,8 @@ const BasicForm = () => {
           setFormSubmitLoader(false);
         })
         .catch((error) => {
-       toast.error(error.response.data.message);
-       console.log(error)
+          toast.error(error.response.data.message);
+          console.log(error);
           setFormSubmitLoader(false);
         });
     },
@@ -120,9 +137,13 @@ const BasicForm = () => {
   return (
     <>
       <div className="basicform_container">
-        <Toaster position="top-right"/>
+        <Toaster position="top-right" />
         <div className="form1_container_box">
-          <form encType="multipart/form-data" onSubmit={formik.handleSubmit} method="POST">
+          <form
+            encType="multipart/form-data"
+            onSubmit={formik.handleSubmit}
+            method="POST"
+          >
             <div className="form_group">
               <label htmlFor="VCardName">
                 VCard Name <sup>*</sup>
@@ -152,7 +173,7 @@ const BasicForm = () => {
                 Description<sup>*</sup>
               </label>
               <Editor
-              {...formik.getFieldProps('Description')}
+                {...formik.getFieldProps("Description")}
                 value={formik.values.Description}
                 onTextChange={(e) => setDescription(e.htmlValue)}
                 id="Description"
@@ -184,7 +205,6 @@ const BasicForm = () => {
                   type="file"
                   name="Profile"
                   id="Profile"
-                
                 />
               </div>
               <div className="second">
@@ -206,9 +226,9 @@ const BasicForm = () => {
                 <small>Allowed file types: png, jpg, jpeg.</small>
                 <input
                   type="file"
-                  ref={BannerRef}
+                  // ref={BannerRef}
                   onChange={onUploadBanner}
-                  // {...formik.getFieldProps('Banner')}
+                  // {...formik.getFieldProps("Banner")}
                   name="Banner"
                   id="Banner"
                 />
@@ -316,7 +336,6 @@ const BasicForm = () => {
                 id="InquiryToggleSwitch"
                 name="InquiryToggleSwitch"
                 type="checkbox"
-                
                 checked={formik.values.InquiryToggleSwitch}
                 onChange={formik.handleChange}
               />
@@ -370,8 +389,14 @@ const BasicForm = () => {
               <button className="save" type="submit">
                 Save
               </button>
-             
-              <button className="discard" type="button" onClick={formik.handleReset}>Clear</button>
+
+              <button
+                className="discard"
+                type="button"
+                onClick={formik.handleReset}
+              >
+                Clear
+              </button>
             </div>
           </form>
         </div>

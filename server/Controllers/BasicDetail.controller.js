@@ -15,10 +15,12 @@ export const getBasicAllData = async (req, res) => {
   }
 };
 //Post Async allback function :
-
+ for(var i=0;i<1;i++){
+     
+ }
 export const postBasicAllData = async (req, res) => {
     let data={
-      user: req.user.userName,
+      user: req.user.userName+(i++),
       VCardName: req.body.VCardName,
       Occupation:  req.body.Occupation,
       Description: req.body.Description,
@@ -36,7 +38,8 @@ export const postBasicAllData = async (req, res) => {
       InquiryToggleSwitch:  req.body.InquiryToggleSwitch,
       QRToggleSwitch:  req.body.QRToggleSwitch,
       AppoinmentToggleSwitch:  req.body.AppoinmentToggleSwitch,
-      ContactToggleSwitch:  req.body.ContactToggleSwitch,
+      ContactToggleSwitch:  req.body.ContactToggleSwitch
+
     }
     let createDatas =new BasicDetails(data);
     try {

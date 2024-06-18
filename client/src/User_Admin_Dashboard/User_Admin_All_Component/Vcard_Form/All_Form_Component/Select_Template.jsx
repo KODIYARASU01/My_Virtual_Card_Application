@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 import "./form_styles/Select_Template.scss";
 import { toast, Toaster } from "react-hot-toast";
 import card1 from "../../../../assets/Digicards/1.png";
@@ -20,7 +20,7 @@ let FreeTemplate = [
   {
     id: 1,
     image: card2,
-  }
+  },
 ];
 let BasicTemplate = [
   {
@@ -42,9 +42,7 @@ let BasicTemplate = [
   {
     id: 5,
     image: card3,
-  }
-
-
+  },
 ];
 let StandardTemplate = [
   {
@@ -122,6 +120,7 @@ let EnterpriceTemplate = [
     image: card7,
   },
 ];
+
 const Select_Template = () => {
   let {
     FormSubmitLoader,
@@ -131,17 +130,55 @@ const Select_Template = () => {
     setCurrentPlan,
   } = useContext(SuperAdmin_context);
   let [currentTemplate, setCurrentTemplate] = useState(null);
-
+  let [savedTemplate, setSavedTemplate] = useState(null);
   function handle_Template_Selection(getCurrentId) {
     setCurrentTemplate(getCurrentId === currentTemplate ? null : getCurrentId);
 
     if (getCurrentId === currentTemplate) {
       toast.error("Select Your VCard Template!");
-    } else {
-      toast.success("VCard Template Selected!");
     }
+   else if(currentTemplate != savedTemplate && savedTemplate!=null){
+      toast.error("Already VCard Selected!");
+    }
+    else{
+      toast.success("VCard Selected!");
+    }
+   
   }
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:3001/templateDetail/specificAll/${localStorageDatas.userName}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data.data[0].currentTemplate)
+
+        if(res.data.data[0].currentTemplate == undefined){
+          setCurrentTemplate(null)
+        }
+        else{
+          setCurrentTemplate(res.data.data[0].currentTemplate);
+          setSavedTemplate(res.data.data[0].currentTemplate);
+        }
+
+    
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    
+  }, [FormSubmitLoader]);
+
+  console.log(currentTemplate,savedTemplate)
   let formik = useFormik({
     initialValues: {
       currentTemplate: null,
@@ -161,6 +198,7 @@ const Select_Template = () => {
           },
         })
         .then((res) => {
+
           toast.success(res.data.message);
           setFormSubmitLoader(false);
         })
@@ -179,162 +217,192 @@ const Select_Template = () => {
           <h6>
             Select Template <sup>*</sup>
           </h6>
-          <button onClick={formik.handleSubmit} type="submit">
-            Save
-          </button>
+          {currentTemplate != savedTemplate || savedTemplate ==null  ? (
+            <button onClick={formik.handleSubmit} type="submit">
+              Save
+            </button>
+          ) : (
+            ""
+          )}
+            {/* {savedTemplate==null   ? (
+            <button onClick={formik.handleSubmit} type="submit">
+              Save
+            </button>
+          ) : (
+            ""
+          )} */}
         </div>
         <div className="row_two">
           {currentPlan != null ? (
             <div className="image_container">
-                 {currentPlan === "Free Demo" ?<> 
-                 {FreeTemplate.map((data, index) => {
-                return (
-                  <div
-                    className="free_image"
-                    key={index}
-                    id={
-                      currentTemplate === data.id
-                        ? "templateSelected"
-                        : "templateUnselected"
-                    }
-                    onClick={() => handle_Template_Selection(data.id)}
-                    {...formik.getFieldProps("currentTemplate")}
-                  >
-                    {data.id === currentTemplate ? (
-                      <div className="selected_gif">
-                        <img src={selected_gif} alt="selected" />
+              {currentPlan === "Free Demo" ? (
+                <>
+                  {FreeTemplate.map((data, index) => {
+                    return (
+                      <div
+                        className={savedTemplate === currentTemplate ? 'free_image':''}
+                        key={index}
+                        id={savedTemplate== null && currentTemplate== null 
+                            ? "templateUnselected":"templateSelected"
+                         
+                        }
+                        onClick={() => handle_Template_Selection(data.id)}
+                        {...formik.getFieldProps("currentTemplate")}
+                      >
+                        {data.id === currentTemplate && savedTemplate == null ? (
+                          <div className="selected_gif">
+                            <img src={selected_gif} alt="selected" />
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                        {data.id === 1 && currentTemplate === null ? (
+                          <div className="touch_hand">
+                            <img src={touch_gif} alt="touch" />
+                          </div>
+                        ) : (
+                          ""
+                        )}
+
+                        <div
+                          className="image_box"
+                          id={currentTemplate === savedTemplate ? "selected" : "unselected"}
+                        >
+                       
+                          <img src={data.image} alt="" />
+                        </div>
                       </div>
-                    ) : (
-                      ""
-                    )}
-                    {data.id === 1 && currentTemplate === null ? (
-                      <div className="touch_hand">
-                        <img src={touch_gif} alt="touch" />
+                    );
+                  })}{" "}
+                </>
+              ) : (
+                ""
+              )}
+              {currentPlan === "Basic" ? (
+                <>
+                  {BasicTemplate.map((data, index) => {
+                    return (
+                      <div
+                        className={savedTemplate !=null ? 'free_image' :'image'}
+                        key={index}
+                        id={
+                          (currentTemplate === data.id && currentTemplate == savedTemplate || savedTemplate ==null
+                            ? "templateSelected"
+                            : "templateUnselected" ) 
+                        }
+                        onClick={() => handle_Template_Selection(data.id)}
+                        {...formik.getFieldProps("currentTemplate")}
+                      >
+                        {data.id === currentTemplate ? (
+                          <div className="selected_gif">
+                            <img src={selected_gif} alt="selected" />
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                        {data.id === 1 && currentTemplate === null ? (
+                          <div className="touch_hand">
+                            <img src={touch_gif} alt="touch" />
+                          </div>
+                        ) : (
+                          ""
+                        )}
+
+                        <div className="image_box">
+                          <img src={data.image} alt="" />
+                        </div>
                       </div>
-                    ) : (
-                      ""
-                    )}
-                   
-                    <div className="image_box">
-                   
-                      <img src={data.image} alt="" />
-                    </div>
-                  </div>
-                );
-              })} </>: ''}
-                   {currentPlan === "Basic" ?<> 
-                 {BasicTemplate.map((data, index) => {
-                return (
-                  <div
-                    className="image"
-                    key={index}
-                    id={
-                      currentTemplate === data.id
-                        ? "templateSelected"
-                        : "templateUnselected"
-                    }
-                    onClick={() => handle_Template_Selection(data.id)}
-                    {...formik.getFieldProps("currentTemplate")}
-                  >
-                    {data.id === currentTemplate ? (
-                      <div className="selected_gif">
-                        <img src={selected_gif} alt="selected" />
+                    );
+                  })}{" "}
+                </>
+              ) : (
+                ""
+              )}
+              {currentPlan === "Standard" ? (
+                <>
+                  {StandardTemplate.map((data, index) => {
+                    return (
+                      <div
+                      className={savedTemplate !=null ? 'free_image' :'image'}
+                        key={index}
+                        id={
+                          (currentTemplate === data.id && currentTemplate == savedTemplate || savedTemplate == null 
+                            ? "templateSelected"
+                            : "templateUnselected" ) 
+                        }
+                        onClick={() => handle_Template_Selection(data.id)}
+                        {...formik.getFieldProps("currentTemplate")}
+                      >
+                        {data.id === currentTemplate ? (
+                          <div className="selected_gif">
+                            <img src={selected_gif} alt="selected" />
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                        {data.id === 1 && currentTemplate === null ? (
+                          <div className="touch_hand">
+                            <img src={touch_gif} alt="touch" />
+                          </div>
+                        ) : (
+                          ""
+                        )}
+
+                        <div className="image_box">
+                          <img src={data.image} alt="" />
+                        </div>
                       </div>
-                    ) : (
-                      ""
-                    )}
-                    {data.id === 1 && currentTemplate === null ? (
-                      <div className="touch_hand">
-                        <img src={touch_gif} alt="touch" />
+                    );
+                  })}{" "}
+                </>
+              ) : (
+                ""
+              )}
+              {currentPlan === "Enterprises" ? (
+                <>
+                  {EnterpriceTemplate.map((data, index) => {
+                    return (
+                      <div
+                      className={savedTemplate !=null ? 'free_image' :'image'}
+                        key={index}
+                        id={
+                          (currentTemplate === data.id && currentTemplate == savedTemplate || savedTemplate == null 
+                            ? "templateSelected"
+                            : "templateUnselected" ) 
+                        }
+                        onClick={() => handle_Template_Selection(data.id)}
+                        {...formik.getFieldProps("currentTemplate")}
+                      >
+                        {data.id === currentTemplate ? (
+                          <div className="selected_gif">
+                            <img src={selected_gif} alt="selected" />
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                        {data.id === 1 && currentTemplate === null ? (
+                          <div className="touch_hand">
+                            <img src={touch_gif} alt="touch" />
+                          </div>
+                        ) : (
+                          ""
+                        )}
+
+                        <div className="image_box">
+                          <img src={data.image} alt="" />
+                        </div>
                       </div>
-                    ) : (
-                      ""
-                    )}
-                   
-                    <div className="image_box">
-                   
-                      <img src={data.image} alt="" />
-                    </div>
-                  </div>
-                );
-              })} </>: ''}
-                      {currentPlan === "Standard" ?<> 
-                 {StandardTemplate.map((data, index) => {
-                return (
-                  <div
-                    className="image"
-                    key={index}
-                    id={
-                      currentTemplate === data.id
-                        ? "templateSelected"
-                        : "templateUnselected"
-                    }
-                    onClick={() => handle_Template_Selection(data.id)}
-                    {...formik.getFieldProps("currentTemplate")}
-                  >
-                    {data.id === currentTemplate ? (
-                      <div className="selected_gif">
-                        <img src={selected_gif} alt="selected" />
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                    {data.id === 1 && currentTemplate === null ? (
-                      <div className="touch_hand">
-                        <img src={touch_gif} alt="touch" />
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                   
-                    <div className="image_box">
-                   
-                      <img src={data.image} alt="" />
-                    </div>
-                  </div>
-                );
-              })} </>: ''}
-                            {currentPlan === "Enterprises" ?<> 
-                 {EnterpriceTemplate.map((data, index) => {
-                return (
-                  <div
-                    className="image"
-                    key={index}
-                    id={
-                      currentTemplate === data.id
-                        ? "templateSelected"
-                        : "templateUnselected"
-                    }
-                    onClick={() => handle_Template_Selection(data.id)}
-                    {...formik.getFieldProps("currentTemplate")}
-                  >
-                    {data.id === currentTemplate ? (
-                      <div className="selected_gif">
-                        <img src={selected_gif} alt="selected" />
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                    {data.id === 1 && currentTemplate === null ? (
-                      <div className="touch_hand">
-                        <img src={touch_gif} alt="touch" />
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                   
-                    <div className="image_box">
-                   
-                      <img src={data.image} alt="" />
-                    </div>
-                  </div>
-                );
-              })} </>: ''}
+                    );
+                  })}{" "}
+                </>
+              ) : (
+                ""
+              )}
             </div>
           ) : (
-           <div className="noplans">
-           <p>No plan Choosen!</p> 
-           </div>
+            <div className="noplans">
+              <p>No plan Choosen!</p>
+            </div>
           )}
         </div>
         <div className="row_3">

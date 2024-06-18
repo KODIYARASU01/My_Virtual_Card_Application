@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import "./VCard_Form.scss";
+import "./VCard_Form_Edit.scss";
 import BasicForm from "./All_Form_Component/BasicForm";
 import { Link, useNavigate } from "react-router-dom";
 import Select_Template from "./All_Form_Component/Select_Template";
@@ -20,7 +20,7 @@ import Manage_Session from "./All_Form_Component/Manage_Session";
 import axios from "axios";
 import SuperAdmin_context from "../../../SuperAdmin_Context/SuperAdmin_context";
 import Plan from "./All_Form_Component/Plan";
-const VCard_Form = () => {
+const VCard_Form_Edit = () => {
 let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
   let navigate = useNavigate();
   let [userData, setUserData] = useState("jayakumar");
@@ -45,7 +45,7 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
       <div className="vcard_form_container">
         <div className="vcard_form_title">
           <div className="title">
-            <h5>Create Your VCard</h5>
+            <h5>Update Your VCard</h5>
           </div>
           <div className="action">
             <button
@@ -237,4 +237,4 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
   );
 };
 
-export default VCard_Form;
+export default VCard_Form_Edit;
