@@ -11,13 +11,13 @@ const storage = multer.diskStorage({
 });
 
 // Initialize upload
-const upload = multer({
+const serviceUpload = multer({
   storage: storage,
   limits: {fileSize: 2 * 1024 * 1024  }, // 2MB limit
   fileFilter: (req, file, cb) => {
     checkFileType(file, cb);
   }
-}).single('GalleryImage');
+}).single('ServiceImage');
 
 // Check file type
 function checkFileType(file, cb) {
@@ -31,7 +31,7 @@ function checkFileType(file, cb) {
     cb('Error: Images Only!');
   }
 }
-export default upload;
+export default serviceUpload;
 // // Define storage for the images
 // const storage = multer.diskStorage({
 //   destination: function (req, file, cb) {

@@ -19,13 +19,14 @@ let serviceSchema=new mongoose.Schema({
         required:true
     },
     ServiceImage:{
-        type:String,
-        required:true
+        data: Buffer,
+      contentType: String,
+        // required:true
     }
 },
 {timestamps:true}
 );
 
 
-let ServiceData=mongoose.model('ServiceData',serviceSchema);
-export default ServiceData;
+let ServiceModel=mongoose.model('ServiceData',serviceSchema);
+export default ServiceModel;

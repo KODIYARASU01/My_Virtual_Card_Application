@@ -15,7 +15,7 @@ let TestimonialSchema=new mongoose.Schema({
     },
     ClientImage:{
         type:String,
-        default:'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671116.jpg?t=st=1716667954~exp=1716671554~hmac=ce3024b7d9c40305eefee6854f6b9404c9429afa64f2732a5e48a480280975cf&w=740'
+        default:'https://img.freepik.com/free-photo/3d-illustration-teenager-with-funny-face-glasses_1142-50955.jpg?t=st=1718905206~exp=1718908806~hmac=66b71371f6581281335856c83d37c49d64dd263f365e7d4dc8d089afffd07818&w=740'
     }
 },{timestamps:true});
 

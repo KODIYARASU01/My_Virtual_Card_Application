@@ -10,19 +10,24 @@ import { Toaster, toast } from "react-hot-toast";
 import { convertToBase64ProductImage } from "../../../../Helper/convert";
 import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_context";
 const Products = () => {
-  let { FormSubmitLoader, setFormSubmitLoader, userName } =
+  let { currentPlan, setCurrentPlan,FormSubmitLoader, setFormSubmitLoader, userName } =
     useContext(SuperAdmin_context);
   let [productFormOpen, setProductFormOpen] = useState(false);
   let [ProductName, setProductName] = useState();
   let [ProductURL, setProductURL] = useState();
   let [ProductDescription, setProductDescription] = useState();
-  let [ProductImage, setProductImage] = useState();
+  let [ProductImage, setProductImage] = useState(null);
   let [ProductPrice, setProductPrice] = useState();
 
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
-  const onUploadProductImage = async (e) => {
-    let base64 = await convertToBase64ProductImage(e.target.files[0]);
-    setProductImage(base64);
+  // const onUploadProductImage = async (e) => {
+  //   let base64 = await convertToBase64ProductImage(e.target.files[0]);
+  //   setProductImage(base64);
+  // };
+  const [filename, setFilename] = useState("Choose File");
+  const onUploadProductImage = (e) => {
+    setProductImage(e.target.files[0]);
+    setFilename(e.target.files[0].name);
   };
   const stripHtmlTags = (html) => {
     const div = document.createElement("div");
@@ -34,7 +39,7 @@ const Products = () => {
       ProductName: "",
       ProductURL: "",
       ProductDescription: "",
-      ProductImage: undefined,
+      ProductImage: null,
       ProductPrice: 0,
     },
     validateOnChange: false,
@@ -42,15 +47,24 @@ const Products = () => {
     // validate:BasicDetailValidate,
 
     onSubmit: async (values) => {
-      values = await Object.assign(values, {
-        ProductImage: ProductImage || "",
-      });
-      values.ProductDescription = stripHtmlTags(ProductDescription);
+
+
+      const formData = new FormData();
+   formData.append("ProductImage", ProductImage);
+   formData.append('ProductName',values.ProductName);
+   formData.append('ProductURL',values.ProductURL);
+   formData.append('ProductDescription', values.ProductDescription = stripHtmlTags(ProductDescription));
+   formData.append('ProductPrice',values.ProductPrice);
+      // values = await Object.assign(values, {
+      //   ProductImage: ProductImage || "",
+      // });
+
+     
       setFormSubmitLoader(true);
       await axios
-        .post("http://localhost:3001/productDetail", values, {
+        .post("http://localhost:3001/productDetail", formData, {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
           },
         })
@@ -60,7 +74,6 @@ const Products = () => {
         })
         .catch((error) => {
           toast.error(error.response.data.message);
-          console.log(error);
           setFormSubmitLoader(false);
         });
     },
@@ -68,6 +81,9 @@ const Products = () => {
   return (
     <>
       <div className="product_container">
+      <div className="product_plan_title">
+        <p><strong>{currentPlan} plan </strong>&nbsp; Subscribed!</p>
+        </div>
         <div className="add_new_product">
           <button onClick={() => setProductFormOpen(true)}>Add Product</button>
         </div>
@@ -185,7 +201,7 @@ const Products = () => {
 
               <div className="form_group productImage">
                 <label htmlFor="ProductImage">Product Image<sup>*</sup></label>
-                <label htmlFor="ProductImage">
+                {/* <label htmlFor="ProductImage">
                   <img
                     src={
                       ProductImage != undefined
@@ -195,8 +211,8 @@ const Products = () => {
                     alt="ProductImage"
                   />
                   <i className="bx bxs-edit-location"></i>
-                </label>
-                <small>Allowed file types: png, jpg, jpeg.</small>
+                </label> */}
+                <small>Allowed file types: png, jpg, jpeg,.gif.</small>
                 <input
                   type="file"
                   id="ProductImage"

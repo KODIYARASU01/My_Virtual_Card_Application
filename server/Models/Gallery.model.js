@@ -7,8 +7,10 @@ let GallerySchema=new mongoose.Schema({
         required: true,  
       },
       GalleryImage:{
-        type:String,
-        required:true
+        data:Buffer,
+        contentType:String,
+        // type:String,
+    
       }
     ,
     GalleryURL:{

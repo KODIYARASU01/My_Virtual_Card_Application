@@ -2,10 +2,7 @@ import express from 'express';
 import { GetGalleryData, PostGalleryData,readSpecificUserAllData,getSpecificIdData,updateSpecificUserData,deleteSpecificUserAllData,deleteSpecificUserData } from '../Controllers/Gallery.controller.js';
 import { verifyToken } from '../Middleware/verifyToken.js';
 let router=express.Router();
-import multer from 'multer';
-// Configure Multer
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+import upload from '../Multer/config.js';
 
 router.get('/',verifyToken,GetGalleryData);
 router.post('/',verifyToken,PostGalleryData);

@@ -18,7 +18,7 @@ let router = express.Router();
 
 
 router.get("/", verifyToken, getBasicAllData);
-router.post("/",verifyToken, upload.single('Banner'), postBasicAllData);
+router.post("/",verifyToken, postBasicAllData);
 //Read Specific user all Data:
 router.get("/specificAll/:userName", verifyToken, readSpecificUserAllData);
 //Read Specific user all Data:

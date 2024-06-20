@@ -6,7 +6,13 @@ export const postTemplateData = async (req, res) => {
   try {
     if (req.body.currentTemplate === null) {
       return res.status(401).json({ message: "Select Your VCard Template!" });
-    } else {
+    } 
+
+    let checkVardActive=await Current_VCardTemplate.find({user:req.user.userName});
+
+    if(checkVardActive.length > 0){
+      return res.status(401).json({ message: "Already VCard selected!" });  
+    }else{
       let data = {
         user: req.user.userName,
         currentTemplate: req.body.currentTemplate,
@@ -16,6 +22,8 @@ export const postTemplateData = async (req, res) => {
 
       return res.status(201).json({ message: "Card Selected!", data: result });
     }
+
+
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

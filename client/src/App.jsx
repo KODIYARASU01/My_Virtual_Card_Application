@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import axios from 'axios'
+import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 import SuperAdmin_context from "./SuperAdmin_Context/SuperAdmin_context";
 import SuperAdmin from "./Admin_Container/SuperAdmin/SuperAdmin";
@@ -41,7 +41,7 @@ const App = () => {
   let [profileOpen, setProfileOpen] = useState(false);
   let [searchQuery, setSearchQuery] = useState("");
   let [confirmPassToggle, setConfirmPassToggle] = useState(false);
-  let [Index,setIndex]=useState([])
+  let [Index, setIndex] = useState([]);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   let [userToken, setUserToken] = useState("");
@@ -51,12 +51,12 @@ const App = () => {
   let [SuperAdminLoader, setSuperAdmin_Loader] = useState(false);
   let [FormSubmitLoader, setFormSubmitLoader] = useState(false);
   //AllUser Data:
-  let[userData,setUserData]=useState('Jayakumar');
+  let [userData, setUserData] = useState("Jayakumar");
   let [AllData, setAllData] = useState([]);
   // State to store user authentication
   let [UserDetails, setUserDetails] = useState([]);
   let [show, setShow] = useState(false);
-  let[userName,setUserName]=useState('Jayakumar');
+  let [userName, setUserName] = useState("Jayakumar");
   let [profile, setProfile] = useState();
   let [firstName, setFirstName] = useState("");
   let [lastName, setLastName] = useState("");
@@ -94,9 +94,6 @@ const App = () => {
   let [profession, setProfession] = useState();
   let [summary, setSummary] = useState();
 
-  //Plan:
-  let [currentPlan, setCurrentPlan] = useState(null);
-  let [PlanPrice, setPlanPrice] = useState();
   //Contact Detail form States:
 
   let [Email1, setEmail1] = useState();
@@ -185,32 +182,86 @@ const App = () => {
   let [AddUser, setAddUser] = useState(false);
   let [EditUser, setEditUser] = useState(false);
   // let [userName, setUserName] = useState("Jayakumar");
-
+  let [currentTemplate, setCurrentTemplate] = useState(null);
+  let [savedTemplate, setSavedTemplate] = useState(null);
+  //Plan:
+  let [currentPlan, setCurrentPlan] = useState(null);
+  let [SavedPlan, setSavedPlan] = useState(null);
+  let [PlanPrice, setPlanPrice] = useState();
+  console.log(currentPlan, SavedPlan);
   useEffect(() => {
     const Token = JSON.parse(localStorage.getItem("datas"));
     if (Token) {
       setUser(Token);
       setUserName(Token.userName);
+    } else {
+      setUserName("Jayakumar");
     }
-    else{
-      setUserName('Jayakumar')
-    }
-
   }, [navigate]);
-// useEffect(()=>{
-  
-//   axios.get('http://localhost:3001/currentplan').then((res)=>{
-//  console.log(res)
-//   }).catch((error)=>{
-//     console.log(error)
-//   })
-// },[])
+  let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:3001/currentplan/specificAll/${localStorageDatas.userName}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.length <= 0) {
+          setCurrentPlan(null);
+        } else {
+          setCurrentPlan(res.data.data[0].currentPlan);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [FormSubmitLoader]);
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:3001/templateDetail/specificAll/${localStorageDatas.userName}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        }
+      )
+      .then((res) => {
+      
+
+        if (res.data.data[0].currentTemplate === null) {
+          setCurrentTemplate(null);
+        } else {
+          setCurrentTemplate(res.data.data[0].currentTemplate);
+          setSavedTemplate(res.data.data[0].currentTemplate);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [FormSubmitLoader]);
+
   return (
     <>
       <div className="App_container">
         <SuperAdmin_context.Provider
           value={{
-            Index,setIndex,
+            currentTemplate,
+            setCurrentTemplate,
+            savedTemplate,
+            setSavedTemplate,
+            SavedPlan,
+            setSavedPlan,
+            currentPlan, setCurrentPlan,
+            Index,
+            setIndex,
             userData,
             setUserData,
             FormSubmitLoader,
@@ -240,9 +291,9 @@ const App = () => {
             setLoader5,
             ServiceId,
             setServiceId,
-            currentPlan, 
+            currentPlan,
             setCurrentPlan,
-            PlanPrice, 
+            PlanPrice,
             setPlanPrice,
             userToken,
             setUserToken,
@@ -450,10 +501,13 @@ const App = () => {
                 )
               }
             />
-             <Route path="/forgot_password" element={<ForgotPassword />} />
-             <Route path="/reset_password/:id/:token" element={<ResetPassword />} />
+            <Route path="/forgot_password" element={<ForgotPassword />} />
+            <Route
+              path="/reset_password/:id/:token"
+              element={<ResetPassword />}
+            />
             <Route path="/" element={<HomePage />} />
-            <Route path="/new_card3" element={<NewCardDesign3/>}/>
+            <Route path="/new_card3" element={<NewCardDesign3 />} />
             <Route path="/sadmin" element={<SuperAdmin />}>
               <Route path="/sadmin/dashboard" element={<Dashboard />} />
 
@@ -496,22 +550,20 @@ const App = () => {
                 path={`/${userName}/uadmin/vcard_form`}
                 element={<VCard_Form />}
               />
-                    <Route
+              <Route
                 path={`/${userName}/uadmin/vcard_form_edit/:userName/:Index`}
                 element={<VCard_Form_Edit />}
               />
-                <Route
-                  path={`/${userName}/uadmin/vcard_form/basic_form`}
-                  element={<BasicForm />}
-                />
-         
+              <Route
+                path={`/${userName}/uadmin/vcard_form/basic_form`}
+                element={<BasicForm />}
+              />
 
               <Route
                 path={`/${userName}/uadmin/account_setting`}
                 element={<UserAccountSetting />}
               />
             </Route>
-           
           </Routes>
         </SuperAdmin_context.Provider>
       </div>

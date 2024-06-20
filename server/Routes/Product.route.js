@@ -8,9 +8,9 @@ import {
   deleteSpecificUserAllData,
   deleteSpecificUserData,
 } from "../Controllers/Product.controller.js";
-import { verifyToken } from "../Middleware/verifyToken.js";
-let router = express.Router();
 
+let router = express.Router();
+import { verifyToken } from "../Middleware/verifyToken.js";
 router.get("/", verifyToken, GetProductData);
 router.post("/", verifyToken, PostProductData);
 //Read Specific user all Data:

@@ -3,13 +3,34 @@
   width: 100%;
   height: 100%;
   padding: 1rem;
+  .service_plan_title{
+    p{
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+  
+      font-size: 0.8rem;
+      font-weight: bold;
+  
+      strong{
+        color: green;
+      }
+  
+    }
+  }
+
   .add_new_service {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     width: 100%;
+    height: 50px;
+
 
     button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       outline: none;
       border: transparent;
       border-radius: 5px;
@@ -212,7 +233,10 @@
             }
           }
           input[type="file"] {
-            display: none;
+            width: 100%;
+            display: block;
+            padding: 10px 0px;
+            font-size: 0.8rem;border: none;
           }
           textarea {
             grid-column: 1/-1;

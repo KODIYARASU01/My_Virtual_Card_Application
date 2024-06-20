@@ -9,9 +9,10 @@ import axios from "axios";
 import { Toaster,toast } from "react-hot-toast";
 import { convertToBase64ServiceImage } from "../../../../Helper/convert";
 import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_context";
+import currentPlan from "../../../../../../server/Models/Plan.model";
 const Services = () => {
 
-  let { FormSubmitLoader, setFormSubmitLoader,userName } =
+  let {    currentPlan, setCurrentPlan, FormSubmitLoader, setFormSubmitLoader,userName } =
   useContext(SuperAdmin_context);
   let[serviceFormOpen,setServiceFormOpen]=useState(false);
 
@@ -19,11 +20,11 @@ const Services = () => {
   let[ServiceURL,setServiceURL]=useState();
   let[ServiceDescription,setServiceDescription]=useState();
   let[ServiceImage,setServiceImage]=useState();
-
+  const [filename, setFilename] = useState("Choose File");
   let localStorageDatas=JSON.parse(localStorage.getItem('datas'))
   const onUploadServiceImage = async (e) => {
-    let base64 = await convertToBase64ServiceImage(e.target.files[0]);
-    setServiceImage(base64);
+    setServiceImage(e.target.files[0]);
+    setFilename(e.target.files[0].name);
   };
   const stripHtmlTags = (html) => {
     const div = document.createElement("div");
@@ -35,20 +36,24 @@ const Services = () => {
       ServiceName: "",
       ServiceURL: "",
       ServiceDescription: "",
-      ServiceImage: undefined
+      ServiceImage: null
     },
     validateOnChange: false,
     validateOnBlur: false,
     // validate:BasicDetailValidate,
  
     onSubmit: async (values) => {
-      values = await Object.assign(values, { ServiceImage: ServiceImage || "" });
-      values.ServiceDescription = stripHtmlTags(ServiceDescription);
+      // values = await Object.assign(values, { ServiceImage: ServiceImage || "" });
+      const formData = new FormData();
+      formData.append("ServiceImage", ServiceImage);
+      formData.append('ServiceName',values.ServiceName);
+      formData.append('ServiceURL',values.ServiceURL);
+      formData.append('ServiceDescription', values.ServiceDescription = stripHtmlTags(ServiceDescription));
       setFormSubmitLoader(true);
       await axios
-        .post("http://localhost:3001/serviceDetail", values, {
+        .post("http://localhost:3001/serviceDetail", formData, {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
           },
         })
@@ -58,7 +63,6 @@ const Services = () => {
         })
         .catch((error) => {
        toast.error(error.response.data.message);
-       console.log(error)
           setFormSubmitLoader(false);
         });
     },
@@ -66,7 +70,12 @@ const Services = () => {
   return (
     <>
       <div className="service_container">
+        <div className="service_plan_title">
+        <p><strong>{currentPlan} plan </strong>&nbsp; Subscribed!</p>
+        </div>
+
         <div className="add_new_service">
+       
           <button onClick={()=>setServiceFormOpen(true)}>Add Service</button>
         </div>
 
@@ -132,12 +141,9 @@ const Services = () => {
             </div>
             <div className="form_group serviceImage">
               <label htmlFor="ServiceImage">Service Icon</label>
-              <label htmlFor="ServiceImage">
-                <img src={ServiceImage !=undefined ? ServiceImage : "https://img.freepik.com/free-vector/autumn-background_23-2149054409.jpg?t=st=1715971926~exp=1715975526~hmac=064e47d99740a4e25fb7345c45d5bc744da1c1ad7f5f1e14668eaae2cc601381&w=900"} alt="ServiceImage" />
-                <i className='bx bxs-edit-location'></i>
-              </label>
+          
               <input type="file" id="ServiceImage"  name="ServiceImage" onChange={onUploadServiceImage} />
-              <small>Allowed file types: png, jpg, jpeg.</small>
+              <small>Allowed file types: png, jpg, jpeg,.gif.</small>
             
             </div>
             <div className="form_submit_actions">

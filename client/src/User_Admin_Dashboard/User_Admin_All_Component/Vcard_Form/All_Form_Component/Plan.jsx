@@ -11,11 +11,11 @@ import axios from "axios";
 let Free_Plans = [
   {
     id: 1,
-    PlanName: "Free Demo",
+    PlanName: "Demo",
     batches:
       "https://img.icons8.com/external-bearicons-flat-bearicons/64/external-Free-Trial-miscellany-texts-and-badges-bearicons-flat-bearicons.png",
-    Duration: "Month",
-    PlanPrice: 0,
+    Duration: "1-Day",
+    PlanPrice: 10,
     VCardCount: "01",
     Access: [
       {
@@ -400,11 +400,12 @@ const Plan = () => {
           },
         })
         .then((res) => {
+       
           toast.success(res.data.message);
           setFormSubmitLoader(false);
         })
         .catch((error) => {
-          console.log(error);
+          toast.error(error.response.data.message);
           setFormSubmitLoader(false);
         });
     } catch (error) {
@@ -424,8 +425,12 @@ const Plan = () => {
         }
       )
       .then((res) => {
-        if (res.data.data.length > 0) {
-          return setCurrentPlan(res.data.data[0].currentPlan)
+        console.log(res.data)
+        if (res.data.length > 0) {
+           setCurrentPlan(res.data.data[0].currentPlan)
+        }
+        else{
+          setCurrentPlan(null)
         }
       })
       .catch((error) => {
@@ -437,15 +442,16 @@ const Plan = () => {
     setCurrentAccessDetails(data);
     setCurrentAccessActive(true)
   }
-  console.log(currentAccessDetails);
+
+  console.log(currentPlan);
   return (
     <>
-      <div className="plan_container">
+      <div className="plan_container" >
         {currentAccessDetails === 1 ? (
           <>
             {Free_Plans.map((data, index) => {
               return (
-                <div className="plan_access_details" id={currentAccessActive ?'active':''}>
+                <div className="plan_access_details" id={currentAccessActive ?'activeDetail':''}>
                       <div className="plan_close" onClick={()=>setCurrentAccessActive(false)}>
                   <i className='bx bx-message-x'></i>
                   </div>
@@ -477,7 +483,7 @@ const Plan = () => {
           <>
             {Basic_Plans.map((data, index) => {
               return (
-                <div className="plan_access_details" id={currentAccessActive ?'active':''}>
+                <div className="plan_access_details" id={currentAccessActive ?'activeDetail':''}>
                       <div className="plan_close" onClick={()=>setCurrentAccessActive(false)}>
                   <i className='bx bx-message-x'></i>
                   </div>
@@ -509,7 +515,7 @@ const Plan = () => {
           <>
             {Standard_Plans.map((data, index) => {
               return (
-                <div className="plan_access_details" id={currentAccessActive ?'active':''}>
+                <div className="plan_access_details" id={currentAccessActive ?'activeDetail':''}>
                       <div className="plan_close" onClick={()=>setCurrentAccessActive(false)}>
                   <i className='bx bx-message-x'></i>
                   </div>
@@ -541,7 +547,7 @@ const Plan = () => {
           <>
             {EnterPrice_Plans.map((data, index) => {
               return (
-                <div className="plan_access_details" id={currentAccessActive ?'active':''}>
+                <div className="plan_access_details" id={currentAccessActive ?'activeDetail':''}>
                   <div className="plan_close" onClick={()=>setCurrentAccessActive(false)}>
                   <i className='bx bx-message-x'></i>
                   </div>
@@ -570,6 +576,7 @@ const Plan = () => {
           ""
         )}
         <Toaster position="top-right" />
+        <div id={currentAccessActive ? 'listView' :'listUnview'} >
         <div className="plan_title">
           <h5>Choose Your Subscription</h5>
           {currentPlan != null ? (
@@ -815,6 +822,8 @@ const Plan = () => {
             );
           })}
         </div>
+        </div>
+    
       </div>
     </>
   );

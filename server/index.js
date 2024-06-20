@@ -41,7 +41,7 @@ app.use(helmet.crossOriginResourcePolicy({policy:'cross-origin'}))
 //This will help you to allow file upload size limit
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-app.use(express.static(path.join(__dirname,'public')));
+app.use('/uploads',express.static(path.join(__dirname,'uploads')));
 
 
 

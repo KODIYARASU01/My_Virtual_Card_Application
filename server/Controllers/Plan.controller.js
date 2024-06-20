@@ -3,14 +3,14 @@ import currentPlan from "../Models/Plan.model.js";
 //Post plan detail data to database:
 export const PostPlanData = async (req, res) => {
   try {
-    if (
-        !req.body.PlanPrice
-    ) {
-      return res
-        .status(401)
-        .json({ message: "Plan Not been Choosen!" });
+    if (!req.body.PlanPrice) {
+      return res.status(401).json({ message: "Plan Not been Choosen!" });
+    }
+    let getSpecificData = await currentPlan.find({ user: req.user.userName });
+
+    if (getSpecificData.length >= 1) {
+      return res.status(401).json({ message: `Plan Already Selected!` });
     } else {
-      
       let data = {
         user: req.user.userName,
         currentPlan: req.body.currentPlan,
@@ -19,12 +19,10 @@ export const PostPlanData = async (req, res) => {
 
       const result = await currentPlan.create(data);
 
-      return res
-        .status(201)
-        .json({ message: "Plan saved!", data:result });
+      return res.status(201).json({ message: "Plan saved!", data: result });
     }
   } catch (error) {
-    res.status(400).json({error:error.message});
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -36,12 +34,10 @@ export const GetPlanData = async (req, res) => {
     if (!datas) {
       res.status(400).json({ message: "Data not found" });
     } else {
-      res
-        .status(201)
-        .json({
-          message: "Data Fetched!",
-          data: datas,
-        });
+      res.status(201).json({
+        message: "Data Fetched!",
+        data: datas,
+      });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -58,7 +54,11 @@ export const readSpecificUserAllData = async (req, res) => {
     } else {
       res
         .status(201)
-        .json({ message: " Data Fetched!", length:getSpecificData.length, data: getSpecificData });
+        .json({
+          message: " Data Fetched!",
+          length: getSpecificData.length,
+          data: getSpecificData,
+        });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -67,15 +67,13 @@ export const readSpecificUserAllData = async (req, res) => {
 // //Read or get Specific User all Data  :
 export const getSpecificIdData = async (req, res) => {
   try {
-    let {id}=req.params;
-    let getSpecificData = await currentPlan.findById(id );
+    let { id } = req.params;
+    let getSpecificData = await currentPlan.findById(id);
 
     if (!getSpecificData) {
       res.status(400).json({ message: "Data Not Found" });
     } else {
-      res
-        .status(201)
-        .json({ message: " Data Fetched", data: getSpecificData });
+      res.status(201).json({ message: " Data Fetched", data: getSpecificData });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });

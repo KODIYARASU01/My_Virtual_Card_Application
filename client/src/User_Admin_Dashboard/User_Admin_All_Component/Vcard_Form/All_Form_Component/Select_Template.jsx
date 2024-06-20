@@ -128,6 +128,7 @@ const Select_Template = () => {
     userName,
     currentPlan,
     setCurrentPlan,
+    SavedPlan, setSavedPlan
   } = useContext(SuperAdmin_context);
   let [currentTemplate, setCurrentTemplate] = useState(null);
   let [savedTemplate, setSavedTemplate] = useState(null);
@@ -136,14 +137,11 @@ const Select_Template = () => {
 
     if (getCurrentId === currentTemplate) {
       toast.error("Select Your VCard Template!");
-    }
-   else if(currentTemplate != savedTemplate && savedTemplate!=null){
+    } else if (currentTemplate != savedTemplate && savedTemplate != null) {
       toast.error("Already VCard Selected!");
-    }
-    else{
+    } else {
       toast.success("VCard Selected!");
     }
-   
   }
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
 
@@ -159,26 +157,42 @@ const Select_Template = () => {
         }
       )
       .then((res) => {
-        console.log(res.data.data[0].currentTemplate)
+        console.log(res.data.data[0].currentTemplate);
 
-        if(res.data.data[0].currentTemplate == undefined){
-          setCurrentTemplate(null)
-        }
-        else{
+        if (res.data.data[0].currentTemplate == undefined) {
+          setCurrentTemplate(null);
+        } else {
           setCurrentTemplate(res.data.data[0].currentTemplate);
           setSavedTemplate(res.data.data[0].currentTemplate);
         }
-
-    
       })
       .catch((error) => {
         console.log(error);
       });
-
-    
+  }, [FormSubmitLoader]);
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:3001/currentplan/specificAll/${localStorageDatas.userName}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        }
+      )
+      .then((res) => {
+        if (res.data.data.length > 0) {
+       setCurrentPlan(res.data.data[0].currentPlan);
+          FormSubmitLoader(false)
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        FormSubmitLoader(false)
+      });
   }, [FormSubmitLoader]);
 
-  console.log(currentTemplate,savedTemplate)
   let formik = useFormik({
     initialValues: {
       currentTemplate: null,
@@ -198,7 +212,6 @@ const Select_Template = () => {
           },
         })
         .then((res) => {
-
           toast.success(res.data.message);
           setFormSubmitLoader(false);
         })
@@ -209,22 +222,30 @@ const Select_Template = () => {
         });
     },
   });
+
   return (
     <>
       <div className="select_vcard_template_container">
         <Toaster position="top-right" />
         <div className="row_one">
-          <h6>
-            Select Template <sup>*</sup>
+          {currentTemplate == null ? (
+            <h6>
+              Select {currentPlan} Plan Template <sup>*</sup>
+            </h6>
+          ) : (
+            <h6>
+            Selected {currentPlan} Plan Template <sup>*</sup>
           </h6>
-          {currentTemplate != savedTemplate || savedTemplate ==null  ? (
+          )}
+
+          {currentTemplate != savedTemplate || savedTemplate == null ? (
             <button onClick={formik.handleSubmit} type="submit">
               Save
             </button>
           ) : (
             ""
           )}
-            {/* {savedTemplate==null   ? (
+          {/* {savedTemplate==null   ? (
             <button onClick={formik.handleSubmit} type="submit">
               Save
             </button>
@@ -235,21 +256,27 @@ const Select_Template = () => {
         <div className="row_two">
           {currentPlan != null ? (
             <div className="image_container">
-              {currentPlan === "Free Demo" ? (
+              {currentPlan === "Demo" ? (
                 <>
                   {FreeTemplate.map((data, index) => {
                     return (
                       <div
-                        className={savedTemplate === currentTemplate ? 'free_image':''}
+                      className={
+                        savedTemplate != null ? "free_image" : "single_template"
+                      }
                         key={index}
-                        id={savedTemplate== null && currentTemplate== null 
-                            ? "templateUnselected":"templateSelected"
-                         
+                        id={
+                          (currentTemplate === data.id &&
+                            currentTemplate == savedTemplate) ||
+                          savedTemplate == null
+                            ? "templateSelected"
+                            : "templateUnselected"
                         }
                         onClick={() => handle_Template_Selection(data.id)}
                         {...formik.getFieldProps("currentTemplate")}
                       >
-                        {data.id === currentTemplate && savedTemplate == null ? (
+                        {data.id === currentTemplate &&
+                        savedTemplate == null ? (
                           <div className="selected_gif">
                             <img src={selected_gif} alt="selected" />
                           </div>
@@ -266,9 +293,12 @@ const Select_Template = () => {
 
                         <div
                           className="image_box"
-                          id={currentTemplate === savedTemplate ? "selected" : "unselected"}
+                          id={
+                            currentTemplate === savedTemplate
+                              ? "selected"
+                              : "unselected"
+                          }
                         >
-                       
                           <img src={data.image} alt="" />
                         </div>
                       </div>
@@ -283,12 +313,16 @@ const Select_Template = () => {
                   {BasicTemplate.map((data, index) => {
                     return (
                       <div
-                        className={savedTemplate !=null ? 'free_image' :'image'}
+                        className={
+                          savedTemplate != null ? "free_image" : "image"
+                        }
                         key={index}
                         id={
-                          (currentTemplate === data.id && currentTemplate == savedTemplate || savedTemplate ==null
+                          (currentTemplate === data.id &&
+                            currentTemplate == savedTemplate) ||
+                          savedTemplate == null
                             ? "templateSelected"
-                            : "templateUnselected" ) 
+                            : "templateUnselected"
                         }
                         onClick={() => handle_Template_Selection(data.id)}
                         {...formik.getFieldProps("currentTemplate")}
@@ -323,12 +357,16 @@ const Select_Template = () => {
                   {StandardTemplate.map((data, index) => {
                     return (
                       <div
-                      className={savedTemplate !=null ? 'free_image' :'image'}
+                        className={
+                          savedTemplate != null ? "free_image" : "image"
+                        }
                         key={index}
                         id={
-                          (currentTemplate === data.id && currentTemplate == savedTemplate || savedTemplate == null 
+                          (currentTemplate === data.id &&
+                            currentTemplate == savedTemplate) ||
+                          savedTemplate == null
                             ? "templateSelected"
-                            : "templateUnselected" ) 
+                            : "templateUnselected"
                         }
                         onClick={() => handle_Template_Selection(data.id)}
                         {...formik.getFieldProps("currentTemplate")}
@@ -363,12 +401,16 @@ const Select_Template = () => {
                   {EnterpriceTemplate.map((data, index) => {
                     return (
                       <div
-                      className={savedTemplate !=null ? 'free_image' :'image'}
+                      className={
+                        savedTemplate != null ? "free_image" : "image"
+                      }
                         key={index}
                         id={
-                          (currentTemplate === data.id && currentTemplate == savedTemplate || savedTemplate == null 
+                          (currentTemplate === data.id &&
+                            currentTemplate == savedTemplate) ||
+                          savedTemplate == null
                             ? "templateSelected"
-                            : "templateUnselected" ) 
+                            : "templateUnselected"
                         }
                         onClick={() => handle_Template_Selection(data.id)}
                         {...formik.getFieldProps("currentTemplate")}
