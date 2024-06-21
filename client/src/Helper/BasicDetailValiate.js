@@ -81,9 +81,10 @@ function MobileNumberVerify(error = {}, values) {
     error.MobileNumber = toast.error("Wrong MobileNumber!");
   } else if (values.MobileNumber.length <= 9) {
     error.MobileNumber = toast.error("MobileNumber must be 10 digits !");
-  } else if (values.MobileNumber.length > 10) {
-    error.MobileNumber = toast.error("Invalid MobileNumber!");
-  }
+  } 
+  // else if (values.MobileNumber.length > 10) {
+  //   error.MobileNumber = toast.error("Invalid MobileNumber!");
+  // }
   return error;
 }
 function LocationVerify(error = {}, values) {

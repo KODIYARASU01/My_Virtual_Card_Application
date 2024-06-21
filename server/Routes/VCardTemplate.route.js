@@ -2,6 +2,7 @@ import express from 'express';
 import { getTemplateData, postTemplateData,  
     getSpecificUserAllData,
     getSpecificIdData,
+    updateSpecificUserData_id,
     updateSpecificUserData,
     deleteSpecificUserAllData,
     deleteSpecificUserData } from '../Controllers/VCardTemplate.controller.js';
@@ -15,8 +16,10 @@ router.post('/',verifyToken,postTemplateData);
  router.get("/specificAll/:userName", verifyToken, getSpecificUserAllData);
  //Read Specific ID Data:
  router.get("/specific/:id", verifyToken, getSpecificIdData);
+ //Update Specific user Single Data:
+router.put("/update_with_userName/:id", verifyToken, updateSpecificUserData);
 //Update Specific user Single Data:
-router.put("/update/:id", verifyToken, updateSpecificUserData);
+router.put("/update_with_id/:id", verifyToken, updateSpecificUserData_id);
 //Delete Specific user all Data in Basic Detail:
 router.delete("/deleteAll/:userName", verifyToken, deleteSpecificUserAllData);
 //Delete Specific user document Data in Basic Detail:

@@ -139,6 +139,25 @@ export const updateSpecificUserData = async (req, res) => {
   try {
     let { id } = req.params;
     let data = req.body;
+    let updateSpecificData = await SocialMediaModel.findOneAndUpdate({user:req.user.userName}, data);
+
+    if (!updateSpecificData) {
+      res.status(400).json({ message: "Data Not Found!" });
+    } else {
+      res
+        .status(201)
+        .json({ message: "Data Updated!", data: updateSpecificData });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+//Update Specific document with id:
+
+export const updateSpecificUserData_id = async (req, res) => {
+  try {
+    let { id } = req.params;
+    let data = req.body;
     let updateSpecificData = await SocialMediaModel.findByIdAndUpdate(id, data);
 
     if (!updateSpecificData) {

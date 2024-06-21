@@ -1,33 +1,74 @@
 import PopupBannerModel from "../Models/PopupBanner.model.js";
-
+import currentPlan from "../Models/Plan.model.js";
 //Post basic detail data to database:
 
 export const PostPopupBannerData = async (req, res) => {
   try {
-    if (
-         !req.body.BannerTitle || !req.body.BannerDescription
-    ) {
-      return res
-        .status(401)
-        .json({ message: "All * fields are Mandatory!" });
+    if (!req.body.BannerTitle || !req.body.BannerDescription) {
+      return res.status(401).json({ message: "All * fields are Mandatory!" });
+    }
+    let checkCurrentPlan = await currentPlan.find({
+      user: req.user.userName,
+    });
+
+    if (!checkCurrentPlan) {
+      return res.status(400).json({ message: "Plan not be there!" });
+    }
+    if (checkCurrentPlan.length <= 0) {
+      return res.status(400).json({ message: "Choose your Plan first!" });
     } else {
-      let data = {
-        user: req.user.userName,
-        BannerTitle: req.body.BannerTitle,
-        BannerURL: req.body.BannerURL,
-        BannerDescription: req.body.BannerDescription,
-        BannerButtonName:req.body.BannerButtonName
-  
-      };
+      //Plan 2 and 3
+      if (
+        checkCurrentPlan[0].PlanPrice === 10 ||
+        checkCurrentPlan[0].PlanPrice === 365 ||
+        checkCurrentPlan[0].PlanPrice === 799 ||
+        checkCurrentPlan[0].PlanPrice === 1499
+      ) {
+        //check images
+        let checkPopupBannerLength = await PopupBannerModel.find({
+          user: req.user.userName,
+        });
 
-      const result = await PopupBannerModel.create(data);
+        if (!checkPopupBannerLength) {
+          return res.status(400).json({ message: "Image will not be there!" });
+        } else {
+          //Basic Image File limit checked:
+          if (checkPopupBannerLength.length < 1) {
+            // Create a new image instance and save to MongoDB
+            const newPopupBanner = new PopupBannerModel({
+              user: req.user.userName,
+              BannerTitle: req.body.BannerTitle,
+              BannerURL: req.body.BannerURL,
+              BannerDescription: req.body.BannerDescription,
+              BannerButtonName: req.body.BannerButtonName,
+            });
 
-      return res
-        .status(201)
-        .json({ message: "Data saved!", data:result });
+            await newPopupBanner
+              .save()
+              .then(() => {
+                res.status(200).json({
+                  message: "Popup Banner saved!",
+                  data: newPopupBanner,
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+                res.status(400).json({
+                  message: "Failed to save popup Banner Details!",
+                });
+              });
+          } else {
+            res.status(400).json({
+              message: "Already Banner detail saved ! ",
+            });
+          }
+        }
+      } else {
+        res.status(400).json({ message: "Plan not match!", error: err });
+      }
     }
   } catch (error) {
-    res.status(400).json({error:error.message});
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -39,13 +80,11 @@ export const GetPopupBannerData = async (req, res) => {
     if (!datas) {
       res.status(400).json({ message: "Data not found!" });
     } else {
-      res
-        .status(201)
-        .json({
-          message: "Data Fetched!",
-          count: datas.length,
-          data: datas,
-        });
+      res.status(201).json({
+        message: "Data Fetched!",
+        count: datas.length,
+        data: datas,
+      });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -55,17 +94,22 @@ export const GetPopupBannerData = async (req, res) => {
 // //Read or get Specific User all Data  :
 export const readSpecificUserData = async (req, res) => {
   try {
-    let getSpecificData = await PopupBannerModel.find({ user: req.user.userName });
+    let getSpecificData = await PopupBannerModel.find({
+      user: req.user.userName,
+    });
 
     if (!getSpecificData) {
       res.status(400).json({ message: "Data Not Found!" });
-    } else if(getSpecificData.length <=0){
+    } else if (getSpecificData.length <= 0) {
       res.status(400).json({ message: "Data not been inserted!..Empty Data" });
-    }
-     else {
+    } else {
       res
         .status(201)
-        .json({ message: "Data Fetched!",length:getSpecificData.length, data: getSpecificData });
+        .json({
+          message: "Data Fetched!",
+          length: getSpecificData.length,
+          data: getSpecificData,
+        });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -74,8 +118,8 @@ export const readSpecificUserData = async (req, res) => {
 // //Read or get Specific User all Data  :
 export const getSpecificIdData = async (req, res) => {
   try {
-    let {id}=req.params;
-    let getSpecificData = await PopupBannerModel.findById(id );
+    let { id } = req.params;
+    let getSpecificData = await PopupBannerModel.findById(id);
 
     if (!getSpecificData) {
       res.status(400).json({ message: " Data Not Found!" });
@@ -146,3 +190,34 @@ export const deleteSpecificUserData = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+// //Post basic detail data to database:
+
+// export const PostPopupBannerData = async (req, res) => {
+//   try {
+//     if (
+//          !req.body.BannerTitle || !req.body.BannerDescription
+//     ) {
+//       return res
+//         .status(401)
+//         .json({ message: "All * fields are Mandatory!" });
+//     } else {
+//       let data = {
+//         user: req.user.userName,
+//         BannerTitle: req.body.BannerTitle,
+//         BannerURL: req.body.BannerURL,
+//         BannerDescription: req.body.BannerDescription,
+//         BannerButtonName:req.body.BannerButtonName
+
+//       };
+
+//       const result = await PopupBannerModel.create(data);
+
+//       return res
+//         .status(201)
+//         .json({ message: "Data saved!", data:result });
+//     }
+//   } catch (error) {
+//     res.status(400).json({error:error.message});
+//   }
+// };

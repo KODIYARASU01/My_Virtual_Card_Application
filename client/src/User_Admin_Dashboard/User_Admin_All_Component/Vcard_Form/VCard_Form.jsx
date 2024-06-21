@@ -20,6 +20,7 @@ import Manage_Session from "./All_Form_Component/Manage_Session";
 import axios from "axios";
 import SuperAdmin_context from "../../../SuperAdmin_Context/SuperAdmin_context";
 import Plan from "./All_Form_Component/Plan";
+import PrivacyPolicy from "./All_Form_Component/PrivacyPolicy";
 const VCard_Form = () => {
 let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
   let navigate = useNavigate();
@@ -87,7 +88,14 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
 
               <small>VCard Templates</small>
             </div>
-
+            <div
+              className="menu_item"
+              onClick={handleFormShow}
+              id={ShowForm === "Social Link - Website" ? "menu_active" : ""}
+            >
+              <i className="bx bxs-planet" style={{ color: "tomato" }}></i>
+              <small>Social Link - Website</small>
+            </div>
             <div
               className="menu_item"
               onClick={handleFormShow}
@@ -115,14 +123,7 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
               <i className="bx bxs-photo-album" style={{ color: "violet" }}></i>
               <small>Galleries</small>
             </div>
-            <div
-              className="menu_item"
-              onClick={handleFormShow}
-              id={ShowForm === "Blog" ? "menu_active" : ""}
-            >
-              <i className="bx bxl-blogger" style={{ color: "purple" }}></i>
-              <small>Blog</small>
-            </div>
+       
             <div
               className="menu_item"
               onClick={handleFormShow}
@@ -134,42 +135,10 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
             <div
               className="menu_item"
               onClick={handleFormShow}
-              id={ShowForm === "Iframes" ? "menu_active" : ""}
-            >
-              <i className="bx bx-shape-square" style={{ color: "grey" }}></i>
-              <small>Iframes</small>
-            </div>
-            <div
-              className="menu_item"
-              onClick={handleFormShow}
-              id={ShowForm === "Appoinment" ? "menu_active" : ""}
-            >
-              <i className="bx bxs-calendar" style={{ color: "royalBlue" }}></i>
-              <small>Appoinment</small>
-            </div>
-            <div
-              className="menu_item"
-              onClick={handleFormShow}
-              id={ShowForm === "Social Link - Website" ? "menu_active" : ""}
-            >
-              <i className="bx bxs-planet" style={{ color: "tomato" }}></i>
-              <small>Social Link - Website</small>
-            </div>
-            <div
-              className="menu_item"
-              onClick={handleFormShow}
-              id={ShowForm === "Banner" ? "menu_active" : ""}
+              id={ShowForm === "PopUp Banner" ? "menu_active" : ""}
             >
               <i className="bx bxs-image-add" style={{ color: "darkGray" }}></i>
-              <small>Banner</small>
-            </div>
-            <div
-              className="menu_item"
-              onClick={handleFormShow}
-              id={ShowForm === "Dynamic VCard" ? "menu_active" : ""}
-            >
-              <i className="bx bxs-landscape" style={{ color: "orange" }}></i>
-              <small>Dynamic VCard</small>
+              <small>PopUp Banner</small>
             </div>
             <div
               className="menu_item"
@@ -190,10 +159,11 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
             <div
               className="menu_item"
               onClick={handleFormShow}
-              id={ShowForm === "Fonts" ? "menu_active" : ""}
+              id={ShowForm === "Privacy Policy" ? "menu_active" : ""}
             >
-              <i className="bx bx-font-family" style={{ color: "skyblue" }}></i>
-              <small>Fonts</small>
+          
+              <i className='bx bxs-lock' style={{ color: "grey" }}></i>
+              <small>Privacy Policy</small>
             </div>
             <div
               className="menu_item"
@@ -211,6 +181,57 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
               <i className="bx bxs-slideshow" style={{ color: "tomato" }}></i>
               <small>Manage Sections</small>
             </div>
+            <div className="progressing">
+            <small>On Working  Progress</small>
+            <i class='bx bx-chevrons-down bx-fade-down' ></i>
+            </div>
+    
+            <div
+              className="menu_item"
+              onClick={handleFormShow}
+              id={ShowForm === "Iframes" ? "menu_active" : ""}
+            >
+              <i className="bx bx-shape-square" style={{ color: "grey" }}></i>
+              <small>Iframes</small>
+            </div>
+            <div
+              className="menu_item"
+              onClick={handleFormShow}
+              id={ShowForm === "Appoinment" ? "menu_active" : ""}
+            >
+              <i className="bx bxs-calendar" style={{ color: "royalBlue" }}></i>
+              <small>Appoinment</small>
+            </div>
+         
+         
+            <div
+              className="menu_item"
+              onClick={handleFormShow}
+              id={ShowForm === "Dynamic VCard" ? "menu_active" : ""}
+            >
+              <i className="bx bxs-landscape" style={{ color: "orange" }}></i>
+              <small>Dynamic VCard</small>
+            </div>
+            <div
+              className="menu_item"
+              onClick={handleFormShow}
+              id={ShowForm === "Blog" ? "menu_active" : ""}
+            >
+              <i className="bx bxl-blogger" style={{ color: "purple" }}></i>
+              <small>Blog</small>
+            </div>
+         
+          
+            <div
+              className="menu_item"
+              onClick={handleFormShow}
+              id={ShowForm === "Fonts" ? "menu_active" : ""}
+            >
+              <i className="bx bx-font-family" style={{ color: "skyblue" }}></i>
+              <small>Fonts</small>
+            </div>
+        
+           
           </div>
           <div className="all_form_inputs">
             {ShowForm === "Basic Detail" ? <BasicForm /> : ""}
@@ -223,11 +244,12 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
             {ShowForm === "Testimonials" ? <Testimonial /> : ""}
             {ShowForm === "Iframes" ? <Iframe /> : ""}
             {ShowForm === "Social Link - Website" ? <SocialMedias /> : ""}
-            {ShowForm === "Banner" ? <Banner /> : ""}
+            {ShowForm === "PopUp Banner" ? <Banner /> : ""}
             {ShowForm === "Dynamic VCard" ? <Dynamic_VCard /> : ""}
             {ShowForm === "Appoinment" ? <Appoinment /> : ""}
             {ShowForm === "Business Hours" ? <Business_Hour /> : ""}
             {ShowForm === "Fonts" ? <Font /> : ""}
+            {ShowForm === "Privacy Policy" ? <PrivacyPolicy/> : ""}
             {ShowForm === "Terms & Conditions" ? <Terms_Conditions /> : ""}
             {ShowForm === "Manage Sections" ? <Manage_Session /> : ""}
           </div>

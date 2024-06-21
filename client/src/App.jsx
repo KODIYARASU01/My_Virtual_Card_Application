@@ -35,6 +35,7 @@ import NewCardDesign3 from "./All_VCards/NewCardDesign3";
 import ForgotPassword from "./Authentication/ForgotPassword/ForgotPassword";
 import ResetPassword from "./Authentication/ResetPassword/ResetPassword";
 import VCard_Form_Edit from "./User_Admin_Dashboard/User_Admin_All_Component/Vcard_Form/VCard_Form_Edit";
+import toast from "react-hot-toast";
 
 const App = () => {
   let [SideNavActions, setSideNavActions] = useState(false);
@@ -188,7 +189,7 @@ const App = () => {
   let [currentPlan, setCurrentPlan] = useState(null);
   let [SavedPlan, setSavedPlan] = useState(null);
   let [PlanPrice, setPlanPrice] = useState();
-  console.log(currentPlan, SavedPlan);
+
   useEffect(() => {
     const Token = JSON.parse(localStorage.getItem("datas"));
     if (Token) {
@@ -211,7 +212,6 @@ const App = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         if (res.data.length <= 0) {
           setCurrentPlan(null);
         } else {
@@ -219,7 +219,7 @@ const App = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error.response.data.message);
       });
   }, [FormSubmitLoader]);
   useEffect(() => {

@@ -5,13 +5,15 @@ import fs from "fs";
 import multer from "multer";
 //Post basic detail data to database:
 
-export const PostServiceData =  (req, res) => {
+export const PostServiceData = (req, res) => {
   serviceUpload(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
       if (err.code === "LIMIT_FILE_SIZE") {
         return res
           .status(400)
-          .json({ message: "Image File size too large. Maximum limit is 2MB." });
+          .json({
+            message: "Image File size too large. Maximum limit is 2MB.",
+          });
       }
       return res.status(400).json({ message: err.message });
     } else if (err) {
@@ -50,7 +52,6 @@ export const PostServiceData =  (req, res) => {
             user: req.user.userName,
           });
 
-
           if (!checkServiceLength) {
             return res
               .status(400)
@@ -72,7 +73,7 @@ export const PostServiceData =  (req, res) => {
                   },
                 });
 
-               await newService
+                await newService
                   .save()
                   .then(() => {
                     res.status(200).json({
@@ -81,22 +82,19 @@ export const PostServiceData =  (req, res) => {
                     });
                   })
                   .catch((err) => {
-                    console.log(err)
+                    console.log(err);
                     res.status(400).json({
                       message: "Failed to save Service to database!",
-                
                     });
                   });
               } else {
                 res.status(400).json({
                   message:
                     "Max Service limit crossed..Enterprice plan Only accept 8  Service Details! ",
-              
                 });
               }
             }
-            if (checkCurrentPlan[0].PlanPrice === 799
-            ) {
+            if (checkCurrentPlan[0].PlanPrice === 799) {
               //Basic Image File limit checked:
               if (checkServiceLength.length < 6) {
                 // Create a new image instance and save to MongoDB
@@ -121,21 +119,19 @@ export const PostServiceData =  (req, res) => {
                     });
                   })
                   .catch((err) => {
-                    console.log(err.message)
+                    console.log(err.message);
                     res.status(400).json({
                       message: "Failed to save Service to database!",
-                  
                     });
                   });
               } else {
                 res.status(400).json({
                   message:
-                  "Max Service limit crossed..Standard plan Only accept 6  Service Details! ",
-               
+                    "Max Service limit crossed..Standard plan Only accept 6  Service Details! ",
                 });
               }
             }
-        
+
             if (checkCurrentPlan[0].PlanPrice === 365) {
               if (checkServiceLength.length < 4) {
                 // Create a new image instance and save to MongoDB
@@ -160,17 +156,15 @@ export const PostServiceData =  (req, res) => {
                     });
                   })
                   .catch((err) => {
-                    console.log(err.message)
+                    console.log(err.message);
                     res.status(400).json({
                       message: "Failed to save Service to database!",
-                
                     });
                   });
               } else {
                 res.status(400).json({
                   message:
-                  "Max Service limit crossed..Basic plan Only accept 4  Service Details! ",
-             
+                    "Max Service limit crossed..Basic plan Only accept 4  Service Details! ",
                 });
               }
             }
@@ -184,7 +178,6 @@ export const PostServiceData =  (req, res) => {
               } else {
                 res.status(400).json({
                   message: "Service Access denied for Demo Plan!",
-               
                 });
               }
             }
@@ -207,7 +200,7 @@ export const GetServiceData = async (req, res) => {
     } else {
       res.status(201).json({
         message: "Data Fetched!",
-length:datas.length,
+        length: datas.length,
         data: datas,
       });
     }
@@ -217,100 +210,103 @@ length:datas.length,
 };
 
 //   // //Read or get Specific User all Data  :
-  export const getSpecificUserAllData = async (req, res) => {
-    try {
-      let getSpecificData = await ServiceData.find({ user: req.user.userName });
+export const getSpecificUserAllData = async (req, res) => {
+  try {
+    let getSpecificData = await ServiceModel.find({ user: req.user.userName });
 
-      if (!getSpecificData) {
-        res.status(400).json({ message: "Data Not Found!" });
-      } else {
-        res
-          .status(201)
-          .json({ message: "Data Fetched!",length:getSpecificData.length, data: getSpecificData });
-      }
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+    if (!getSpecificData) {
+      res.status(400).json({ message: "Data Not Found!" });
+    } else {
+      res
+        .status(201)
+        .json({
+          message: "Data Fetched!",
+          length: getSpecificData.length,
+          data: getSpecificData,
+        });
     }
-  };
-  // //Read or get Specific User all Data  :
-  export const getSpecificIdData = async (req, res) => {
-    try {
-      let {id}=req.params;
-      let getSpecificData = await ServiceData.findById(id );
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+// //Read or get Specific User all Data  :
+export const getSpecificIdData = async (req, res) => {
+  try {
+    let { id } = req.params;
+    let getSpecificData = await ServiceModel.findById(id);
 
-      if (!getSpecificData) {
-        res.status(400).json({ message: "Data Not Found!" });
-      } else {
-        res
-          .status(201)
-          .json({ message: "Data Fetched!", data: getSpecificData });
-      }
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+    if (!getSpecificData) {
+      res.status(400).json({ message: "Data Not Found!" });
+    } else {
+      res.status(201).json({ message: "Data Fetched!", data: getSpecificData });
     }
-  };
-  //Update Specific document user data:
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+//Update Specific document user data:
 
-  export const updateSpecificUserData = async (req, res) => {
-    try {
-      let { id } = req.params;
-      let data = req.body;
-      let updateSpecificData = await ServiceData.findByIdAndUpdate(id, data);
+export const updateSpecificUserData = async (req, res) => {
+  try {
+    let { id } = req.params;
+    let data = req.body;
+    let updateSpecificData = await ServiceModel.findByIdAndUpdate(id, data, { new: true, runValidators: true });
 
-      if (!updateSpecificData) {
-        res.status(400).json({ message: "Data Not Found!" });
-      } else {
-        res
-          .status(201)
-          .json({ message: "Data Updated!", data: updateSpecificData });
-      }
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+    if (!updateSpecificData) {
+      res.status(400).json({ message: "Data Not Found!" });
+    } else {
+      res
+        .status(201)
+        .json({ message: "Data Updated!", data: updateSpecificData });
     }
-  };
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-  //Delete Specific User Bssic detail All data deleted By using user Id:
-  export const deleteSpecificUserAllData = async (req, res) => {
-    try {
-      let deleteSpecificData = await ServiceData.deleteMany({
-        user: req.user.userName,
-      });
 
-      if (!deleteSpecificData) {
-        res.status(400).json({ message: "Data Not Found" });
-      } else {
-        res
-          .status(201)
-          .json({ message: "All Data Deleted!",length:deleteSpecificData.length, 
-            data: deleteSpecificData });
-      }
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+//Delete Specific User Bssic detail All data deleted By using user Id:
+export const deleteSpecificUserAllData = async (req, res) => {
+  try {
+    let deleteSpecificData = await ServiceModel.deleteMany({
+      user: req.user.userName,
+    });
+
+    if (!deleteSpecificData) {
+      res.status(400).json({ message: "Data Not Found" });
+    } else {
+      res
+        .status(201)
+        .json({
+          message: "All Data Deleted!",
+          length: deleteSpecificData.length,
+          data: deleteSpecificData,
+        });
     }
-  };
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-  //Delete Spcific user  Document in Basic Detail:
+//Delete Spcific user  Document in Basic Detail:
 
-  export const deleteSpecificUserData = async (req, res) => {
-    try {
-      let { id } = req.params;
+export const deleteSpecificUserData = async (req, res) => {
+  try {
+    let { id } = req.params;
 
-      let deleteSpecificData = await ServiceData.findByIdAndDelete(id);
+    let deleteSpecificData = await ServiceModel.findByIdAndDelete(id);
 
-      if (!deleteSpecificData) {
-        res.status(400).json({ message: "Data Not Found!" });
-      } else {
-        res
-          .status(201)
-          .json({ message: "Data Deleted!", data: deleteSpecificData });
-      }
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+    if (!deleteSpecificData) {
+      res.status(400).json({ message: "Data Not Found!" });
+    } else {
+      res
+        .status(201)
+        .json({ message: "Data Deleted!", data: deleteSpecificData });
     }
-  };
-
-
-
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 //   //Post basic detail data to database:
 
@@ -334,6 +330,26 @@ length:datas.length,
 //       const result = await ServiceData.create(data);
 
 //       return res.status(201).json({ message: "Data saved!", data: result });
+//     }
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
+
+// //Update Specific document user data:
+
+// export const updateSpecificUserData = async (req, res) => {
+//   try {
+//     let { id } = req.params;
+//     let data = req.body;
+//     let updateSpecificData = await ServiceModel.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+
+//     if (!updateSpecificData) {
+//       res.status(400).json({ message: "Data Not Found!" });
+//     } else {
+//       res
+//         .status(201)
+//         .json({ message: "Data Updated!", data: updateSpecificData });
 //     }
 //   } catch (error) {
 //     res.status(400).json({ error: error.message });

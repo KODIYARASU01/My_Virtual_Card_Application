@@ -92,6 +92,27 @@ export const getSpecificIdData = async (req, res) => {
 
 export const updateSpecificUserData = async (req, res) => {
   try {
+    let data = req.body;
+    let updateSpecificData = await Current_VCardTemplate.findOneAndUpdate(
+      {user:req.user.userName},
+      data
+    );
+
+    if (!updateSpecificData) {
+      res.status(400).json({ message: "Data Not Found!" });
+    } else {
+      res
+        .status(201)
+        .json({ message: "VCard  Updated!", data: updateSpecificData });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+//Update Specific document width id:
+
+export const updateSpecificUserData_id = async (req, res) => {
+  try {
     let { id } = req.params;
     let data = req.body;
     let updateSpecificData = await Current_VCardTemplate.findByIdAndUpdate(

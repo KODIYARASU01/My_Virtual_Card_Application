@@ -21,6 +21,8 @@ import TestimonialDetailRoute from './Routes/Testimonial.route.js';
 import SocialMediaDetailRoute from './Routes/SocialMedia.route.js';
 import PopupBannerDetailRoute from './Routes/PopupBanner.route.js'
 import PlanDetailRoute from './Routes/Plan.route.js';
+import TermConditionRoute from './Routes/Terms&Condition.route.js';
+import PrivacyPolicyRoute from './Routes/PrivacyPolicy.route.js'
 import AllDataRoute from './Routes/AllData_Fetch_At_Single_API.route.js'
 //App initialized
 let app = express();
@@ -63,6 +65,8 @@ app.use('/galleryDetail',GalleryDetailRoute);
 app.use('/testimonialDetail',TestimonialDetailRoute);
 app.use('/socialMediaDetail',SocialMediaDetailRoute);
 app.use('/popupBannerDetail',PopupBannerDetailRoute);
+app.use('/termConditionDetail',TermConditionRoute);
+app.use('/privacyPolicyDetail',PrivacyPolicyRoute)
 app.use('/vcard',AllDataRoute);
 
 //Setup Mongoose conncetion ;

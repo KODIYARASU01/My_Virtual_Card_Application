@@ -58,14 +58,7 @@ const BasicForm = () => {
 
     setBanner(base64);
   };
-  // const onUploadBanner = async () => {
-  //   setBanner(BannerRef.current.files[0]);
-  //   // setBannerName(BannerRef.current.files[0].name);
 
-  //   // const formData=new FormData();
-  //   // formData.append('Banner',Banner);
-  //   // formData.append('BannerName',BannerName)
-  // };
   let formik = useFormik({
     initialValues: {
       VCardName: "",
@@ -92,25 +85,7 @@ const BasicForm = () => {
     validate: BasicDetailValidate,
 
     onSubmit: async (values) => {
-      //  values.Banner=new FormData().append('Banner',Banner);
-      //  values.BannerName=new FormData().append('BannerName',BannerName);
-      // values.Banner= new FormData().append("Banner", values.Banner);
-      
-      // formData.append("VCardName", values.VCardName);
-      // formData.append("Occupation", values.Occupation);
-      // formData.append("Description", values.Description);
-      // formData.append("Profile", values.Profile);
-      // formData.append("FirstName", values.FirstName);
-      // formData.append("LastName", values.LastName);
-      // formData.append("Email", values.Email);
-      // formData.append("AlternateEmail", values.AlternateEmail);
-      // formData.append("AlternateMobileNumber", values.AlternateMobileNumber);
-      // formData.append("Location", values.Location);
-      // formData.append("JobTitle", values.JobTitle);
-      // formData.append("InquiryToggleSwitch", values.InquiryToggleSwitch);
-      // formData.append("QRToggleSwitch", values.QRToggleSwitch);
-      // formData.append("AppoinmentToggleSwitch", values.AppoinmentToggleSwitch);
-      // formData.append("ContactToggleSwitch", values.ContactToggleSwitch);
+
 
       values = await Object.assign(values, { Profile: Profile || "" });
       values = await Object.assign(values, { Banner: Banner || "" });
