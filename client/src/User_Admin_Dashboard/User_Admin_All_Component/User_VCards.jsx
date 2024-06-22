@@ -140,7 +140,7 @@ const User_VCards = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {VCardCount !=undefined ? (
+                  { VCardCount !=undefined ? (
                    VCardCount.map((data, index) => {
                       return (
                         <tr key={index}>
@@ -176,11 +176,12 @@ const User_VCards = () => {
                       );
                     })
                   ) : (
-                    <tr>
-                    <td colSpan='6' className="text-center">
-                    No Vcard Found!
-                    </td>
-                </tr>
+                //     <tr>
+                //     <td colSpan='6' className="text-center">
+                //     No Vcard Found!
+                //     </td>
+                // </tr>
+                ''
                   
                   )}
                 </tbody>
