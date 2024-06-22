@@ -48,6 +48,8 @@ export const postBasicAllData = async (req, res) => {
             } else {
               //Basic Image File limit checked:
               if (checkBasicDetailLength.length < 1) {
+
+                
                 let data={
                   user: req.user.userName,
                   VCardName: req.body.VCardName,

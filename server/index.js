@@ -23,7 +23,8 @@ import PopupBannerDetailRoute from './Routes/PopupBanner.route.js'
 import PlanDetailRoute from './Routes/Plan.route.js';
 import TermConditionRoute from './Routes/Terms&Condition.route.js';
 import PrivacyPolicyRoute from './Routes/PrivacyPolicy.route.js'
-import AllDataRoute from './Routes/AllData_Fetch_At_Single_API.route.js'
+import AllDataRoute from './Routes/AllData_Fetch_At_Single_API.route.js';
+import AllDataDeleteRoute from './Routes/AllData_Delete_At_Single_ApI.route.js'
 //App initialized
 let app = express();
 // Configurations:
@@ -68,7 +69,7 @@ app.use('/popupBannerDetail',PopupBannerDetailRoute);
 app.use('/termConditionDetail',TermConditionRoute);
 app.use('/privacyPolicyDetail',PrivacyPolicyRoute)
 app.use('/vcard',AllDataRoute);
-
+app.use('/vcard',AllDataDeleteRoute);
 //Setup Mongoose conncetion ;
 mongoose
   .connect(process.env.MONGODB_CONNECTION_STRING)

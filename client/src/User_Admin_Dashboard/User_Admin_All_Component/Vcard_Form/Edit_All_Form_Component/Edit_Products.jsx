@@ -1,4 +1,4 @@
-import React, { useState,useContext } from "react";
+import React, { useState,useContext,useEffect } from "react";
 import "./Edit_form_styles/Edit_Products.scss";
 import { useFormik } from "formik";
 import { Editor } from "primereact/editor";
@@ -12,28 +12,66 @@ import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_contex
 const Products = () => {
   let { currentPlan, setCurrentPlan,FormSubmitLoader, setFormSubmitLoader, userName } =
     useContext(SuperAdmin_context);
+    let [AllProduct, setAllProduct] = useState();
+    let[ProductViewToggle,setProductViewToggle]=useState(false)
   let [productFormOpen, setProductFormOpen] = useState(false);
+  let [updateFormOpen, setUpdateFormOpen] = useState(false);
   let [ProductName, setProductName] = useState();
   let [ProductURL, setProductURL] = useState();
   let [ProductDescription, setProductDescription] = useState();
   let [ProductImage, setProductImage] = useState(null);
+  let [ProductId, setProductId] = useState();
   let [ProductPrice, setProductPrice] = useState();
+  const [key, setKey] = useState(0);
 
-  let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
-  // const onUploadProductImage = async (e) => {
-  //   let base64 = await convertToBase64ProductImage(e.target.files[0]);
-  //   setProductImage(base64);
-  // };
-  const [filename, setFilename] = useState("Choose File");
-  const onUploadProductImage = (e) => {
-    setProductImage(e.target.files[0]);
-    setFilename(e.target.files[0].name);
+  const reloadComponent = () => {
+    setKey((prevKey) => prevKey + 1); // Change the key to trigger a remount
   };
+  let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
+  const onUploadProductImage = async (e) => {
+    let base64 = await convertToBase64ProductImage(e.target.files[0]);
+    setProductImage(base64);
+  };
+
   const stripHtmlTags = (html) => {
     const div = document.createElement("div");
     div.innerHTML = html;
     return div.textContent || div.innerText || "";
   };
+  async function fetchCurrentProduct() {
+    setFormSubmitLoader(true);
+    try {
+      await axios
+        .get(
+          `http://localhost:3001/productDetail/specificAll/${localStorageDatas.userName}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorageDatas.token}`,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.data.length == 0) {
+            toast.error("No Product added!");
+            setFormSubmitLoader(false);
+          } else {
+
+            setAllProduct(res.data.data);
+            setFormSubmitLoader(false);
+          }
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+          setFormSubmitLoader(false);
+        });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+  useEffect(() => {
+    fetchCurrentProduct();
+  }, [key]);
   let formik = useFormik({
     initialValues: {
       ProductName: "",
@@ -69,8 +107,10 @@ const Products = () => {
           },
         })
         .then((res) => {
+          reloadComponent()
           toast.success(res.data.message);
           setFormSubmitLoader(false);
+        
         })
         .catch((error) => {
           toast.error(error.response.data.message);
@@ -78,6 +118,138 @@ const Products = () => {
         });
     },
   });
+  async function handleProductView(id) {
+    setProductViewToggle(true);
+    try {
+      await axios
+        .get(`http://localhost:3001/productDetail/specific/${id}`, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        })
+        .then((res) => {
+          setProductViewToggle(true);
+          setProductName(res.data.data.ProductName);
+          setProductImage(res.data.data.ProductImage);
+          setProductPrice(res.data.data.ProductPrice);
+          setProductURL(res.data.data.ProductURL)
+          setProductDescription(
+            (res.data.data.ProductDescription = stripHtmlTags(
+              res.data.data.ProductDescription
+            ))
+          );
+          setFormSubmitLoader(false);
+        })
+
+        .catch((error) => {
+          toast.error(error.response.data.message);
+          setFormSubmitLoader(false);
+        });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+  async function handleProductEdit(id) {
+    setFormSubmitLoader(true);
+    try {
+      await axios
+        .get(`http://localhost:3001/productDetail/specific/${id}`, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        })
+        .then((res) => {
+          setUpdateFormOpen(true);
+      
+          setProductName(res.data.data.ProductName);
+          setProductURL(res.data.data.ProductURL);
+          setProductDescription(res.data.data.ProductDescription);
+          setProductImage(res.data.data.ProductImage);
+          setProductId(res.data.data._id);
+          setFormSubmitLoader(false);
+       
+        })
+
+        .catch((error) => {
+          console.log(error);
+          setFormSubmitLoader(false);
+        });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
+
+  async function handleProductUpdate(e) {
+    e.preventDefault();
+    setFormSubmitLoader(true);
+
+    // const formData = new FormData();
+    // formData.append("ServiceImage", ServiceImage);
+    // formData.append('ServiceName',ServiceName);
+    // formData.append('ServiceURL',ServiceURL);
+    // formData.append('ServiceDescription', ServiceDescription = stripHtmlTags(ServiceDescription));
+    ProductDescription = stripHtmlTags(ProductDescription);
+    let data = {
+      ProductName,
+      ProductImage,
+      ProductURL,
+      ProductPrice,
+      ProductDescription,
+    };
+    try {
+      axios
+        .put(`http://localhost:3001/productDetail/update/${ProductId}`, data, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        })
+        .then((res) => {
+          toast.success(res.data.message);
+          setFormSubmitLoader(false);
+          reloadComponent()
+          setTimeout(() => {
+            setUpdateFormOpen(false);
+          }, 1000);
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error(error.response.data.message);
+          setFormSubmitLoader(false);
+        });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+  async function handleProductDelete(id) {
+    // e.preventDefault();
+    setFormSubmitLoader(true);
+    try {
+      axios
+        .delete(`http://localhost:3001/productDetail/delete/${id}`, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        })
+        .then((res) => {
+          toast.success(res.data.message);
+          reloadComponent()
+          setFormSubmitLoader(false);
+
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+          setFormSubmitLoader(false);
+   
+        });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
   return (
     <>
       <div className="product_container">
@@ -92,37 +264,50 @@ const Products = () => {
           <table className="table rounded-3" id="example">
             <thead className="table-secondary rounded-3">
               <tr>
-                <th>ICON OR IMAGE</th>
-                <th>Name</th>
-                <th>DESCRIPTION</th>
-                <th>PRICE</th>
-                <th>ACTIONS</th>
+                <th  className="fw-bold">ICON OR IMAGE</th>
+                <th  className="fw-bold">Name</th>
+                <th  className="fw-bold">DESCRIPTION</th>
+                <th className="fw-bold"> PRICE</th>
+                <th  className="fw-bold">ACTIONS</th>
               </tr>
             </thead>
             <tbody className=" shadow-sm">
-              <tr>
-                <td className="h-100 align-middle">
-                  <img
-                    src="https://img.freepik.com/free-photo/standard-quality-control-collage-concept_23-2149595847.jpg?t=st=1715933611~exp=1715937211~hmac=d54576362232e002de841cc935f4244af4ca12908d312055576f773e438e7014&w=900"
-                    alt="service_image"
-                  />
+              {AllProduct!=undefined ?  <>
+               {AllProduct.map((data,index)=>{
+
+                return(
+                  <tr key={index}>
+                  <td className="h-100 align-middle">
+                    <img
+                      src={data.ProductImage ? data.ProductImage : 'Loading...'}
+                      alt="service_image"
+                    />
+                  </td>
+                  <td className="h-100 align-middle">{data.ProductName}</td>
+                  <td className="h-100 align-middle">{data.ProductDescription}</td>
+                  <td className="h-100 align-middle">Rs:&nbsp;{data.ProductPrice}</td>
+                  <td className="h-100 align-middle">
+                    <i className="bx bxs-show" style={{ color: "skyBlue" }} onClick={()=>handleProductView(data._id)}></i>
+                    <i className="bx bx-edit" style={{ color: "#6571FF" }}  onClick={() => handleProductEdit(data._id)}></i>
+                    <i className="bx bx-trash-alt" style={{ color: "red" }} onClick={()=>handleProductDelete(data._id)}></i>
+                  </td>
+                </tr>
+                )
+                 
+               })}
+              </>:       <tr>
+                <td colSpan='6' className="text-center">
+                No Products Added!
                 </td>
-                <td className="h-100 align-middle">Web Development</td>
-                <td className="h-100 align-middle">Fully Responsive</td>
-                <td className="h-100 align-middle">3000</td>
-                <td className="h-100 align-middle">
-                  <i className="bx bxs-show" style={{ color: "skyBlue" }}></i>
-                  <i className="bx bx-edit" style={{ color: "#6571FF" }}></i>
-                  <i className="bx bx-trash-alt" style={{ color: "red" }}></i>
-                </td>
-              </tr>
+            </tr>}
+           
             </tbody>
           </table>
         </div>
 
         {/* //Create New Product Form */}
 
-        <div
+  <div
           className="create_new_product_container"
           id={productFormOpen ? "shadow_background" : ""}
         >
@@ -180,13 +365,7 @@ const Products = () => {
                   Description <sup>*</sup>
                 </label>
 
-                {/* <textarea
-                  name="product_description"
-                  id="product_description"
-                  cols="48"
-                  rows="4"
-                  placeholder="Enter Short Description"
-                ></textarea> */}
+               
                 <Editor
                   {...formik.getFieldProps("ProductDescription")}
                   value={formik.values.ProductDescription}
@@ -201,7 +380,7 @@ const Products = () => {
 
               <div className="form_group productImage">
                 <label htmlFor="ProductImage">Product Image<sup>*</sup></label>
-                {/* <label htmlFor="ProductImage">
+                <label htmlFor="ProductImage">
                   <img
                     src={
                       ProductImage != undefined
@@ -211,7 +390,8 @@ const Products = () => {
                     alt="ProductImage"
                   />
                   <i className="bx bxs-edit-location"></i>
-                </label> */}
+                </label>
+                <p><strong>Note :</strong> Max file size limit 2MB</p>
                 <small>Allowed file types: png, jpg, jpeg,.gif.</small>
                 <input
                   type="file"
@@ -229,6 +409,178 @@ const Products = () => {
                 </div>
               </div>
             </form>
+          </div>
+        </div>
+               {/* //uPDATE  Product Form */}
+
+  <div
+          className="update_new_product_container"
+          id={updateFormOpen ? "shadow_background" : ""}
+        >
+          <div
+            className="create_new_product_box"
+            id={updateFormOpen ? "productOpen" : "productClose"}
+          >
+            <div className="title">
+              <p>Update Product</p>
+              <i
+                className="bx bx-x"
+                onClick={() => setUpdateFormOpen(false)}
+              ></i>
+            </div>
+            <form action="" onSubmit={handleProductUpdate}>
+              <div className="form_group">
+                <label htmlFor="ProductName">
+                  Product Name <sup>*</sup>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter Product Title"
+                 value={ProductName}
+                 onChange={(e)=>setProductName(e.target.value)}
+                />
+              </div>
+              <div className="form_group">
+                <label htmlFor="ProductURL">Product URL</label>
+                <input
+                  type="text"
+                  placeholder="Paste Product URL"
+                  value={ProductURL}
+                  onChange={(e)=>setProductURL(e.target.value)}
+                />
+              </div>
+              <div className="form_group">
+                <label htmlFor="product_currency">
+                  Currency<sup>(Default)</sup>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter Product Currency"
+                  value="₹"
+                  readOnly
+                />
+              </div>
+              <div className="form_group">
+                <label htmlFor="ProductPrice">Price<sup>*</sup></label>
+                <input
+                  type="text"
+                  placeholder="Enter Product Price"
+                  value={ProductPrice}
+                  onChange={(e)=>setProductPrice(e.target.value)}
+                />
+              </div>
+              <div className="form_group productDescription">
+                <label htmlFor="ProductDescription">
+                  Description <sup>*</sup>
+                </label>
+
+        
+                <Editor
+              
+                  value={ProductDescription}
+                  onTextChange={(e) => setProductDescription(e.htmlValue)}
+                  id="ProductDescription"
+                  name="ProductDescription"
+                  placeholder="Enter Short Description"
+                  style={{ height: "130px" }}
+               
+                />
+              </div>
+
+              <div className="form_group productImage">
+                <label htmlFor="ProductImage">Product Image<sup>*</sup></label>
+                <label htmlFor="ProductImage">
+                  <img
+                    src={
+                      ProductImage != undefined
+                        ? ProductImage
+                        : "https://img.freepik.com/free-vector/autumn-background_23-2149054409.jpg?t=st=1715971926~exp=1715975526~hmac=064e47d99740a4e25fb7345c45d5bc744da1c1ad7f5f1e14668eaae2cc601381&w=900"
+                    }
+                    alt="ProductImage"
+                  />
+                  <i className="bx bxs-edit-location"></i>
+                </label>
+                <p><strong>Note :</strong> Max file size limit 2MB</p>
+                <small>Allowed file types: png, jpg, jpeg,.gif.</small>
+                <input
+                  type="file"
+                  id="ProductImage"
+                  name="ProductImage"
+                  onChange={onUploadProductImage}
+                />
+              </div>
+              <div className="form_submit_actions">
+                <div className="save">
+                  <button type="submit">Update</button>
+                </div>
+            
+              </div>
+            </form>
+          </div>
+        </div>
+
+            {/* //Product  Detail Box */}
+
+            <div
+          className="view_new_service_container"
+          id={ProductViewToggle ? "shadow_background" : ""}
+        >
+          <div
+            className="view_new_service_box"
+            id={ProductViewToggle ? "serviceUpdateOpen" : "serviceUpdateClose"}
+          >
+            <div className="title">
+              <p>Product Detail</p>
+              <i
+                className="bx bx-x"
+                onClick={() => setProductViewToggle(false)}
+              ></i>
+            </div>
+            <div className="details_container">
+              <div className="service_name">
+                <div className="service_title">Product Name</div>
+                <div className="name">
+                  <p>{ProductName != undefined ? ProductName : "N/A"}</p>
+                </div>
+              </div>
+              <div className="service_desc">
+                <div className="service_title">Product Description</div>
+                <div className="name">
+                  <p>
+                    {ProductDescription != undefined
+                      ? ProductDescription
+                      : "N/A"}
+                  </p>
+                </div>
+              </div>
+              <div className="service_desc">
+                <div className="service_title">Product Price</div>
+                <div className="name">
+                  <p>
+                    {ProductPrice != undefined
+                      ?`₹ ${ProductPrice}`
+                      : "₹ 0"}
+                  </p>
+                </div>
+              </div>
+              <div className="service_url">
+                <div className="service_title">Product URL</div>
+                <div className="name">
+                  <a href={ProductURL} target="_blank">
+                    {ProductURL != undefined ? ProductURL : "N/A"}
+                  </a>
+                </div>
+              </div>
+              <div className="service_image">
+                <div className="service_title">Product Image</div>
+                <div className="service_image">
+                  <img
+                    src={ProductImage != null ? ProductImage :'https://img.freepik.com/free-photo/texture-cold-gray-background-copy-space-generative-ai_169016-29494.jpg?t=st=1719067458~exp=1719071058~hmac=cd83aaa24c4e3db687a13e63bc286a6ae631fa31fc3c17a55273372b6a109a0f&w=1060'}
+                    alt="service"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

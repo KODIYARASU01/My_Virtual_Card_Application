@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "./form_styles/Gallery.scss";
 import { useFormik } from "formik";
 import { Editor } from "primereact/editor";
@@ -10,24 +10,61 @@ import { Toaster, toast } from "react-hot-toast";
 import { convertToBase64GalleryImage } from "../../../../Helper/convert";
 import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_context";
 const Gallery = () => {
+  let [AllGallery, setAllGallery] = useState();
   let [galleryFormOpen, setGalleryFormOpen] = useState(false);
-  let { currentPlan, setCurrentPlan,FormSubmitLoader, setFormSubmitLoader, userName } =
-    useContext(SuperAdmin_context);
+  let {
+    currentPlan,
+    setCurrentPlan,
+    FormSubmitLoader,
+    setFormSubmitLoader,
+    userName,
+  } = useContext(SuperAdmin_context);
   let [GalleryURL, setGalleryURL] = useState();
   let [GalleryImage, setGalleryImage] = useState(null);
-
+  let [fullImageToggle, setFullImageToggle] = useState(false);
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
-  // const onUploadGalleryImage = async (e) => {
-  //   // let base64 = await convertToBase64GalleryImage(e.target.files[0]);
-  //   setGalleryImage(e.target.files[0]);
-  // };
-  const [filename, setFilename] = useState("Choose File");
-
-
-  const onUploadGalleryImage = (e) => {
-    setGalleryImage(e.target.files[0]);
-    setFilename(e.target.files[0].name);
+  const onUploadGalleryImage = async (e) => {
+    let base64 = await convertToBase64GalleryImage(e.target.files[0]);
+    setGalleryImage(base64);
   };
+  const [key, setKey] = useState(0);
+  const reloadComponent = () => {
+    setKey((prevKey) => prevKey + 1); // Change the key to trigger a remount
+  };
+  async function fetchAllGallery() {
+    setFormSubmitLoader(true);
+    try {
+      await axios
+        .get(
+          `http://localhost:3001/galleryDetail/specificAll/${localStorageDatas.userName}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorageDatas.token}`,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.data.length == 0) {
+            toast.error("No Gallery added!");
+            setFormSubmitLoader(false);
+          } else {
+            setAllGallery(res.data.data);
+
+            setFormSubmitLoader(false);
+          }
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+          setFormSubmitLoader(false);
+        });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+  useEffect(() => {
+    fetchAllGallery();
+  }, [key]);
 
   let formik = useFormik({
     initialValues: {
@@ -56,7 +93,8 @@ const Gallery = () => {
         .then((res) => {
           toast.success(res.data.message);
           setFormSubmitLoader(false);
-
+          reloadComponent();
+          setGalleryFormOpen(false);
           setGalleryImage(null);
           values.GalleryURL = "";
         })
@@ -67,45 +105,104 @@ const Gallery = () => {
         });
     },
   });
+
+  async function handleFullImageShow(id) {
+    setFormSubmitLoader(true);
+    try {
+      axios
+        .get(`http://localhost:3001/galleryDetail/specific/${id}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        })
+        .then((res) => {
+          setFormSubmitLoader(false);
+          setFullImageToggle(true);
+          setGalleryImage(res.data.data.GalleryImage);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+          setFormSubmitLoader(false);
+        });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
   return (
     <>
       <div className="gallery_container">
-      <div className="plan_title">
-        <p><strong>{currentPlan} plan </strong>&nbsp; Subscribed!</p>
+        {fullImageToggle ?     <div className="Image_Full_view">
+          <div
+            className="close_image"
+            onClick={() => setFullImageToggle(false)}
+          >
+            <i className="bx bxs-message-square-x"></i>
+          </div>
+          <img
+            src={GalleryImage}
+            alt="image"
+          />
+        </div>: ''}
+    
+        <div className="plan_title">
+          <p>
+            <strong>{currentPlan} plan </strong>&nbsp; Subscribed!
+          </p>
         </div>
         <div className="add_new_gallery">
           <button onClick={() => setGalleryFormOpen(true)}>Add Gallery</button>
         </div>
-
-        <div className="gallery_list_table table-responsive container w-100 rounded-3">
+{!fullImageToggle ?     <div className="gallery_list_table table-responsive container w-100 rounded-3">
           <table className="table rounded-3" id="example">
             <thead className="table-secondary rounded-3">
               <tr>
-                <th>COUNT</th>
-                <th>IMAGE</th>
-
-                <th>ACTIONS</th>
+                <th className="fw-bold">COUNT</th>
+                <th className="fw-bold">IMAGE</th>
+                <th className="fw-bold">URL</th>
+                <th className="fw-bold">View Image</th>
               </tr>
             </thead>
             <tbody className=" shadow-sm">
-              <tr>
-                <td className="h-100 align-middle">01</td>
-                <td className="h-100 align-middle">
-                  <img
-                    src="https://img.freepik.com/free-photo/closeup-portrait-halloween-man-woman-posing-with-frightening-faces-couple-black-clothes-with-red-details-screaming_197531-16286.jpg?t=st=1715977956~exp=1715981556~hmac=64122237c39a2a56c21002123b61e6b0faeef692f14d4dd680a59dd55f06769b&w=900"
-                    alt="service_image"
-                  />
-                </td>
-
-                <td className="h-100 align-middle">
-                  <i className="bx bxs-show" style={{ color: "skyBlue" }}></i>
-                  <i className="bx bx-edit" style={{ color: "#6571FF" }}></i>
-                  <i className="bx bx-trash-alt" style={{ color: "red" }}></i>
-                </td>
-              </tr>
+              {AllGallery != undefined ? (
+                <>
+                  {AllGallery.map((data, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="h-100 align-middle fw-semibold">
+                          {index + 1}
+                        </td>
+                        <td className="h-100 align-middle fw-semibold">
+                          <img
+                            src={data.GalleryImage}
+                            alt="GalleryImage"
+                            name="GalleryImage"
+                          />
+                        </td>
+                        <td className="h-100 align-middle fw-semibold">
+                          {data.GalleryURL != "" ? data.GalleryURL : "N/A"}
+                        </td>
+                        <td className="h-100 align-middle fw-semibold">
+                          <i
+                            className="bx bxs-show"
+                            onClick={() => handleFullImageShow(data._id)}
+                          ></i>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </>
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center">
+                    No Gallery Added!
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
-        </div>
+        </div>: ''}
+    
 
         {/* //Create New Service Form */}
 
@@ -129,10 +226,17 @@ const Gallery = () => {
                 <label htmlFor="GalleryImage">
                   Choose Your Image<sup>*</sup>
                 </label>
-                {/* <label htmlFor="GalleryImage">
-                <img src={GalleryImage !=undefined ? GalleryImage :"https://img.freepik.com/free-vector/realistic-fog-background_23-2149115275.jpg?t=st=1715977908~exp=1715981508~hmac=1d533445708d92e0d4c40a4db9ebd8a90505fbfa07dcb1b58b5915f9fde4f028&w=900"} alt="GalleryImage" />
-                <i className='bx bxs-edit-location'></i>
-              </label> */}
+                <label htmlFor="GalleryImage">
+                  <img
+                    src={
+                      GalleryImage != undefined
+                        ? GalleryImage
+                        : "https://img.freepik.com/free-vector/realistic-fog-background_23-2149115275.jpg?t=st=1715977908~exp=1715981508~hmac=1d533445708d92e0d4c40a4db9ebd8a90505fbfa07dcb1b58b5915f9fde4f028&w=900"
+                    }
+                    alt="GalleryImage"
+                  />
+                  <i className="bx bxs-edit-location"></i>
+                </label>
                 <p>
                   <strong>Note :</strong> Max image size limit 2MB
                 </p>

@@ -22,15 +22,15 @@ let ProductSchema = new mongoose.Schema(
       default: 0,
       required: true,
     },
-    // ProductImage:{
-    //     type:String,
-    //     required:true
-    // }
-    ProductImage: {
-      data: Buffer,
-      contentType: String,
-      // type:String,
-    },
+    ProductImage:{
+        type:String,
+        required:true
+    }
+    // ProductImage: {
+    //   data: Buffer,
+    //   contentType: String,
+    //   // type:String,
+    // },
   },
   { timestamps: true }
 );

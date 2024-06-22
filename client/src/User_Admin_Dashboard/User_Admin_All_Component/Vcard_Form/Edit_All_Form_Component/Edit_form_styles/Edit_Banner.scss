@@ -147,6 +147,9 @@
                 font-size: 0.9rem;
               }
               .save{
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 background-color: royalblue;
                 color: #fff;
                 transition: all 0.3s ease;

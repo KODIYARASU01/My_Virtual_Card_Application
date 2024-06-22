@@ -20,17 +20,22 @@ const Services = () => {
   } = useContext(SuperAdmin_context);
   let [AllService, setAllService] = useState();
   let [serviceFormOpen, setServiceFormOpen] = useState(false);
-  let[updateFormOpen,setUpdateFormOpen]=useState(false);
+  let [updateFormOpen, setUpdateFormOpen] = useState(false);
+  let [viewServiceDetail, setViewServiceDetail] = useState(false);
   let [ServiceName, setServiceName] = useState();
   let [ServiceURL, setServiceURL] = useState();
   let [ServiceDescription, setServiceDescription] = useState();
   let [ServiceImage, setServiceImage] = useState();
   let [ServiceId, setServiceId] = useState();
   const [filename, setFilename] = useState("Choose File");
+  const [key, setKey] = useState(0);
 
+  var reloadComponent = () => {
+    setKey((prevKey) => prevKey + 1); // Change the key to trigger a remount
+  };
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
-  
-  async function fetchCurrentService() {
+
+  async function fetchAllService() {
     setFormSubmitLoader(true);
     try {
       await axios
@@ -44,11 +49,10 @@ const Services = () => {
           }
         )
         .then((res) => {
-          if(res.data.data.length == 0){
-            toast.error('No service added!');
-            setFormSubmitLoader(false)
-          }
-          else{
+          if (res.data.data.length == 0) {
+            toast.error("No service added!");
+            setFormSubmitLoader(false);
+          } else {
             setAllService(res.data.data);
             setFormSubmitLoader(false);
           }
@@ -62,33 +66,42 @@ const Services = () => {
     }
   }
   useEffect(() => {
-    fetchCurrentService()
-  }, []);
+    fetchAllService();
+  }, [key]);
   const stripHtmlTags = (html) => {
     const div = document.createElement("div");
     div.innerHTML = html;
     return div.textContent || div.innerText || "";
+  };
+  const onUploadServiceImage = async (e) => {
+    // setServiceImage(e.target.files[0]);
+    // setFilename(e.target.files[0].name);
+    let base64 = await convertToBase64ServiceImage(e.target.files[0]);
+    setServiceImage(base64);
   };
   let formik = useFormik({
     initialValues: {
       ServiceName: "",
       ServiceURL: "",
       ServiceDescription: "",
-      ServiceImage: null
+      ServiceImage: null,
     },
     validateOnChange: false,
     validateOnBlur: false,
     // validate:BasicDetailValidate,
- 
+
     onSubmit: async (values) => {
       setFormSubmitLoader(true);
       // values = await Object.assign(values, { ServiceImage: ServiceImage || "" });
       const formData = new FormData();
       formData.append("ServiceImage", ServiceImage);
-      formData.append('ServiceName',values.ServiceName);
-      formData.append('ServiceURL',values.ServiceURL);
-      formData.append('ServiceDescription', values.ServiceDescription = stripHtmlTags(ServiceDescription));
- 
+      formData.append("ServiceName", values.ServiceName);
+      formData.append("ServiceURL", values.ServiceURL);
+      formData.append(
+        "ServiceDescription",
+        (values.ServiceDescription = stripHtmlTags(ServiceDescription))
+      );
+
       await axios
         .post("http://localhost:3001/serviceDetail", formData, {
           headers: {
@@ -99,16 +112,51 @@ const Services = () => {
         .then((res) => {
           setFormSubmitLoader(false);
           toast.success(res.data.message);
-        
+          reloadComponent();
+          setTimeout(() => {
+            setServiceFormOpen(false);
+          }, 500);
         })
         .catch((error) => {
-       toast.error(error.response.data.message);
+          toast.error(error.response.data.message);
           setFormSubmitLoader(false);
         });
     },
   });
+  async function handleServiceView(id) {
+    setViewServiceDetail(true);
+    try {
+      await axios
+        .get(`http://localhost:3001/serviceDetail/specific/${id}`, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        })
+        .then((res) => {
+          setViewServiceDetail(true);
+          setServiceName(res.data.data.ServiceName);
+          setServiceURL(res.data.data.ServiceURL);
+          setServiceDescription(
+            (res.data.data.ServiceDescription = stripHtmlTags(
+              res.data.data.ServiceDescription
+            ))
+          );
+          setServiceImage(res.data.data.ServiceImage);
+          setServiceId(res.data.data._id);
+          setFormSubmitLoader(false);
+        })
+
+        .catch((error) => {
+          toast.error(error.response.data.message);
+          setFormSubmitLoader(false);
+        });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
   async function handleServiceEdit(id) {
-    setFormSubmitLoader(true)
+    setFormSubmitLoader(true);
     try {
       await axios
         .get(`http://localhost:3001/serviceDetail/specific/${id}`, {
@@ -125,23 +173,16 @@ const Services = () => {
           setServiceImage(res.data.data.ServiceImage);
           setServiceId(res.data.data._id);
           setFormSubmitLoader(false);
-       
         })
 
         .catch((error) => {
-          console.log(error);
-          setFormSubmitLoader(false)
+          setFormSubmitLoader(false);
         });
     } catch (error) {
       toast.error(error.message);
     }
   }
-  const onUploadServiceImage = async (e) => {
-    setServiceImage(e.target.files[0]);
-    setFilename(e.target.files[0].name);
-  };
 
-  
   async function handleServiceUpdate(e) {
     e.preventDefault();
     setFormSubmitLoader(true);
@@ -151,16 +192,17 @@ const Services = () => {
     // formData.append('ServiceName',ServiceName);
     // formData.append('ServiceURL',ServiceURL);
     // formData.append('ServiceDescription', ServiceDescription = stripHtmlTags(ServiceDescription));
-ServiceDescription=stripHtmlTags(ServiceDescription);
-let data={
-  ServiceName,
-  ServiceImage,
-  ServiceURL,
-  ServiceDescription
-}
-console.log(ServiceId)
+    ServiceDescription = stripHtmlTags(ServiceDescription);
+    let data = {
+      ServiceName,
+      ServiceImage,
+      ServiceURL,
+      ServiceDescription,
+    };
+    console.log(ServiceId);
     try {
-      axios.put(`http://localhost:3001/serviceDetail/update/${ServiceId}`,data, {
+      axios
+        .put(`http://localhost:3001/serviceDetail/update/${ServiceId}`, data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -168,21 +210,21 @@ console.log(ServiceId)
         })
         .then((res) => {
           toast.success(res.data.message);
-          console.log(res)
+
           setFormSubmitLoader(false);
-          setTimeout(()=>{
-           setUpdateFormOpen(false)
-          },1000)
+          reloadComponent();
+          setTimeout(() => {
+            setUpdateFormOpen(false);
+          }, 1000);
         })
         .catch((error) => {
-          console.log(error)
           toast.error(error.response.data.message);
           setFormSubmitLoader(false);
         });
     } catch (error) {
       toast.error(error.message);
     }
-  };
+  }
   async function handleServiceDelete(id) {
     // e.preventDefault();
     setFormSubmitLoader(true);
@@ -196,7 +238,9 @@ console.log(ServiceId)
         })
         .then((res) => {
           toast.success(res.data.message);
+          reloadComponent();
           setFormSubmitLoader(false);
+    
         })
         .catch((error) => {
           toast.error(error.response.data.message);
@@ -205,7 +249,7 @@ console.log(ServiceId)
     } catch (error) {
       toast.error(error.message);
     }
-  };
+  }
 
   return (
     <>
@@ -224,14 +268,14 @@ console.log(ServiceId)
           <table className="table rounded-3" id="example">
             <thead className="table-secondary rounded-3">
               <tr>
-                <th>ICON OR IMAGE</th>
-                <th>TITLE</th>
-                <th>DESCRIPTION</th>
-                <th>ACTIONS</th>
+                <th className="fw-bold">ICON OR IMAGE</th>
+                <th className="fw-bold">TITLE</th>
+                <th className="fw-bold">DESCRIPTION</th>
+                <th className="fw-bold">URL</th>
+                <th className="fw-bold">ACTIONS</th>
               </tr>
             </thead>
-            <tbody className=" shadow-sm">
-            
+            <tbody className="shadow-sm">
               {AllService != undefined ? (
                 <>
                   {AllService.map((data, index) => {
@@ -239,8 +283,9 @@ console.log(ServiceId)
                       <tr key={index}>
                         <td className="h-100 align-middle">
                           <img
-                            src="https://img.freepik.com/free-photo/standard-quality-control-collage-concept_23-2149595847.jpg?t=st=1715933611~exp=1715937211~hmac=d54576362232e002de841cc935f4244af4ca12908d312055576f773e438e7014&w=900"
-                            alt="service_image"
+                            src={data.ServiceImage}
+                            alt="ServiceImage"
+                            name="ServiceImage"
                           />
                         </td>
                         <td className="h-100 align-middle">
@@ -250,9 +295,17 @@ console.log(ServiceId)
                           {data.ServiceDescription.slice(0, 20)}
                         </td>
                         <td className="h-100 align-middle">
+                          <a href={data.ServiceURL} target="_blank">
+                            {data.ServiceURL != undefined
+                              ? data.ServiceURL
+                              : ""}
+                          </a>
+                        </td>
+                        <td className="h-100 align-middle">
                           <i
                             className="bx bxs-show"
                             style={{ color: "skyBlue" }}
+                            onClick={() => handleServiceView(data._id)}
                           ></i>
                           <i
                             className="bx bx-edit"
@@ -262,7 +315,7 @@ console.log(ServiceId)
                           <i
                             className="bx bx-trash-alt"
                             style={{ color: "red" }}
-                            onClick={()=>handleServiceDelete(data._id)}
+                            onClick={() => handleServiceDelete(data._id)}
                           ></i>
                         </td>
                       </tr>
@@ -270,65 +323,108 @@ console.log(ServiceId)
                   })}
                 </>
               ) : (
-                "No data Found!"
+                <tr>
+                <td colSpan='6' className="text-center">
+                No Service Added!
+                </td>
+            </tr>
               )}
             </tbody>
           </table>
         </div>
 
         {/* //Create New Service Form */}
-{serviceFormOpen ?  <div className="create_new_service_container" id={serviceFormOpen ? 'shadow_background':''}>
-<div className="create_new_service_box" id={serviceFormOpen ? 'serviceOpen':'serviceClose'}>
-           <div className="title">
-            <p>New Service</p>
-            <i className='bx bx-x'  onClick={()=>setServiceFormOpen(false)}></i>
-           </div>
-           <form action="" onSubmit={formik.handleSubmit}>
-            <div className="form_group">
-              <label htmlFor="ServiceName">Service Name <sup>*</sup></label>
-              <input type="text" placeholder="Enter Service Title" {...formik.getFieldProps('ServiceName')} />
+
+        <div
+          className="create_new_service_container"
+          id={serviceFormOpen ? "shadow_background" : ""}
+        >
+          <div
+            className="create_new_service_box"
+            id={serviceFormOpen ? "serviceOpen" : "serviceClose"}
+          >
+            <div className="title">
+              <p>New Service</p>
+              <i
+                className="bx bx-x"
+                onClick={() => setServiceFormOpen(false)}
+              ></i>
             </div>
-            <div className="form_group">
-              <label htmlFor="ServiceURL">Service URL</label>
-              <input type="text" placeholder="Paste Service URL" {...formik.getFieldProps('ServiceURL')} />
-            </div>
-            <div className="form_group editor">
-              <label htmlFor="ServiceDescription">Description <sup>*</sup></label>
-              <Editor
-              {...formik.getFieldProps('ServiceDescription')}
-                value={formik.values.ServiceDescription}
-                onTextChange={(e) => setServiceDescription(e.htmlValue)}
-                id="ServiceDescription"
-                name="ServiceDescription"
-                style={{ height: "130px" }}
-                placeholder="Enter Short Description"
-              />
-             {/* <textarea name="service_description" id="service_description" cols="48" rows="4" placeholder="Enter Short Description"></textarea> */}
-            </div>
-            <div className="form_group serviceImage">
-              <label htmlFor="ServiceImage">Service Icon</label>
-          
-              <input type="file" id="ServiceImage"  name="ServiceImage" onChange={onUploadServiceImage} />
-              <small>Allowed file types: png, jpg, jpeg,.gif.</small>
-            
-            </div>
-            <div className="form_submit_actions">
-              <div className="save">
-              <button type="submit">
-                Save
-              </button>
+            <form action="" onSubmit={formik.handleSubmit}>
+              <div className="form_group">
+                <label htmlFor="ServiceName">
+                  Service Name <sup>*</sup>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter Service Title"
+                  {...formik.getFieldProps("ServiceName")}
+                />
               </div>
-           <div className="discard" >
-           <button type="button" onClick={formik.handleReset}>Clear</button>
-           </div>
-           
-            </div>
-           </form>
+              <div className="form_group">
+                <label htmlFor="ServiceURL">Service URL</label>
+                <input
+                  type="text"
+                  placeholder="Paste Service URL"
+                  {...formik.getFieldProps("ServiceURL")}
+                />
+              </div>
+              <div className="form_group editor">
+                <label htmlFor="ServiceDescription">
+                  Description <sup>*</sup>
+                </label>
+                <Editor
+                  {...formik.getFieldProps("ServiceDescription")}
+                  value={formik.values.ServiceDescription}
+                  onTextChange={(e) => setServiceDescription(e.htmlValue)}
+                  id="ServiceDescription"
+                  name="ServiceDescription"
+                  style={{ height: "130px" }}
+                  placeholder="Enter Short Description"
+                />
+                {/* <textarea name="service_description" id="service_description" cols="48" rows="4" placeholder="Enter Short Description"></textarea> */}
+              </div>
+              <div className="form_group serviceImage">
+                <label htmlFor="ServiceImage">Service Icon</label>
+                <label htmlFor="ServiceImage">
+                  <img
+                    src={
+                      ServiceImage != undefined
+                        ? ServiceImage
+                        : "https://img.freepik.com/free-vector/autumn-background_23-2149054409.jpg?t=st=1715971926~exp=1715975526~hmac=064e47d99740a4e25fb7345c45d5bc744da1c1ad7f5f1e14668eaae2cc601381&w=900"
+                    }
+                    alt="ServiceImage"
+                  />
+                  <i className="bx bxs-edit-location"></i>
+                </label>
+                <input
+                  type="file"
+                  id="ServiceImage"
+                  name="ServiceImage"
+                  onChange={onUploadServiceImage}
+                />
+                <p>
+                  <strong>Note :</strong> Max file size limit 2MB
+                </p>
+                <small>Allowed file types: png, jpg, jpeg,.gif.</small>
+              </div>
+              <div className="form_submit_actions">
+                <div className="save">
+                  <button type="submit">Save</button>
+                </div>
+                <div className="discard">
+                  <button type="button" onClick={formik.handleReset}>
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
-</div>:''}
-       
+
         {/* //Update  Service Form */}
-{updateFormOpen ?      <div
+
+        <div
           className="update_new_service_container"
           id={updateFormOpen ? "shadow_background" : ""}
         >
@@ -361,8 +457,8 @@ console.log(ServiceId)
                 <input
                   type="text"
                   placeholder="Paste Service URL"
-                 value={ServiceURL}
-                 onChange={(e)=>setServiceURL(e.target.value)}
+                  value={ServiceURL}
+                  onChange={(e) => setServiceURL(e.target.value)}
                 />
               </div>
               <div className="form_group editor">
@@ -370,7 +466,6 @@ console.log(ServiceId)
                   Description <sup>*</sup>
                 </label>
                 <Editor
-                
                   value={ServiceDescription}
                   onTextChange={(e) => setServiceDescription(e.htmlValue)}
                   id="ServiceDescription"
@@ -382,26 +477,90 @@ console.log(ServiceId)
               </div>
               <div className="form_group serviceImage">
                 <label htmlFor="ServiceImage">Service Icon</label>
-
+                <label htmlFor="ServiceImage">
+                  <img
+                    src={
+                      ServiceImage != undefined
+                        ? ServiceImage
+                        : "https://img.freepik.com/free-vector/autumn-background_23-2149054409.jpg?t=st=1715971926~exp=1715975526~hmac=064e47d99740a4e25fb7345c45d5bc744da1c1ad7f5f1e14668eaae2cc601381&w=900"
+                    }
+                    alt="ServiceImage"
+                  />
+                  <i className="bx bxs-edit-location"></i>
+                </label>
                 <input
                   type="file"
                   id="ServiceImage"
                   name="ServiceImage"
-                 
                   onChange={onUploadServiceImage}
                 />
+                <p>
+                  <strong>Note :</strong> Max file size limit 2MB
+                </p>
                 <small>Allowed file types: png, jpg, jpeg,.gif.</small>
               </div>
               <div className="form_submit_actions">
                 <div className="save">
                   <button type="submit">Update</button>
                 </div>
-              
               </div>
             </form>
           </div>
-        </div>:''}
-   
+        </div>
+        {/* //Service  Detail Box */}
+
+        <div
+          className="view_new_service_container"
+          id={viewServiceDetail ? "shadow_background" : ""}
+        >
+          <div
+            className="view_new_service_box"
+            id={viewServiceDetail ? "serviceUpdateOpen" : "serviceUpdateClose"}
+          >
+            <div className="title">
+              <p>Service Details</p>
+              <i
+                className="bx bx-x"
+                onClick={() => setViewServiceDetail(false)}
+              ></i>
+            </div>
+            <div className="details_container">
+              <div className="service_name">
+                <div className="service_title">Service Name</div>
+                <div className="name">
+                  <p>{ServiceName != undefined ? ServiceName : "N/A"}</p>
+                </div>
+              </div>
+              <div className="service_desc">
+                <div className="service_title">Service Description</div>
+                <div className="name">
+                  <p>
+                    {ServiceDescription != undefined
+                      ? ServiceDescription
+                      : "N/A"}
+                  </p>
+                </div>
+              </div>
+              <div className="service_url">
+                <div className="service_title">Service URL</div>
+                <div className="name">
+                  <a href={ServiceURL} target="_blank">
+                    {ServiceURL != undefined ? ServiceURL : "N/A"}
+                  </a>
+                </div>
+              </div>
+              <div className="service_image">
+                <div className="service_title">Service Image</div>
+                <div className="service_image">
+                  <img
+                    src="https://img.freepik.com/free-photo/texture-cold-gray-background-copy-space-generative-ai_169016-29494.jpg?t=st=1719067458~exp=1719071058~hmac=cd83aaa24c4e3db687a13e63bc286a6ae631fa31fc3c17a55273372b6a109a0f&w=1060"
+                    alt="service"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

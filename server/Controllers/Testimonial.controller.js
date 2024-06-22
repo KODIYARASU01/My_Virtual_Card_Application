@@ -47,6 +47,7 @@ export const postTestimonialData = async (req, res) => {
                 user: req.user.userName,
                 ClientImage: req.body.ClientImage,
                 ClientName: req.body.ClientName,
+                ClientReviewDate:req.body.ClientReviewDate,
                 ClientFeedback: req.body.ClientFeedback,
               });
 
@@ -80,6 +81,7 @@ export const postTestimonialData = async (req, res) => {
                 user: req.user.userName,
                 ClientImage: req.body.ClientImage,
                 ClientName: req.body.ClientName,
+                ClientReviewDate:req.body.ClientReviewDate,
                 ClientFeedback: req.body.ClientFeedback,
               });
 
@@ -114,6 +116,7 @@ export const postTestimonialData = async (req, res) => {
                 user: req.user.userName,
                 ClientImage: req.body.ClientImage,
                 ClientName: req.body.ClientName,
+                ClientReviewDate:req.body.ClientReviewDate,
                 ClientFeedback: req.body.ClientFeedback,
               });
 
@@ -147,6 +150,7 @@ export const postTestimonialData = async (req, res) => {
                 user: req.user.userName,
                 ClientImage: req.body.ClientImage,
                 ClientName: req.body.ClientName,
+                ClientReviewDate:req.body.ClientReviewDate,
                 ClientFeedback: req.body.ClientFeedback,
               });
 

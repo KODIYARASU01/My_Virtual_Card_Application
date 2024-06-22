@@ -3,6 +3,7 @@
     width: 100%;
     height: 100%;
     padding: 1rem;
+
     .add_new_testimonial {
       display: flex;
       align-items: center;
@@ -72,6 +73,8 @@
                   filter: drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.3));
                 }
               }
+
+            
             }
           }
         }
@@ -102,8 +105,9 @@
     }
   
     .create_new_testimonial_container {
+      position: relative;
       .create_new_testimonial_box {
-        position: fixed;
+        position: absolute;
         top: 20%;
         left: 50%;
         transform: translate(-50%, -10%);
@@ -112,7 +116,7 @@
         padding: 1rem;
         place-items: center;
         min-width: 400px;
-        height: auto;
+        height: 400px;
         background-color: #fff;
         box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.3);
         border-radius: 10px;
@@ -156,7 +160,12 @@
           flex-direction: column;
           align-items: flex-start;
           justify-content: flex-start;
+          position: relative;
           width: 100%;
+          height: 80%;
+          padding-bottom: 2rem;
+          padding-right: 10px;
+          overflow-y: scroll;
   
           .form_group {
             display: flex;
@@ -260,6 +269,16 @@
               }
             }
           }
+          &::-webkit-scrollbar {
+            width: 3px;
+            height: 4px;
+            background-color: #ffffff;
+            border-radius: 5px;
+          }
+          &::-webkit-scrollbar-thumb {
+            background: #5b6bfa;
+            border-radius: 5px;
+          }
         }
       }
     }
@@ -267,13 +286,25 @@
   
   //Service Form Open::after
   
-  #serviceOpen {
+  #testimonialOpen {
     opacity: 1;
+    height: 550px;
     scale: 1;
     transition: all 0.4s ease-in;
+
+    &::-webkit-scrollbar {
+      width: 3px;
+      height: 4px;
+      background-color: #d0faf1;
+      border-radius: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #a4a7ff;
+      border-radius: 5px;
+    }
   }
   
-  #serviceClose {
+  #testimonialClose {
     opacity: 0;
     scale: 0.9;
     transition: all 0.2s ease-in;

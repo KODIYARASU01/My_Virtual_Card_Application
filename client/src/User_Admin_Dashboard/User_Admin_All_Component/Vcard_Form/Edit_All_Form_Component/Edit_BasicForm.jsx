@@ -10,11 +10,13 @@ import {
   convertToBase64Banner,
   convertToBase64Profile,
 } from "../../../../Helper/convert";
+import {useParams} from 'react-router-dom'
 import { BasicDetailValidate } from "../../../../Helper/BasicDetailValiate";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Toaster, toast } from "react-hot-toast";
 const BasicForm = () => {
+  let {Index}=useParams();
   let { FormSubmitLoader, setFormSubmitLoader, userName } =
     useContext(SuperAdmin_context);
   let [BasicDetailLoader, setBasicDetailLoader] = useState(false);
@@ -40,6 +42,9 @@ const BasicForm = () => {
   let [ContactToggleSwitch, setContactToggleSwitch] = useState(true);
 
   let [imagePath, setImagePath] = useState(null);
+
+ 
+
   const stripHtmlTags = (html) => {
     const div = document.createElement("div");
     div.innerHTML = html;
@@ -56,6 +61,7 @@ const BasicForm = () => {
 
     setBanner(base64);
   };
+  console.log(Index)
   async function fetchBasicData(){
     try{
       setFormSubmitLoader(true)
@@ -70,24 +76,24 @@ const BasicForm = () => {
         }
       )
       .then((res) => {
-      console.log(res.data.data[0]);
-      setVCardName(res.data.data[0].VCardName);
-      setOccupation(res.data.data[0].Occupation);
-      setDescription(res.data.data[0].Description);
-      setProfile(res.data.data[0].Profile);
-      setBanner(res.data.data[0].Banner);
-      setFirstName(res.data.data[0].FirstName);
-      setLastName(res.data.data[0].LastName);
-      setEmail(res.data.data[0].Email);
-      setMobileNumber(res.data.data[0].MobileNumber);
-      setAlternateEmail(res.data.data[0].AlternateEmail);
-      setAlternateMobileNumber(res.data.data[0].AlternateMobileNumber);
-      setLocation(res.data.data[0].Location);
-      setJobTitle(res.data.data[0].JobTitle);
-      setInquiryToggleSwitch(res.data.data[0].InquiryToggleSwitch);
-      setQRToggleSwitch(res.data.data[0].QRToggleSwitch);
-      setAppoinmentToggleSwitch(res.data.data[0].AppoinmentToggleSwitch);
-      setAppoinmentToggleSwitch(res.data.data[0].AppoinmentToggleSwitch)
+   
+      setVCardName(res.data.data[Index].VCardName);
+      setOccupation(res.data.data[Index].Occupation);
+      setDescription(res.data.data[Index].Description);
+      setProfile(res.data.data[Index].Profile);
+      setBanner(res.data.data[Index].Banner);
+      setFirstName(res.data.data[Index].FirstName);
+      setLastName(res.data.data[Index].LastName);
+      setEmail(res.data.data[Index].Email);
+      setMobileNumber(res.data.data[Index].MobileNumber);
+      setAlternateEmail(res.data.data[Index].AlternateEmail);
+      setAlternateMobileNumber(res.data.data[Index].AlternateMobileNumber);
+      setLocation(res.data.data[Index].Location);
+      setJobTitle(res.data.data[Index].JobTitle);
+      setInquiryToggleSwitch(res.data.data[Index].InquiryToggleSwitch);
+      setQRToggleSwitch(res.data.data[Index].QRToggleSwitch);
+      setAppoinmentToggleSwitch(res.data.data[Index].AppoinmentToggleSwitch);
+      setAppoinmentToggleSwitch(res.data.data[Index].AppoinmentToggleSwitch)
       setFormSubmitLoader(false)
       })
       .catch((error) => {
@@ -201,7 +207,7 @@ e.preventDefault();
     toast.error(error.message)
   }
 }
-console.log(VCardName)
+
   return (
     <>
       <div className="basicform_container">
@@ -231,8 +237,8 @@ console.log(VCardName)
               <input
                 type="text"
                 placeholder="Enter Occupation"
-                // value={Occupation}
-                // onChange={() => setOccupation(e.target.value)}
+                value={Occupation}
+                onChange={(e) => setOccupation(e.target.value)}
              
               />
             </div>

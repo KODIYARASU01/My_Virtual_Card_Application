@@ -50,8 +50,11 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
           </div>
           <div className="action">
             <button
-              onClick={() =>
+              onClick={() =>{
+          
                 (window.location.pathname = `/${userName}/uadmin/user_vcard`)
+              }
+          
               }
             >
               Back
@@ -61,15 +64,7 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
         <div className="vcard_form_box">
      
           <div className="form_sidenav">
-            <div
-              className="menu_item"
-              onClick={handleFormShow}
-              id={ShowForm === "Basic Detail" ? "menu_active" : ""}
-            >
-              <i className="bx bxs-user" style={{ color: "blue" }}></i>
-              <small>Basic Detail</small>
-            </div>
-            <div
+          <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "Choose Your Plan" ? "menu_active" : ""}
@@ -79,6 +74,15 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
 
               <small>Choose Your Plan</small>
             </div>
+            <div
+              className="menu_item"
+              onClick={handleFormShow}
+              id={ShowForm === "Basic Detail" ? "menu_active" : ""}
+            >
+              <i className="bx bxs-user" style={{ color: "blue" }}></i>
+              <small>Basic Detail</small>
+            </div>
+        
             <div
               className="menu_item"
               onClick={handleFormShow}

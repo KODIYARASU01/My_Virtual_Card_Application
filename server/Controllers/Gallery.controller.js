@@ -26,7 +26,7 @@ export const PostGalleryData = async (req, res) => {
     if (err) {
       res.status(400).json({ message: err });
     } else {
-      if (!req.file) {
+      if (!req.body.GalleryImage) {
         return res.status(400).json({ message: "No file choosen!" });
       }
 
@@ -64,10 +64,11 @@ export const PostGalleryData = async (req, res) => {
           const newImage = new GalleryModel({
             user: req.user.userName,
             GalleryURL:req.body.GalleryURL,
-            GalleryImage: {
-              data: fs.readFileSync("uploads/" + req.file.filename),
-              contentType: req.file.mimetype,
-            },
+            GalleryImage:req.body.GalleryImage
+            // GalleryImage: {
+            //   data: fs.readFileSync("uploads/" + req.file.filename),
+            //   contentType: req.file.mimetype,
+            // },
           });
 
           newImage
@@ -98,10 +99,11 @@ export const PostGalleryData = async (req, res) => {
         const newImage = new GalleryModel({
           user: req.user.userName,
           GalleryURL:req.body.GalleryURL,
-          GalleryImage: {
-            data: fs.readFileSync("uploads/" + req.file.filename),
-            contentType: req.file.mimetype,
-          },
+          GalleryImage:req.body.GalleryImage
+          // GalleryImage: {
+          //   data: fs.readFileSync("uploads/" + req.file.filename),
+          //   contentType: req.file.mimetype,
+          // },
         });
  
         newImage
@@ -132,10 +134,11 @@ export const PostGalleryData = async (req, res) => {
       const newImage = new GalleryModel({
         user: req.user.userName,
         GalleryURL:req.body.GalleryURL,
-        GalleryImage: {
-          data: fs.readFileSync("uploads/" + req.file.filename),
-          contentType: req.file.mimetype,
-        },
+        GalleryImage:req.body.GalleryImage
+        // GalleryImage: {
+        //   data: fs.readFileSync("uploads/" + req.file.filename),
+        //   contentType: req.file.mimetype,
+        // },
       });
 
       newImage

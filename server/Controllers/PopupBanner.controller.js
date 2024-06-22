@@ -30,7 +30,7 @@ export const PostPopupBannerData = async (req, res) => {
         });
 
         if (!checkPopupBannerLength) {
-          return res.status(400).json({ message: "Image will not be there!" });
+          return res.status(400).json({ message: "Banner will not be there!" });
         } else {
           //Basic Image File limit checked:
           if (checkPopupBannerLength.length < 1) {
@@ -138,7 +138,7 @@ export const updateSpecificUserData = async (req, res) => {
   try {
     let { id } = req.params;
     let data = req.body;
-    let updateSpecificData = await PopupBannerModel.findByIdAndUpdate(id, data);
+    let updateSpecificData = await PopupBannerModel.findByIdAndUpdate(id, data,{new:true});
 
     if (!updateSpecificData) {
       res.status(400).json({ message: " Data Not Found!" });

@@ -3,138 +3,217 @@
   width: 100%;
   padding: 1rem;
 
-  .row_1{
+  .Vcard_delete_popupBox{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 300px;
+    height: auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.3);
+    padding: 10px;
+    z-index: 1000;
+    .popup_title{
+      padding: 10px;
+      font-size: 0.8rem;
+      font-weight: 550;
+      width: 100%;
+    }
+    .popup_actions{
+      width: 100%;
+      margin: 1rem auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+
+      .delete{
+
+        button{
+          padding: 6px 1rem;
+          outline: none;
+          border: transparent;
+          background-color: tomato;
+          color: white;
+          font-weight: 550;
+          font-size: 0.9rem;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: all 0.5s ease;
+          &:hover{
+            box-shadow: 0px 4px 4px rgba(0,0,0,0.4);
+            scale: 1.05;
+            transition: all 0.5s ease;
+          }
+
+        }
+      }
+      .cancel{
+
+        button{
+          padding: 6px 1rem;
+          outline: none;
+          border: transparent;
+          background-color: rgb(44, 138, 117);
+          color: white;
+          font-weight: 550;
+          font-size: 0.9rem;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: all 0.5s ease;
+          &:hover{
+            box-shadow: 0px 4px 4px rgba(0,0,0,0.4);
+            scale: 1.05;
+            transition: all 0.5s ease;
+          }
+        }
+      }
+    }
+  }
+  .row_1 {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     width: 100%;
 
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex: 1;
 
-   
-    .actions{
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        flex: 1;
+      a {
+        text-decoration: none;
 
-        a{
-            text-decoration: none;
-
-            button{
-                padding: 10px 10px;
-                outline: none;
-                border: transparent;
-                background-color: #6571FF;
-                color: white;
-                // width: 200px;
-                font-size: 0.8rem;
-                border-radius: 10px;
-                transition: all 0.4s ease;
-                &:hover{
-                    background-color: #fff;
-                    box-shadow: 0px 4px 5px rgba(0,0,0,0.3);
-                    color: #000;
-                    transition: all 0.4s ease;
-                }
-                
-            }
+        button {
+          padding: 10px 10px;
+          outline: none;
+          border: transparent;
+          background-color: #6571ff;
+          color: white;
+          // width: 200px;
+          font-size: 0.8rem;
+          border-radius: 10px;
+          transition: all 0.4s ease;
+          &:hover {
+            background-color: #fff;
+            box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.3);
+            color: #000;
+            transition: all 0.4s ease;
+          }
         }
+      }
     }
   }
-  .row_2{
+  .row_2 {
     width: 100%;
     margin: 1rem 1rem;
     position: relative;
 
-  
-    .appoinment_container{
+    .appoinment_container {
       margin: 0.5rem auto;
-  padding: 1rem;
+      padding: 1rem;
 
-      .table{
-        width: 100%;
-        margin: auto;
+      .table {
+        // width: 100%;
+        // margin: auto;
         border-radius: 1rem;
         border: transparent;
-   
 
-        thead{
-          width: 100%;
-          
-          tr{
-            width: 100%;
-  
-          
-           
-            th{
+        thead {
+          // width: 100%;
+
+          tr {
+            // width: 100%;
+
+            th {
               padding: 0.7rem 0.5rem;
-              background-color: #F8F9FA;
+              background-color: #f8f9fa;
               font-size: 0.9rem;
-  font-weight: 550 !important;
-              color: rgb(27, 27, 27);
+              font-weight: 500 !important;
+              color: rgb(49, 49, 49);
             }
           }
         }
-        tbody{
-          width: 100%;
-          
-          tr{
+        tbody {
+          // width: 100%;
+          p {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 10px;
             width: 100%;
-   
-           
-            td{
+            font-size: 0.8rem;
+            font-weight: 550;
+            color: tomato;
+            vertical-align: middle;
+          }
+          tr {
+            // width: 100%;
+
+            td {
               padding: 1rem 0.5rem;
-              font-size: 0.8rem; 
+              font-size: 0.8rem;
               vertical-align: middle;
-           font-weight: 500 !important;
+              font-weight: 500 !important;
               color: rgb(99, 99, 99);
               border-bottom: 1px solid rgb(230, 230, 230);
 
-              i:nth-child(1){
+              i:nth-child(1) {
                 font-size: 1.5rem;
                 padding-left: 10px;
-                color: tomato;
+                color: rgb(99, 99, 99);
                 cursor: pointer;
 
-                &:hover{
+                &:hover {
                   color: gray;
                 }
               }
-              i:nth-child(2){
+              i:nth-child(2) {
+                font-size: 1.5rem;
+                padding-left: 10px;
+                color: rgb(238, 82, 43);
+                cursor: pointer;
+
+                &:hover {
+                  color: rgb(252, 135, 135);
+                }
+              }
+              i:nth-child(3) {
                 font-size: 1.5rem;
                 padding-left: 10px;
                 color: royalblue;
                 cursor: pointer;
 
-                &:hover{
+                &:hover {
                   color: rgb(0, 0, 0);
                 }
               }
 
-              &:nth-child(3){
-         
+              &:nth-child(3) {
                 padding: 5px 10px;
                 vertical-align: middle;
                 color: green;
                 font-weight: 550;
                 font-size: 0.9rem;
               }
-              &:nth-child(2){
-                 a{
+              &:nth-child(2) {
+                a {
                   text-decoration: none;
-                 }
+                }
               }
-              &:nth-child(4){
-             i{
-              font-size: 1.5rem;
-              color: #6571FF;
-             }
-             }
+              &:nth-child(4) {
+                i {
+                  font-size: 1.5rem;
+                  color: #6571ff;
+                }
+              }
             }
-            
           }
         }
       }
     }
-   }
+  }
 }

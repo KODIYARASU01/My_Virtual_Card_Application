@@ -128,7 +128,8 @@ const Select_Template = () => {
     userName,
     currentPlan,
     setCurrentPlan,
-    SavedPlan, setSavedPlan
+    SavedPlan,
+    setSavedPlan,
   } = useContext(SuperAdmin_context);
   let [currentTemplate, setCurrentTemplate] = useState(null);
   let [savedTemplate, setSavedTemplate] = useState(null);
@@ -157,7 +158,6 @@ const Select_Template = () => {
   //       }
   //     )
   //     .then((res) => {
-
 
   //       if (res.data.data[0].currentTemplate == undefined) {
   //         setCurrentTemplate(null);
@@ -193,26 +193,35 @@ const Select_Template = () => {
   //     });
   // }, [FormSubmitLoader]);
 
-  async function fetchCurrentTemplate(){
-    try{
-      await axios.get(`http://localhost:3001/templateDetail/specificAll/${localStorageDatas.userName}`,  {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorageDatas.token}`,
-        },
-      }).then((res)=>{
-       setCurrentTemplate(res.data.data[0].currentTemplate)
-      }).catch((error)=>{
-        console.log(error)
-      })
+  async function fetchCurrentTemplate() {
+    try {
+      await axios
+        .get(
+          `http://localhost:3001/templateDetail/specificAll/${localStorageDatas.userName}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorageDatas.token}`,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.data.length <= 0) {
+            setCurrentTemplate(null);
+          } else {
+            setCurrentTemplate(res.data.data[0].currentTemplate);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      toast.error(error.message);
     }
-    catch(error){
-      toast.error(error.message)
-    }
-  };
-  useEffect(()=>{
-    fetchCurrentTemplate()
-  },[])
+  }
+  useEffect(() => {
+    fetchCurrentTemplate();
+  }, []);
   let formik = useFormik({
     initialValues: {
       currentTemplate: null,
@@ -225,12 +234,16 @@ const Select_Template = () => {
       setFormSubmitLoader(true);
       values.currentTemplate = currentTemplate;
       await axios
-        .put(`http://localhost:3001/templateDetail/update_with_userName/${localStorageDatas.userName}`, values, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorageDatas.token}`,
-          },
-        })
+        .put(
+          `http://localhost:3001/templateDetail/update_with_userName/${localStorageDatas.userName}`,
+          values,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorageDatas.token}`,
+            },
+          }
+        )
         .then((res) => {
           toast.success(res.data.message);
           setFormSubmitLoader(false);
@@ -254,8 +267,8 @@ const Select_Template = () => {
             </h6>
           ) : (
             <h6>
-            Selected {currentPlan} Plan Template <sup>*</sup>
-          </h6>
+              Selected {currentPlan} Plan Template <sup>*</sup>
+            </h6>
           )}
 
           {currentTemplate != savedTemplate || savedTemplate == null ? (
@@ -281,9 +294,11 @@ const Select_Template = () => {
                   {FreeTemplate.map((data, index) => {
                     return (
                       <div
-                      className={
-                        savedTemplate != null ? "free_image" : "single_template"
-                      }
+                        className={
+                          savedTemplate != null
+                            ? "free_image"
+                            : "single_template"
+                        }
                         key={index}
                         id={
                           (currentTemplate === data.id &&
@@ -421,9 +436,9 @@ const Select_Template = () => {
                   {EnterpriceTemplate.map((data, index) => {
                     return (
                       <div
-                      className={
-                        savedTemplate != null ? "free_image" : "image"
-                      }
+                        className={
+                          savedTemplate != null ? "free_image" : "image"
+                        }
                         key={index}
                         id={
                           (currentTemplate === data.id &&

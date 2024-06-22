@@ -4,6 +4,119 @@
     100%;
     height: 100%;
     padding: 1rem;
+    .view_demo{
+      position: absolute;
+      right: 2%;
+      top: 2%;
+
+      p{
+        font-size: 0.8rem;
+        font-weight: 500;
+
+        strong{
+          color: rgb(0, 124, 128);
+        }
+        small{
+          color: blue;
+          cursor: pointer;
+          font-weight: 500;
+        }
+      }
+    }
+    .demoBanner{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      width: 500px;
+      height: 250px;
+border-radius: 0.5rem;
+      // background-image: url('https://img.freepik.com/free-photo/abstract-sale-busioness-background-banner-design-multipurpose_1340-16802.jpg?t=st=1719041827~exp=1719045427~hmac=1add532df5a2337c7e283544a4368ac8bfb1b322de22a7a01879dd4d3902d6f0&w=900');
+      background: linear-gradient(#fff,#d2faff);
+      background-position: center;
+      overflow-y: scroll;
+      box-shadow: 0px 4px 5px rgba(0,0,0,0.4);
+      background-repeat: no-repeat;
+      background-size: cover;
+      z-index: 800;
+
+      padding: 10px;
+
+      .close_banner{
+        position: absolute;
+        right: 3%;
+        top: 3%;
+
+        i{
+          font-size: 1.5rem;
+          color: rgb(255, 119, 119);
+          cursor: pointer;
+        }
+      }
+      .banner_title{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        color: #5d5af7;
+
+        h4{
+          font-size: 1.2rem;
+        }
+      }
+      .banner_description{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1rem auto;
+        text-align: center;
+        color: rgb(31, 31, 31);
+
+        small{
+          font-size: 0.9rem;
+          font-weight: 500;
+        }
+      }
+      .banner_action{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1rem auto;
+
+        a{
+          text-decoration: none;
+          padding: 6px 1.5rem;
+          background-color: royalblue;
+          border-radius: 10px;
+          color: rgb(255, 255, 255);
+          font-weight: 550;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+
+          i{
+            color: rgb(255, 255, 255);
+          }
+
+          &:hover{
+            box-shadow: 0px 4px 5px rgba(0,0,0,0.3);
+          }
+        }
+      }
+
+      &::-webkit-scrollbar{
+        display: none;
+        width: 4px;
+        height: 5px;
+        background-color: #fff;
+      }
+      &::-webkit-scrollbar-thumb{
+        width: 4px;
+        background-color: royalblue;
+      }
+    }
     .title {
         width: 100%;
         display: flex;
@@ -33,6 +146,11 @@
               }
               span:nth-child(3) {
                 color: rgb(98, 101, 245);
+                font-weight: 550;
+                padding-right: 5px;
+              }
+              span:nth-child(4) {
+                color: rgb(70, 108, 233);
                 font-weight: 550;
                 padding-right: 5px;
               }
@@ -147,6 +265,9 @@
                 font-size: 0.9rem;
               }
               .save{
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 background-color: royalblue;
                 color: #fff;
                 transition: all 0.3s ease;
@@ -157,6 +278,9 @@
                 }
               }
               .discard{
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 background-color: rgb(138, 138, 138);
                 color: #ffffff;
                 transition: all 0.3s ease;
@@ -170,3 +294,5 @@
         }
       }
 }
+
+

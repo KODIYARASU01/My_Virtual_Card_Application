@@ -19,9 +19,10 @@ let serviceSchema=new mongoose.Schema({
         required:true
     },
     ServiceImage:{
-        data: Buffer,
-      contentType: String,
-        // required:true
+    //     data: Buffer,
+    //   contentType: String,
+    type:String,
+        required:true
     }
 },
 {timestamps:true}

@@ -243,7 +243,7 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
             {ShowForm === "Testimonials" ? <Edit_Testimonial /> : ""}
             {ShowForm === "Iframes" ? <Edit_Iframe /> : ""}
             {ShowForm === "Social Link - Website" ? <Edit_SocialMedias /> : ""}
-            {ShowForm === "Banner" ? <Edit_Banner /> : ""}
+            {ShowForm === "PopUp Banner" ? <Edit_Banner /> : ""}
             {ShowForm === "Dynamic VCard" ? <Edit_Dynamic_VCard /> : ""}
             {ShowForm === "Appoinment" ? <Edit_Appoinment /> : ""}
             {ShowForm === "Business Hours" ? <Edit_Business_Hour /> : ""}

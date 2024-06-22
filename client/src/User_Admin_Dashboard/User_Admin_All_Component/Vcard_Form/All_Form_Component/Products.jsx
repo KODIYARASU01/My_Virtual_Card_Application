@@ -1,4 +1,4 @@
-import React, { useState,useContext } from "react";
+import React, { useState,useContext,useEffect } from "react";
 import "./form_styles/Products.scss";
 import { useFormik } from "formik";
 import { Editor } from "primereact/editor";
@@ -12,6 +12,7 @@ import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_contex
 const Products = () => {
   let { currentPlan, setCurrentPlan,FormSubmitLoader, setFormSubmitLoader, userName } =
     useContext(SuperAdmin_context);
+    let [AllProduct,setAllProduct]=useState();
   let [productFormOpen, setProductFormOpen] = useState(false);
   let [ProductName, setProductName] = useState();
   let [ProductURL, setProductURL] = useState();
@@ -20,15 +21,54 @@ const Products = () => {
   let [ProductPrice, setProductPrice] = useState();
 
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
-  // const onUploadProductImage = async (e) => {
-  //   let base64 = await convertToBase64ProductImage(e.target.files[0]);
-  //   setProductImage(base64);
-  // };
-  const [filename, setFilename] = useState("Choose File");
-  const onUploadProductImage = (e) => {
-    setProductImage(e.target.files[0]);
-    setFilename(e.target.files[0].name);
+  const onUploadProductImage = async (e) => {
+    let base64 = await convertToBase64ProductImage(e.target.files[0]);
+    setProductImage(base64);
   };
+  const [key, setKey] = useState(0);
+  const reloadComponent = () => {
+    setKey((prevKey) => prevKey + 1); // Change the key to trigger a remount
+  };
+  async function fetchCurrentProduct() {
+    setFormSubmitLoader(true);
+    try {
+      await axios
+        .get(
+          `http://localhost:3001/productDetail/specificAll/${localStorageDatas.userName}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorageDatas.token}`,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.data.length == 0) {
+            toast.error("No Product added!");
+            setFormSubmitLoader(false);
+          } else {
+            setAllProduct(res.data.data);
+           
+            setFormSubmitLoader(false);
+          }
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+          setFormSubmitLoader(false);
+        });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+  useEffect(() => {
+    fetchCurrentProduct();
+  }, [key]);
+
+  // const [filename, setFilename] = useState("Choose File");
+  // const onUploadProductImage = (e) => {
+  //   setProductImage(e.target.files[0]);
+  //   setFilename(e.target.files[0].name);
+  // };
   const stripHtmlTags = (html) => {
     const div = document.createElement("div");
     div.innerHTML = html;
@@ -71,6 +111,8 @@ const Products = () => {
         .then((res) => {
           toast.success(res.data.message);
           setFormSubmitLoader(false);
+          reloadComponent();
+          setProductFormOpen(false)
         })
         .catch((error) => {
           toast.error(error.response.data.message);
@@ -92,30 +134,54 @@ const Products = () => {
           <table className="table rounded-3" id="example">
             <thead className="table-secondary rounded-3">
               <tr>
-                <th>ICON OR IMAGE</th>
-                <th>Name</th>
-                <th>DESCRIPTION</th>
-                <th>PRICE</th>
-                <th>ACTIONS</th>
+                <th className="fw-bold">ICON OR IMAGE</th>
+                <th className="fw-bold">Name</th>
+                <th className="fw-bold">DESCRIPTION</th>
+                <th className="fw-bold">PRICE</th>
+                <th className="fw-bold">URL</th>
               </tr>
             </thead>
             <tbody className=" shadow-sm">
-              <tr>
-                <td className="h-100 align-middle">
-                  <img
-                    src="https://img.freepik.com/free-photo/standard-quality-control-collage-concept_23-2149595847.jpg?t=st=1715933611~exp=1715937211~hmac=d54576362232e002de841cc935f4244af4ca12908d312055576f773e438e7014&w=900"
-                    alt="service_image"
-                  />
+            {AllProduct != undefined ? (
+                <>
+                  {AllProduct.map((data, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="h-100 align-middle fw-semibold">
+                          <img
+                            src={data.ProductImage}
+                            alt="ServiceImage"
+                            name="ServiceImage"
+                          />
+                        </td>
+                        <td className="h-100 align-middle fw-semibold">
+                          {data.ProductName}
+                        </td>
+                        <td className="h-100 align-middle fw-semibold">
+                          {data.ProductDescription.slice(0, 20)}
+                        </td>
+                        <td className="h-100 align-middle fw-semibold">
+                        ₹ &nbsp;{data.ProductPrice}
+                        </td>
+                        <td className="h-100 align-middle fw-semibold">
+                          <a href={data.ProductURL} target="_blank">
+                            {data.ProductURL != undefined
+                              ? data.ProductURL
+                              : ""}
+                          </a>
+                        </td>
+                 
+                      </tr>
+                    );
+                  })}
+                </>
+              ) : (
+                <tr>
+                <td colSpan='6' className="text-center">
+                No Product Added!
                 </td>
-                <td className="h-100 align-middle">Web Development</td>
-                <td className="h-100 align-middle">Fully Responsive</td>
-                <td className="h-100 align-middle">3000</td>
-                <td className="h-100 align-middle">
-                  <i className="bx bxs-show" style={{ color: "skyBlue" }}></i>
-                  <i className="bx bx-edit" style={{ color: "#6571FF" }}></i>
-                  <i className="bx bx-trash-alt" style={{ color: "red" }}></i>
-                </td>
-              </tr>
+            </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -180,13 +246,7 @@ const Products = () => {
                   Description <sup>*</sup>
                 </label>
 
-                {/* <textarea
-                  name="product_description"
-                  id="product_description"
-                  cols="48"
-                  rows="4"
-                  placeholder="Enter Short Description"
-                ></textarea> */}
+      
                 <Editor
                   {...formik.getFieldProps("ProductDescription")}
                   value={formik.values.ProductDescription}
@@ -201,7 +261,7 @@ const Products = () => {
 
               <div className="form_group productImage">
                 <label htmlFor="ProductImage">Product Image<sup>*</sup></label>
-                {/* <label htmlFor="ProductImage">
+                <label htmlFor="ProductImage">
                   <img
                     src={
                       ProductImage != undefined
@@ -211,7 +271,7 @@ const Products = () => {
                     alt="ProductImage"
                   />
                   <i className="bx bxs-edit-location"></i>
-                </label> */}
+                </label>
                 <small>Allowed file types: png, jpg, jpeg,.gif.</small>
                 <input
                   type="file"

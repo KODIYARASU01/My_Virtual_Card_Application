@@ -200,53 +200,53 @@ const App = () => {
     }
   }, [navigate]);
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
-  useEffect(() => {
-    axios
-      .get(
-        `http://localhost:3001/currentplan/specificAll/${localStorageDatas.userName}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorageDatas.token}`,
-          },
-        }
-      )
-      .then((res) => {
-        if (res.data.length <= 0) {
-          setCurrentPlan(null);
-        } else {
-          setCurrentPlan(res.data.data[0].currentPlan);
-        }
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
-      });
-  }, [FormSubmitLoader]);
-  useEffect(() => {
-    axios
-      .get(
-        `http://localhost:3001/templateDetail/specificAll/${localStorageDatas.userName}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorageDatas.token}`,
-          },
-        }
-      )
-      .then((res) => {
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `http://localhost:3001/currentplan/specificAll/${localStorageDatas.userName}`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${localStorageDatas.token}`,
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       if (res.data.length <= 0) {
+  //         setCurrentPlan(null);
+  //       } else {
+  //         setCurrentPlan(res.data.data[0].currentPlan);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       toast.error(error.response.data.message);
+  //     });
+  // }, [FormSubmitLoader]);
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `http://localhost:3001/templateDetail/specificAll/${localStorageDatas.userName}`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${localStorageDatas.token}`,
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
       
 
-        if (res.data.data[0].currentTemplate === null) {
-          setCurrentTemplate(null);
-        } else {
-          setCurrentTemplate(res.data.data[0].currentTemplate);
-          setSavedTemplate(res.data.data[0].currentTemplate);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [FormSubmitLoader]);
+  //       if (res.data.data[0].currentTemplate === null) {
+  //         setCurrentTemplate(null);
+  //       } else {
+  //         setCurrentTemplate(res.data.data[0].currentTemplate);
+  //         setSavedTemplate(res.data.data[0].currentTemplate);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, [FormSubmitLoader]);
 
   return (
     <>

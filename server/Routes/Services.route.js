@@ -6,6 +6,10 @@ import { GetServiceData, PostServiceData,
     deleteSpecificUserAllData,
     deleteSpecificUserData } from '../Controllers/Service.controller.js';
 import { verifyToken } from '../Middleware/verifyToken.js';
+import multer from 'multer';
+// Multer storage configuration
+const storage = multer.memoryStorage(); // Store files in memory as Buffer
+const upload = multer({ storage });
 let router=express.Router();
 
 

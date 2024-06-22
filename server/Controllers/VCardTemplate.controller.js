@@ -59,7 +59,7 @@ export const getSpecificUserAllData = async (req, res) => {
       res.status(400).json({ message: "Data Not Found!" });
     }   
     else if(getSpecificData.length <=0){
-      res.status(200).json({ message: "0 - Template selected! " });
+      res.status(200).json({ message: "0 - Template selected! " , data:getSpecificData});
     } else {
       res
         .status(201)
