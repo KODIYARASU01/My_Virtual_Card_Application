@@ -37,7 +37,7 @@ const Services = () => {
     try {
       await axios
         .get(
-          `http://localhost:3001/serviceDetail/specificAll/${localStorageDatas.userName}`,
+          `https://my-virtual-card-application.onrender.com/serviceDetail/specificAll/${localStorageDatas.userName}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -99,7 +99,7 @@ const Services = () => {
       );
       setFormSubmitLoader(true);
       await axios
-        .post("http://localhost:3001/serviceDetail", formData, {
+        .post("https://my-virtual-card-application.onrender.com/serviceDetail", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,

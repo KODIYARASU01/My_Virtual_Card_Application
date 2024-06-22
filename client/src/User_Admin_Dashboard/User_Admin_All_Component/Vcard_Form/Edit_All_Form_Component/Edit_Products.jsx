@@ -43,7 +43,7 @@ const Products = () => {
     try {
       await axios
         .get(
-          `http://localhost:3001/productDetail/specificAll/${localStorageDatas.userName}`,
+          `https://my-virtual-card-application.onrender.com/productDetail/specificAll/${localStorageDatas.userName}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -100,7 +100,7 @@ const Products = () => {
      
       setFormSubmitLoader(true);
       await axios
-        .post("http://localhost:3001/productDetail", formData, {
+        .post("https://my-virtual-card-application.onrender.com/productDetail", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -122,7 +122,7 @@ const Products = () => {
     setProductViewToggle(true);
     try {
       await axios
-        .get(`http://localhost:3001/productDetail/specific/${id}`, {
+        .get(`https://my-virtual-card-application.onrender.com/productDetail/specific/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -154,7 +154,7 @@ const Products = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/productDetail/specific/${id}`, {
+        .get(`https://my-virtual-card-application.onrender.com/productDetail/specific/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -201,7 +201,7 @@ const Products = () => {
     };
     try {
       axios
-        .put(`http://localhost:3001/productDetail/update/${ProductId}`, data, {
+        .put(`https://my-virtual-card-application.onrender.com/productDetail/update/${ProductId}`, data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -229,7 +229,7 @@ const Products = () => {
     setFormSubmitLoader(true);
     try {
       axios
-        .delete(`http://localhost:3001/productDetail/delete/${id}`, {
+        .delete(`https://my-virtual-card-application.onrender.com/productDetail/delete/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,

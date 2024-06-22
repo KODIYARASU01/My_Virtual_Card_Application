@@ -187,7 +187,7 @@ const UserAccountSetting = () => {
   useEffect(() => {
     setLoader(true);
     axios
-      .get(`http://localhost:3001/auth/register/${UserData.id}`)
+      .get(`https://my-virtual-card-application.onrender.com/auth/register/${UserData.id}`)
       .then((responce) => {
         setProfile(responce.data.data.profile);
         setFirstName(responce.data.data.firstName);
@@ -240,7 +240,7 @@ const UserAccountSetting = () => {
         mobileNumber,
       };
       axios
-        .put(`http://localhost:3001/auth/register/${UserData.id}`, data)
+        .put(`https://my-virtual-card-application.onrender.com/auth/register/${UserData.id}`, data)
         .then((res) => {
           toast.success(res.data.message);
           setUpdateLoader(false);

@@ -51,7 +51,7 @@ const ForgotPassword = () => {
     onSubmit: async (values) => {
       setLoginLoader(true);
       await axios
-        .post("http://localhost:3001/auth/forgot_password", values)
+        .post("https://my-virtual-card-application.onrender.com/auth/forgot_password", values)
         .then((res) => {
           toast.success(res.data.message);
           setLoginLoader(false);

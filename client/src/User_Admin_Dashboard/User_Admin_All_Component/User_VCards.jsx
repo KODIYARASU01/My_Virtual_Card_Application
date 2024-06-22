@@ -19,7 +19,7 @@ const User_VCards = () => {
   };
   useEffect(() => {
     axios
-      .get("http://localhost:3001/basicDetail", {
+      .get("https://my-virtual-card-application.onrender.com/basicDetail", {
         headers: {
           Authorization: `Bearer ${userData.token}`,
         },
@@ -37,7 +37,7 @@ const User_VCards = () => {
     try {
       axios
         .delete(
-          `http://localhost:3001/vcard/all_Data_Delete_API/${userData.userName}`,
+          `https://my-virtual-card-application.onrender.com/vcard/all_Data_Delete_API/${userData.userName}`,
           {
             headers: {
               Authorization: `Bearer ${userData.token}`,
@@ -89,7 +89,7 @@ const User_VCards = () => {
                   setFormSubmitLoader(true);
                   axios
                     .get(
-                      `http://localhost:3001/basicDetail/specificAll/${userData.userName}`,
+                      `https://my-virtual-card-application.onrender.com/basicDetail/specificAll/${userData.userName}`,
                       {
                         headers: {
                           Authorization: `Bearer ${userData.token}`,
@@ -147,8 +147,8 @@ const User_VCards = () => {
                           <td className="fw-light">{data.VCardName}</td>
                           <td className="fw-light">
                             {" "}
-                            <a href="http://localhost:3001/kodi">
-                              http://localhost:3001/kodi
+                            <a href="https://my-virtual-card-application.onrender.com/kodi">
+                              Url Comming Soon
                             </a>
                           </td>
                           <td className="fw-light">Free</td>

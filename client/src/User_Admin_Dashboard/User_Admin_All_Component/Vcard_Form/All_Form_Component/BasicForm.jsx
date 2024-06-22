@@ -92,7 +92,7 @@ const BasicForm = () => {
       values.Description = stripHtmlTags(Description);
       setFormSubmitLoader(true);
       await axios
-        .post("http://localhost:3001/basicDetail", values, {
+        .post("https://my-virtual-card-application.onrender.com/basicDetail", values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,

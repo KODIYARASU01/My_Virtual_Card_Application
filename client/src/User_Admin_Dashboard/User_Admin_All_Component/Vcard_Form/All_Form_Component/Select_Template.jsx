@@ -148,7 +148,7 @@ const Select_Template = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:3001/templateDetail/specificAll/${localStorageDatas.userName}`,
+        `https://my-virtual-card-application.onrender.com/templateDetail/specificAll/${localStorageDatas.userName}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -173,7 +173,7 @@ const Select_Template = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:3001/currentplan/specificAll/${localStorageDatas.userName}`,
+        `https://my-virtual-card-application.onrender.com/currentplan/specificAll/${localStorageDatas.userName}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -205,7 +205,7 @@ const Select_Template = () => {
       setFormSubmitLoader(true);
       values.currentTemplate = currentTemplate;
       await axios
-        .post("http://localhost:3001/templateDetail", values, {
+        .post("https://my-virtual-card-application.onrender.com/templateDetail", values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
