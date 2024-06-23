@@ -40,7 +40,7 @@ const Services = () => {
     try {
       await axios
         .get(
-          `https://my-virtual-card-application.onrender.com/serviceDetail/specificAll/${localStorageDatas.userName}`,
+          `http://localhost:3001/serviceDetail/specificAll/${localStorageDatas.userName}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -103,7 +103,7 @@ const Services = () => {
       );
 
       await axios
-        .post("https://my-virtual-card-application.onrender.com/serviceDetail", formData, {
+        .post("http://localhost:3001/serviceDetail", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -127,7 +127,7 @@ const Services = () => {
     setViewServiceDetail(true);
     try {
       await axios
-        .get(`https://my-virtual-card-application.onrender.com/serviceDetail/specific/${id}`, {
+        .get(`http://localhost:3001/serviceDetail/specific/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -159,7 +159,7 @@ const Services = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`https://my-virtual-card-application.onrender.com/serviceDetail/specific/${id}`, {
+        .get(`http://localhost:3001/serviceDetail/specific/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -202,7 +202,7 @@ const Services = () => {
     console.log(ServiceId);
     try {
       axios
-        .put(`https://my-virtual-card-application.onrender.com/serviceDetail/update/${ServiceId}`, data, {
+        .put(`http://localhost:3001/serviceDetail/update/${ServiceId}`, data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -230,7 +230,7 @@ const Services = () => {
     setFormSubmitLoader(true);
     try {
       axios
-        .delete(`https://my-virtual-card-application.onrender.com/serviceDetail/delete/${id}`, {
+        .delete(`http://localhost:3001/serviceDetail/delete/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,

@@ -33,7 +33,7 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
   let userDetails = JSON.parse(localStorage.getItem("datas"));
   useEffect(() => {
     axios
-      .get(`https://my-virtual-card-application.onrender.com/auth/register/${userDetails.id}`)
+      .get(`http://localhost:3001/auth/register/${userDetails.id}`)
       .then((res) => {
         setUserData(res.data.data);
       })

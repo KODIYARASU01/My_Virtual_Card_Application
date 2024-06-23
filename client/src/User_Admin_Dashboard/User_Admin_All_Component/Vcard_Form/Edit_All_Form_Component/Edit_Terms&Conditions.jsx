@@ -32,7 +32,7 @@ const Terms_Conditions = () => {
       values.Terms_Conditions = stripHtmlTags(Terms_Conditions);
       setFormSubmitLoader(true);
       await axios
-        .post("https://my-virtual-card-application.onrender.com/termConditionDetail", values, {
+        .post("http://localhost:3001/termConditionDetail", values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,

@@ -21,7 +21,7 @@ const SocialMedias = () => {
   let localStorageDatas=JSON.parse(localStorage.getItem('datas'));
   async function fetchCurrentSocialMedia(){
     try{
-      await axios.get(`https://my-virtual-card-application.onrender.com/socialMediaDetail/specificAll/${localStorageDatas.userName}`,  {
+      await axios.get(`http://localhost:3001/socialMediaDetail/specificAll/${localStorageDatas.userName}`,  {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorageDatas.token}`,
@@ -63,7 +63,7 @@ const SocialMedias = () => {
       }
       setFormSubmitLoader(true)
       try{
-        axios.put(`https://my-virtual-card-application.onrender.com/socialMediaDetail/update_by_userName/${localStorageDatas.userName}`, data, {
+        axios.put(`http://localhost:3001/socialMediaDetail/update_by_userName/${localStorageDatas.userName}`, data, {
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: `Bearer ${localStorageDatas.token}`,

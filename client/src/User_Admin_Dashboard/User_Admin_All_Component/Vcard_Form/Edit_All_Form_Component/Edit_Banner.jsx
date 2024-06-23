@@ -30,7 +30,7 @@ const Banner = () => {
     try {
       await axios
         .get(
-          `https://my-virtual-card-application.onrender.com/popupBannerDetail/specificAll/${localStorageDatas.userName}`,
+          `http://localhost:3001/popupBannerDetail/specificAll/${localStorageDatas.userName}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -76,7 +76,7 @@ const Banner = () => {
     try {
       await axios
         .put(
-          `https://my-virtual-card-application.onrender.com/popupBannerDetail/update/${PopupBannerId}`,
+          `http://localhost:3001/popupBannerDetail/update/${PopupBannerId}`,
           data,
           {
             headers: {

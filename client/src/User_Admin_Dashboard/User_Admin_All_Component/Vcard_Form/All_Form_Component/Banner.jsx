@@ -37,7 +37,7 @@ const Banner = () => {
       values.BannerDescription = stripHtmlTags(BannerDescription);
       setFormSubmitLoader(true);
       await axios
-        .post("https://my-virtual-card-application.onrender.com/popupBannerDetail", values, {
+        .post("http://localhost:3001/popupBannerDetail", values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,

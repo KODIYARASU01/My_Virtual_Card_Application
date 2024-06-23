@@ -149,7 +149,7 @@ const Select_Template = () => {
   // useEffect(() => {
   //   axios
   //     .get(
-  //       `https://my-virtual-card-application.onrender.com/templateDetail/specificAll/${localStorageDatas.userName}`,
+  //       `http://localhost:3001/templateDetail/specificAll/${localStorageDatas.userName}`,
   //       {
   //         headers: {
   //           "Content-Type": "application/json",
@@ -173,7 +173,7 @@ const Select_Template = () => {
   // useEffect(() => {
   //   axios
   //     .get(
-  //       `https://my-virtual-card-application.onrender.com/currentplan/specificAll/${localStorageDatas.userName}`,
+  //       `http://localhost:3001/currentplan/specificAll/${localStorageDatas.userName}`,
   //       {
   //         headers: {
   //           "Content-Type": "application/json",
@@ -197,7 +197,7 @@ const Select_Template = () => {
     try {
       await axios
         .get(
-          `https://my-virtual-card-application.onrender.com/templateDetail/specificAll/${localStorageDatas.userName}`,
+          `http://localhost:3001/templateDetail/specificAll/${localStorageDatas.userName}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -235,7 +235,7 @@ const Select_Template = () => {
       values.currentTemplate = currentTemplate;
       await axios
         .put(
-          `https://my-virtual-card-application.onrender.com/templateDetail/update_with_userName/${localStorageDatas.userName}`,
+          `http://localhost:3001/templateDetail/update_with_userName/${localStorageDatas.userName}`,
           values,
           {
             headers: {

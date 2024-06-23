@@ -36,7 +36,7 @@ const Gallery = () => {
     try {
       await axios
         .get(
-          `https://my-virtual-card-application.onrender.com/galleryDetail/specificAll/${localStorageDatas.userName}`,
+          `http://localhost:3001/galleryDetail/specificAll/${localStorageDatas.userName}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -84,7 +84,7 @@ const Gallery = () => {
       formData.append("GalleryURL", values.GalleryURL);
       setFormSubmitLoader(true);
       await axios
-        .post("https://my-virtual-card-application.onrender.com/galleryDetail", formData, {
+        .post("http://localhost:3001/galleryDetail", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -110,7 +110,7 @@ const Gallery = () => {
     setFormSubmitLoader(true);
     try {
       axios
-        .get(`https://my-virtual-card-application.onrender.com/galleryDetail/specific/${id}`, {
+        .get(`http://localhost:3001/galleryDetail/specific/${id}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,

@@ -55,7 +55,7 @@ const Login = () => {
       setLoginLoader(true);
 
       await axios
-        .post("https://my-virtual-card-application.onrender.com/auth/login", values)
+        .post("http://localhost:3001/auth/login", values)
         .then((res) => {
           toast.success(res.data.message);
           setLoginLoader(false)

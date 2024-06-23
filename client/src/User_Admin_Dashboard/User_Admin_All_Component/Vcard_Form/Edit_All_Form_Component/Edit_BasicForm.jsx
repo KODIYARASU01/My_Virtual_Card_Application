@@ -67,7 +67,7 @@ const BasicForm = () => {
       setFormSubmitLoader(true)
       axios
       .get(
-        `https://my-virtual-card-application.onrender.com/basicDetail/specificAll/${localStorageDatas.userName}`,
+        `http://localhost:3001/basicDetail/specificAll/${localStorageDatas.userName}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -144,7 +144,7 @@ const BasicForm = () => {
   //     values.Description = stripHtmlTags(Description);
   //     setFormSubmitLoader(true);
   //     await axios
-  //       .put(`https://my-virtual-card-application.onrender.com/basicDetail/update_by_userName/${localStorageDatas.userName}`, values, {
+  //       .put(`http://localhost:3001/basicDetail/update_by_userName/${localStorageDatas.userName}`, values, {
   //         headers: {
   //           "Content-Type": "application/json",
   //           Authorization: `Bearer ${localStorageDatas.token}`,
@@ -187,7 +187,7 @@ e.preventDefault();
   }
   setFormSubmitLoader(true)
   try{
-    axios.put(`https://my-virtual-card-application.onrender.com/basicDetail/update_by_userName/${localStorageDatas.userName}`, data, {
+    axios.put(`http://localhost:3001/basicDetail/update_by_userName/${localStorageDatas.userName}`, data, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorageDatas.token}`,

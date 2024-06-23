@@ -203,7 +203,7 @@ const App = () => {
   // useEffect(() => {
   //   axios
   //     .get(
-  //       `https://my-virtual-card-application.onrender.com/currentplan/specificAll/${localStorageDatas.userName}`,
+  //       `http://localhost:3001/currentplan/specificAll/${localStorageDatas.userName}`,
   //       {
   //         headers: {
   //           "Content-Type": "application/json",
@@ -225,7 +225,7 @@ const App = () => {
   // useEffect(() => {
   //   axios
   //     .get(
-  //       `https://my-virtual-card-application.onrender.com/templateDetail/specificAll/${localStorageDatas.userName}`,
+  //       `http://localhost:3001/templateDetail/specificAll/${localStorageDatas.userName}`,
   //       {
   //         headers: {
   //           "Content-Type": "application/json",

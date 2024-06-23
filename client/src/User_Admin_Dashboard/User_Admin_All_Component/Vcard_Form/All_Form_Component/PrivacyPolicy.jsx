@@ -32,7 +32,7 @@ const PrivacyPolicy = () => {
       values.PrivacyPolicy = stripHtmlTags(PrivacyPolicy);
       setFormSubmitLoader(true);
       await axios
-        .post("https://my-virtual-card-application.onrender.com/privacyPolicyDetail", values, {
+        .post("http://localhost:3001/privacyPolicyDetail", values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
