@@ -6,8 +6,10 @@ import standard from "../../../../assets/animations/standard.gif";
 import basic from "../../../../assets/animations/basic.gif";
 import enterprice from "../../../../assets/animations/enterprice.gif";
 import { toast, Toaster } from "react-hot-toast";
+import { useParams } from "react-router-dom";
 import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_context";
 import axios from "axios";
+
 let Free_Plans = [
   {
     id: 1,
@@ -363,6 +365,7 @@ let EnterPrice_Plans = [
   },
 ];
 const Plan = () => {
+  let {URL_Alies}=useParams();
   let {
     currentPlan,
     setCurrentPlan,
@@ -375,6 +378,11 @@ const Plan = () => {
   let [currentAccessDetails, setCurrentAccessDetails] = useState();
   let [currentAccessActive, setCurrentAccessActive] = useState(false);
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
+  const [key, setKey] = useState(0);
+
+  var reloadComponent = () => {
+    setKey((prevKey) => prevKey + 1); // Change the key to trigger a remount
+  };
   function handle_Plan_Selection(getCurrentPlan) {
     setCurrentPlan(getCurrentPlan === currentPlan ? null : getCurrentPlan);
     if (getCurrentPlan === currentPlan) {
@@ -389,6 +397,7 @@ const Plan = () => {
     try {
       setFormSubmitLoader(true);
       let data = {
+        URL_Alies,
         currentPlan,
         PlanPrice,
       };
@@ -403,6 +412,7 @@ const Plan = () => {
        
           toast.success(res.data.message);
           setFormSubmitLoader(false);
+       
         })
         .catch((error) => {
           toast.error(error.response.data.message);
@@ -416,7 +426,7 @@ const Plan = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:3001/currentplan/specificAll/${localStorageDatas.userName}`,
+        `http://localhost:3001/currentplan/${URL_Alies}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -425,13 +435,17 @@ const Plan = () => {
         }
       )
       .then((res) => {
-        console.log(res.data)
-        if (res.data.length > 0) {
-           setCurrentPlan(res.data.data[0].currentPlan)
+
+        if(res.data.data[0].currentPlan == null){
+            setCurrentPlan(null)
         }
         else{
-          setCurrentPlan(null)
+          setCurrentPlan(res.data.data[0].currentPlan)
         }
+
+ 
+         
+     
       })
       .catch((error) => {
         console.log(error);
@@ -578,7 +592,7 @@ const Plan = () => {
         <Toaster position="top-right" />
         <div id={currentAccessActive ? 'listView' :'listUnview'} >
         <div className="plan_title">
-          <h5>Choose Your Subscription</h5>
+          <h5>{currentPlan != null ? "Plan Subscribed!" :"Choose Your Subscription"}</h5>
           {currentPlan != null ? (
             <div className="actions">
               <button onClick={handlePlanSubmit} type="submit">

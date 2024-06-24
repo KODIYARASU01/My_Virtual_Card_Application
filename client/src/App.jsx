@@ -38,6 +38,7 @@ import VCard_Form_Edit from "./User_Admin_Dashboard/User_Admin_All_Component/Vca
 import toast from "react-hot-toast";
 import VCard_URL_Form from "./User_Admin_Dashboard/User_Admin_All_Component/VCard_URL_Form";
 import Plan from "./User_Admin_Dashboard/User_Admin_All_Component/Vcard_Form/All_Form_Component/Plan";
+import Inquiries from "./User_Admin_Dashboard/User_Admin_All_Component/Inquiries";
 
 const App = () => {
 
@@ -518,6 +519,10 @@ const App = () => {
               <Route
                 path={`/${userName}/uadmin/vcard_form_edit/:URL_Alies`}
                 element={<VCard_Form_Edit />}
+              />
+                 <Route
+                path={`/${userName}/uadmin/inquiries`}
+                element={<Inquiries />}
               />
               <Route
                 path={`/${userName}/uadmin/vcard_form/basic_form`}

@@ -25,7 +25,7 @@ const VCard_Form = () => {
 let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
   let navigate = useNavigate();
   let [userData, setUserData] = useState("jayakumar");
-  let [ShowForm, setShowForm] = useState("Basic Detail");
+  let [ShowForm, setShowForm] = useState("Choose Your Plan");
 
   function handleFormShow(e) {
     setShowForm(e.target.innerText);

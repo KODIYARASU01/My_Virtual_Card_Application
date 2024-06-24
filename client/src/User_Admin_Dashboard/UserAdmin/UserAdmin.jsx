@@ -17,6 +17,7 @@ import VCard_Form_Edit from "../User_Admin_All_Component/Vcard_Form/VCard_Form_E
 
 import VCard_URL_Form from "../User_Admin_All_Component/VCard_URL_Form";
 import Plan from "../User_Admin_All_Component/Vcard_Form/All_Form_Component/Plan";
+import Inquiries from "../User_Admin_All_Component/Inquiries";
 const UserAdmin = () => {
   let { Index } = useParams();
   let navigate = useNavigate();
@@ -239,7 +240,6 @@ const UserAdmin = () => {
       
   }, [navigate]);
 
-  console.log(URL_Alies)
   return (
     <>
       <div className="userAdmin_container">
@@ -274,6 +274,11 @@ const UserAdmin = () => {
 
             {window.location.pathname === `/${userName}/uadmin/user_vcard` ? (
               <User_VCards />
+            ) : (
+              ""
+            )}
+             {window.location.pathname === `/${userName}/uadmin/inquiries` ? (
+              <Inquiries />
             ) : (
               ""
             )}
@@ -363,7 +368,7 @@ const UserAdmin = () => {
                 />
               </div>
               <div className="user_name">
-                <p>{userData.firstName}</p>
+                <p>{userData.firstName} {userData.lastName}</p>
                 <small>{userData.email}</small>
               </div>
             </div>

@@ -18,16 +18,43 @@ import Edit_Font from "./Edit_All_Form_Component/Edit_Font";
 import Edit_Terms_Conditions from "./Edit_All_Form_Component/Edit_Terms&Conditions";
 import Edit_Manage_Session from "./Edit_All_Form_Component/Edit_Manage_Session";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import SuperAdmin_context from "../../../SuperAdmin_Context/SuperAdmin_context";
 import Edit_Plan from "./Edit_All_Form_Component/Edit_Plan";
+import toast from "react-hot-toast";
 const VCard_Form_Edit = () => {
 let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
   let navigate = useNavigate();
   let [userData, setUserData] = useState("jayakumar");
-  let [ShowForm, setShowForm] = useState("Basic Detail");
-
+  let [ShowForm, setShowForm] = useState("Choose Your Plan");
+  let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
   function handleFormShow(e) {
-    setShowForm(e.target.innerText);
+
+    try{
+      axios.get(`http://localhost:3001/currentplan/specificAll/${userName}`,   {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorageDatas.token}`,
+        },
+      }).then((res)=>{
+        console.log(res.data.data.length)
+
+        if(res.data.data.length == 1){
+          setShowForm(e.target.innerText);
+        }
+        // else if(e.target.innerText='Choose Your Plan'){
+        //   setShowForm(e.target.innerText);
+        // }
+        else{
+          toast.error('Choose Your Plan First!')
+        }
+      }).catch((error)=>{
+        toast.error(error.response.data.message)
+      })
+    }
+    catch(error){
+      toast.error(error.message)
+    }
   }
   let userDetails = JSON.parse(localStorage.getItem("datas"));
   useEffect(() => {
@@ -60,15 +87,7 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
         <div className="vcard_form_box">
      
         <div className="form_sidenav">
-            <div
-              className="menu_item"
-              onClick={handleFormShow}
-              id={ShowForm === "Basic Detail" ? "menu_active" : ""}
-            >
-              <i className="bx bxs-user" style={{ color: "blue" }}></i>
-              <small>Basic Detail</small>
-            </div>
-            <div
+        <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "Choose Your Plan" ? "menu_active" : ""}
@@ -78,6 +97,15 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
 
               <small>Choose Your Plan</small>
             </div>
+            <div
+              className="menu_item"
+              onClick={handleFormShow}
+              id={ShowForm === "Basic Detail" ? "menu_active" : ""}
+            >
+              <i className="bx bxs-user" style={{ color: "blue" }}></i>
+              <small>Basic Detail</small>
+            </div>
+         
             <div
               className="menu_item"
               onClick={handleFormShow}

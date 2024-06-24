@@ -97,7 +97,9 @@ const VCard_URL_Form = () => {
         <div className="new_vcardurl_form_title">
           <h5>Create Your New VCard</h5>
         </div>
-
+          <div className="close_new_vcardurl_page">
+              <button type="button" onClick={()=>window.location.pathname =`/${userName}/uadmin/user_vcard`}>Back<i className='bx bx-exit'></i></button>
+          </div>
         <div className="new_vcardURL_container_box">
           {/* Tooltip */}
           {tooltip ? (

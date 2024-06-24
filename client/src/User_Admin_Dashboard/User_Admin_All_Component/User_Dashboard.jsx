@@ -131,19 +131,28 @@ const User_Dashboard = () => {
                 <table className="table table-hover rounded-3" id="example">
                   <thead>
                     <tr>
-                      <th className="fw-bold text-center">VCARD NAME</th>
-                      <th className="fw-bold text-center">NAME</th>
-                      <th className="fw-bold text-center">PHONE</th>
-                      <th className="fw-bold text-center">EMAIL</th>
+                      <th className="fw-bold text-center" colSpan="1" style={{ width: "20%" }}  >VCARD NAME</th>
+                      <th className="fw-bold text-center" colSpan="1" style={{ width: "20%" }} >NAME</th>
+                      <th className="fw-bold text-center" colSpan="1" style={{ width: "15%" }} >PHONE</th>
+                      <th className="fw-bold text-center" colSpan="1" style={{ width: "15%" }} >EMAIL</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+                    {/* <tr>
                       <td className="text-center"></td>
                       <td className="text-center"></td>
                       <td className="text-center"></td>
                       <td className="text-center"></td>
              
+                    </tr> */}
+                    <tr>
+                    <td></td>
+                      <td colSpan="1" className="text-center">
+                         Appoinment not Found!
+                      </td>
+                     
+                      <td></td>
+                      <td></td>
                     </tr>
                   </tbody>
                 </table>

@@ -23,7 +23,7 @@ height: 3px;
 z-index: 1000;
 border-radius: 5px;
 width:100%;
---c:no-repeat linear-gradient(#4b2cff 0 0);
+--c:no-repeat linear-gradient(#21d867 0 0);
 background: var(--c),var(--c),#ffffff;
 background-size: 60% 100%;
 animation: lines 2s infinite;
@@ -182,10 +182,11 @@ z-index: 800;
       height: auto;
       background-color: #fff;
       filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.3));
-      transition: all 0.4s linear;
-      transform: translateY(0px);
-      border-radius: 1rem;
-      z-index: 900;
+      transition: all 0.3s ease;
+      opacity: 1;
+      transform: translateX(0px);
+      border-radius: 10px;
+      z-index: 1000;
 
       .user_details {
         width: 100%;
@@ -193,15 +194,16 @@ z-index: 800;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        border-bottom: 1px solid rgb(238, 237, 237);
+        border-bottom: 1px solid rgb(224, 224, 224);
         .profile {
           margin-top: 2rem;
 
           img {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            border: 2px solid #a7f2ff;
+            // border: 2px solid #3b3b3b;
+            filter: drop-shadow(0px 3px 4px rgba(0,0,0,0.4));
           }
         }
         .user_name {
@@ -213,14 +215,14 @@ z-index: 800;
           gap: 10px;
 
           p {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 500;
-            color: rgb(31, 31, 31);
+            color:royalblue;
           }
           small{
             font-size: 0.8rem;
-            font-weight: 550;
-            color: darkgray;
+            font-weight: 500;
+            color: rgb(34, 34, 34);
           }
         }
       }
@@ -249,7 +251,7 @@ z-index: 800;
 
           i {
             height: 100%;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: darkgray;
         
             display: flex;
@@ -262,7 +264,7 @@ z-index: 800;
             width: 100%;
             height: 100%;
 
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             letter-spacing: 1px;
             font-weight: 500;
             color: rgb(71, 71, 71);
@@ -276,8 +278,8 @@ z-index: 800;
 
           &:hover{
             cursor: pointer;
-            background-color: #d0faf1;
-            border-left: 4px solid rgb(255, 163, 57);
+            background-color: #E0E3FF;
+            border-left: 4px solid rgb(119, 104, 255);
           }
         }
       }
@@ -425,7 +427,7 @@ position: relative;
     #profileclose{
         transform: translateY(-800px);
         transition: all 0.4s linear;
-        z-index: -1;
+        // z-index: -1;
     }
   }
 }

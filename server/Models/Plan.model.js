@@ -8,6 +8,11 @@ let currentPlanSchema=new mongoose.Schema({
         ref:'User',
         required:true
     },
+    URL_Alies:{
+        type:String,
+        required:true,
+        unique:true
+      },
     currentPlan:{
         type:String,
         required:true

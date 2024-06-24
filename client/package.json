@@ -35,6 +35,7 @@
     "react-bootstrap": "^2.10.2",
     "react-chartjs-2": "^5.2.0",
     "react-circular-progressbar": "^2.1.0",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-flag-kit": "^1.1.1",
     "react-flags-select": "^2.2.3",

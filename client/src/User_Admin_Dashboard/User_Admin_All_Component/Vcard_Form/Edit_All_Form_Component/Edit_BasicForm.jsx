@@ -129,7 +129,7 @@ const BasicForm = () => {
             setFormSubmitLoader(false);
           }
           else{
-            toast.error('Basic Detail Not Created!');
+            // toast.error('Basic Detail Not Created!');
             setUpdateButtonToggle(false)
             setFormSubmitLoader(false)
           }

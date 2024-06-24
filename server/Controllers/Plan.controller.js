@@ -13,6 +13,7 @@ export const PostPlanData = async (req, res) => {
     } else {
       let data = {
         user: req.user.userName,
+        URL_Alies: req.body.URL_Alies,
         currentPlan: req.body.currentPlan,
         PlanPrice: req.body.PlanPrice,
       };
@@ -30,7 +31,7 @@ export const PostPlanData = async (req, res) => {
 
 export const GetPlanData = async (req, res) => {
   try {
-    let datas = await currentPlan.find({});
+    let datas = await currentPlan.find({ URL_Alies: req.params.URL_Alies});
     if (!datas) {
       res.status(400).json({ message: "Data not found" });
     } else {

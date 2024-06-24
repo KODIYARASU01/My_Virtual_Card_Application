@@ -49,7 +49,7 @@ const User_Admin_SideNavBar = () => {
         </div>
      
         <div className="menu">
-          <NavLink onClick={()=>window.location.pathname='/sadmin/users'} className={window.location.pathname === '/sadmin/users' ?    'activeMenu' : ''}>
+          <NavLink onClick={()=>window.location.pathname=`/${userName}/uadmin/inquiries`} className={window.location.pathname === `/${userName}/uadmin/inquiries` ?    'activeMenu' : ''}>
           <i className='bx bxs-user-detail h-auto  d-flex align-self-center justify-content-center text-danger'></i>
         <p className={SideNavActions ? 'menuNamesHide':''}id='menuName'>Inquries</p>
           </NavLink>
@@ -121,16 +121,7 @@ const User_Admin_SideNavBar = () => {
         </div>
     </div>
 
-    <div className="color_template">
-      <div className="color_title">
-        <h6>Color Mode</h6>
-      </div>
-      <div className="color_lists">
-        <div className="color"></div>
-        <div className="color"></div>
 
-      </div>
-    </div>
    </div>
    </>
   )
