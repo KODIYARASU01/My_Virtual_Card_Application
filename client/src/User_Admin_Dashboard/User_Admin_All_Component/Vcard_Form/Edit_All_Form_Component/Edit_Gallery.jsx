@@ -5,11 +5,13 @@ import { Editor } from "primereact/editor";
 import "primereact/resources/themes/saga-blue/theme.css"; // Choose a theme
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import { convertToBase64GalleryImage } from "../../../../Helper/convert";
 import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_context";
 const Gallery = () => {
+  let {URL_Alies}=useParams();
   let [AllGallery, setAllGallery] = useState();
   let [GalleryId, setGalleryId] = useState();
   let [updateFormOpen, setUpdateFormOpen] = useState(false);
@@ -35,7 +37,7 @@ const Gallery = () => {
     try {
       await axios
         .get(
-          `http://localhost:3001/galleryDetail/specificAll/${localStorageDatas.userName}`,
+          `http://localhost:3001/galleryDetail/${URL_Alies}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -76,6 +78,7 @@ const Gallery = () => {
 
   let formik = useFormik({
     initialValues: {
+      URL_Alies:URL_Alies,
       GalleryURL: "",
       GalleryImage: null,
     },
@@ -88,11 +91,12 @@ const Gallery = () => {
         GalleryImage: GalleryImage || "",
       });
       const formData = new FormData();
+      formData.append('URL_Alies',URL_Alies)
       formData.append("GalleryImage", values.GalleryImage);
       formData.append("GalleryURL", values.GalleryURL);
       setFormSubmitLoader(true);
       await axios
-        .post("http://localhost:3001/galleryDetail", formData, {
+        .post(`http://localhost:3001/galleryDetail/${URL_Alies}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -105,6 +109,9 @@ const Gallery = () => {
           setGalleryImage(null);
           values.GalleryURL = "";
           reloadComponent();
+          setTimeout(()=>{
+            setGalleryFormOpen(false)
+          },1000)
         })
         .catch((error) => {
           toast.error(error.response.data.message);
@@ -117,7 +124,7 @@ const Gallery = () => {
     setFormSubmitLoader(true);
     try {
       axios
-        .get(`http://localhost:3001/galleryDetail/specific/${id}`, {
+        .get(`http://localhost:3001/galleryDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -140,7 +147,7 @@ const Gallery = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/galleryDetail/specific/${id}`, {
+        .get(`http://localhost:3001/galleryDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -175,12 +182,13 @@ const Gallery = () => {
     // formData.append('ServiceDescription', ServiceDescription = stripHtmlTags(ServiceDescription));
 
     let data = {
+      URL_Alies,
       GalleryImage,
       GalleryURL,
     };
     try {
       axios
-        .put(`http://localhost:3001/galleryDetail/update/${GalleryId}`, data, {
+        .put(`http://localhost:3001/galleryDetail/updateID/${GalleryId}`, data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -191,6 +199,7 @@ const Gallery = () => {
           setFormSubmitLoader(false);
           reloadComponent();
           setTimeout(() => {
+            setGalleryImage(null)
             setUpdateFormOpen(false);
           }, 1000);
         })
@@ -208,7 +217,7 @@ const Gallery = () => {
     setFormSubmitLoader(true);
     try {
       axios
-        .delete(`http://localhost:3001/galleryDetail/delete/${id}`, {
+        .delete(`http://localhost:3001/galleryDetail/deleteID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,

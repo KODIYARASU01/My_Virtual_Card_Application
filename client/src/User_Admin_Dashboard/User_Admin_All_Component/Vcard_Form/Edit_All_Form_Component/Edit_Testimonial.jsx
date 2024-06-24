@@ -6,10 +6,13 @@ import "primereact/resources/themes/saga-blue/theme.css"; // Choose a theme
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import { convertToBase64ClientImage } from "../../../../Helper/convert";
 import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_context";
+import { set } from "mongoose";
 const Testimonial = () => {
+  let { URL_Alies } = useParams();
   let [testimonialFormOpen, setTestimonialFormOpen] = useState(false);
   let [updateFormOpen, setUpdateFormOpen] = useState(false);
   let [testimonialId, setTestimonialId] = useState();
@@ -31,15 +34,12 @@ const Testimonial = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(
-          `http://localhost:3001/testimonialDetail/specificAll/${localStorageDatas.userName}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorageDatas.token}`,
-            },
-          }
-        )
+        .get(`http://localhost:3001/testimonialDetail/${URL_Alies}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        })
         .then((res) => {
           if (res.data.data.length == 0) {
             toast.error("Empty Testimonial!");
@@ -71,6 +71,7 @@ const Testimonial = () => {
   };
   let formik = useFormik({
     initialValues: {
+      URL_Alies: URL_Alies,
       ClientName: "",
       ClientFeedback: "",
       ClientReviewDate: "",
@@ -81,11 +82,12 @@ const Testimonial = () => {
     // validate:BasicDetailValidate,
 
     onSubmit: async (values) => {
+      values.URL_Alies = URL_Alies;
       values = await Object.assign(values, { ClientImage: ClientImage || "" });
       values.ClientFeedback = stripHtmlTags(ClientFeedback);
       setFormSubmitLoader(true);
       await axios
-        .post("http://localhost:3001/testimonialDetail", values, {
+        .post(`http://localhost:3001/testimonialDetail/${URL_Alies}`, values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -93,12 +95,15 @@ const Testimonial = () => {
         })
         .then((res) => {
           toast.success(res.data.message);
-        reloadComponent();
+          reloadComponent();
           setTimeout(() => {
             values.ClientName = "";
             setClientImage(undefined);
-            values.ClientFeedback = "";
-          }, 2000);
+            values.ClientFeedback = stripHtmlTags("");
+            setClientFeedback("");
+            values.ClientReviewDate = "";
+            setTestimonialFormOpen(false);
+          }, 1000);
           setFormSubmitLoader(false);
         })
         .catch((error) => {
@@ -112,7 +117,7 @@ const Testimonial = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/testimonialDetail/specific/${id}`, {
+        .get(`http://localhost:3001/testimonialDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -120,7 +125,8 @@ const Testimonial = () => {
         })
         .then((res) => {
           setUpdateFormOpen(true);
-reloadComponent()
+          reloadComponent();
+          setClientReviewDate(res.data.data.ClientReviewDate);
           setClientName(res.data.data.ClientName);
           setClientImage(res.data.data.ClientImage);
           setClientFeedback(res.data.data.ClientFeedback);
@@ -148,14 +154,16 @@ reloadComponent()
     // formData.append('ServiceDescription', ServiceDescription = stripHtmlTags(ServiceDescription));
 
     let data = {
+      URL_Alies,
       ClientName,
       ClientImage,
-      ClientFeedback,
+      ClientReviewDate,
+      ClientFeedback: stripHtmlTags(ClientFeedback),
     };
     try {
       axios
         .put(
-          `http://localhost:3001/testimonialDetail/update/${testimonialId}`,
+          `http://localhost:3001/testimonialDetail/updateID/${testimonialId}`,
           data,
           {
             headers: {
@@ -165,11 +173,15 @@ reloadComponent()
           }
         )
         .then((res) => {
-          reloadComponent()
+          reloadComponent();
           toast.success(res.data.message);
           setFormSubmitLoader(false);
           setTimeout(() => {
             setUpdateFormOpen(false);
+            setClientImage(undefined);
+            setClientName("");
+            setClientFeedback("");
+            setClientReviewDate("");
           }, 1000);
         })
         .catch((error) => {
@@ -186,17 +198,16 @@ reloadComponent()
     setFormSubmitLoader(true);
     try {
       axios
-        .delete(`http://localhost:3001/testimonialDetail/delete/${id}`, {
+        .delete(`http://localhost:3001/testimonialDetail/deleteID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
           },
         })
         .then((res) => {
-          reloadComponent()
+          reloadComponent();
           toast.success(res.data.message);
           setFormSubmitLoader(false);
-        
         })
         .catch((error) => {
           toast.error(error.response.data.message);
@@ -224,7 +235,7 @@ reloadComponent()
           <table className="table rounded-3" id="example">
             <thead className="table-secondary rounded-3">
               <tr>
-              <th className="fw-bold">COUNT</th>
+                <th className="fw-bold">COUNT</th>
                 <th className="fw-bold">CLIENT PROFILE</th>
                 <th className="fw-bold">CLIENT NAME</th>
                 <th className="fw-bold">CLIENT REVIEW</th>
@@ -262,7 +273,6 @@ reloadComponent()
                           <i
                             className="bx bxs-show"
                             style={{ color: "skyBlue" }}
-                          
                           ></i>
                           <i
                             className="bx bx-edit"
@@ -272,7 +282,7 @@ reloadComponent()
                           <i
                             className="bx bx-trash-alt"
                             style={{ color: "red" }}
-                            onClick={()=>handleTestimonialDelete(data._id)}
+                            onClick={() => handleTestimonialDelete(data._id)}
                           ></i>
                         </td>
                       </tr>
@@ -281,10 +291,10 @@ reloadComponent()
                 </>
               ) : (
                 <tr>
-                <td colSpan='6' className="text-center">
-                No Client Reviews Added!
-                </td>
-            </tr>
+                  <td colSpan="6" className="text-center">
+                    No Client Reviews Added!
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
@@ -292,9 +302,9 @@ reloadComponent()
 
         {/* //Create New Service Form */}
 
-             {/* //Create New Service Form */}
+        {/* //Create New Service Form */}
 
-             <div
+        <div
           className="create_new_testimonial_container"
           id={testimonialFormOpen ? "shadow_background" : ""}
         >
@@ -343,7 +353,11 @@ reloadComponent()
                 <input
                   type="date"
                   placeholder="Enter Client Reviewed Date"
-                  {...formik.getFieldProps("ClientReviewDate")}
+                  value={formik.values.ClientReviewDate}
+                  {...formik.getFieldProps(
+                    "ClientReviewDate",
+                    ClientReviewDate
+                  )}
                 />
               </div>
               <div className="form_group">
@@ -436,7 +450,8 @@ reloadComponent()
                 <input
                   type="date"
                   placeholder="Enter Client Reviewed Date"
-                  {...formik.getFieldProps("ClientReviewDate")}
+                  value={ClientReviewDate}
+                  onChange={(e) => setClientReviewDate(e.target.value)}
                 />
               </div>
               <div className="form_group">

@@ -6,6 +6,11 @@ let serviceSchema=new mongoose.Schema({
         required: true,
         
       },
+      URL_Alies:{
+        type:String,
+        required:true,
+
+      },
     ServiceName:{
         type:String,
         required:true

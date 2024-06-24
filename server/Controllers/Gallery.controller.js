@@ -11,6 +11,24 @@ const __dirname = path.dirname(__filename);
 import path from "path";
 import upload from "../Multer/config.js";
 
+//Read or get all user basicDetail data  from database:
+
+export const GetGalleryData = async (req, res) => {
+  try {
+    let datas = await GalleryModel.find({URL_Alies: req.params.URL_Alies});
+    if (!datas) {
+      res.status(400).json({ message: "Data not found" });
+    } else {
+      res.status(201).json({
+        message: "Data Fetched!",
+        data: datas,
+      });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 export const PostGalleryData = async (req, res) => {
   upload(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
@@ -48,7 +66,7 @@ export const PostGalleryData = async (req, res) => {
     if (checkCurrentPlan[0].PlanPrice === 10 || checkCurrentPlan[0].PlanPrice === 365 || checkCurrentPlan[0].PlanPrice === 799 || checkCurrentPlan[0].PlanPrice === 1499) {
       //check images
       let checkCurrentImages = await GalleryModel.find({
-        user: req.user.userName,
+        URL_Alies:req.params.URL_Alies
       });
 
       if (!checkCurrentImages) {
@@ -63,6 +81,7 @@ export const PostGalleryData = async (req, res) => {
           // Create a new image instance and save to MongoDB
           const newImage = new GalleryModel({
             user: req.user.userName,
+            URL_Alies:req.body.URL_Alies,
             GalleryURL:req.body.GalleryURL,
             GalleryImage:req.body.GalleryImage
             // GalleryImage: {
@@ -98,6 +117,7 @@ export const PostGalleryData = async (req, res) => {
         // Create a new image instance and save to MongoDB
         const newImage = new GalleryModel({
           user: req.user.userName,
+          URL_Alies:req.body.URL_Alies,
           GalleryURL:req.body.GalleryURL,
           GalleryImage:req.body.GalleryImage
           // GalleryImage: {
@@ -133,6 +153,7 @@ export const PostGalleryData = async (req, res) => {
       // Create a new image instance and save to MongoDB
       const newImage = new GalleryModel({
         user: req.user.userName,
+        URL_Alies:req.body.URL_Alies,
         GalleryURL:req.body.GalleryURL,
         GalleryImage:req.body.GalleryImage
         // GalleryImage: {
@@ -174,28 +195,11 @@ export const PostGalleryData = async (req, res) => {
     }
   });
 };
-//Read or get all user basicDetail data  from database:
-
-export const GetGalleryData = async (req, res) => {
-  try {
-    let datas = await GalleryModel.find({});
-    if (!datas) {
-      res.status(400).json({ message: "Data not found" });
-    } else {
-      res.status(201).json({
-        message: "Data Fetched!",
-        data: datas,
-      });
-    }
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
 
 // //Read or get Specific User all Data  :
 export const readSpecificUserAllData = async (req, res) => {
   try {
-    let getSpecificData = await GalleryModel.find({ user: req.user.userName });
+    let getSpecificData = await GalleryModel.find({  URL_Alies:req.params.URL_Alies });
 
     if (!getSpecificData) {
       res.status(400).json({ message: " Data Not Found!" });
@@ -250,7 +254,7 @@ export const updateSpecificUserData = async (req, res) => {
 export const deleteSpecificUserAllData = async (req, res) => {
   try {
     let deleteSpecificData = await GalleryModel.deleteMany({
-      user: req.user.userName,
+      URL_Alies:req.params.URL_Alies
     });
 
     if (!deleteSpecificData) {

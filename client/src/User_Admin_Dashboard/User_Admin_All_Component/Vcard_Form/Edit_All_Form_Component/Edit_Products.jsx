@@ -5,11 +5,13 @@ import { Editor } from "primereact/editor";
 import "primereact/resources/themes/saga-blue/theme.css"; // Choose a theme
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import { convertToBase64ProductImage } from "../../../../Helper/convert";
 import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_context";
 const Products = () => {
+  let {URL_Alies}=useParams();
   let { currentPlan, setCurrentPlan,FormSubmitLoader, setFormSubmitLoader, userName } =
     useContext(SuperAdmin_context);
     let [AllProduct, setAllProduct] = useState();
@@ -43,7 +45,7 @@ const Products = () => {
     try {
       await axios
         .get(
-          `http://localhost:3001/productDetail/specificAll/${localStorageDatas.userName}`,
+          `http://localhost:3001/productDetail/${URL_Alies}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -75,6 +77,7 @@ const Products = () => {
   let formik = useFormik({
     initialValues: {
       ProductName: "",
+      URL_Alies:URL_Alies,
       ProductURL: "",
       ProductDescription: "",
       ProductImage: null,
@@ -88,6 +91,7 @@ const Products = () => {
 
 
       const formData = new FormData();
+      formData.append('URL_Alies',URL_Alies),
    formData.append("ProductImage", ProductImage);
    formData.append('ProductName',values.ProductName);
    formData.append('ProductURL',values.ProductURL);
@@ -100,7 +104,7 @@ const Products = () => {
      
       setFormSubmitLoader(true);
       await axios
-        .post("http://localhost:3001/productDetail", formData, {
+        .post(`http://localhost:3001/productDetail/${URL_Alies}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -110,6 +114,17 @@ const Products = () => {
           reloadComponent()
           toast.success(res.data.message);
           setFormSubmitLoader(false);
+          setProductFormOpen(false);
+
+          setTimeout(()=>{
+values.ProductName='';
+values.ProductPrice='';
+values.ProductURL='';
+values.ProductDescription='';
+values.ProductImage=undefined
+setProductImage(undefined)
+
+          },[])
         
         })
         .catch((error) => {
@@ -122,7 +137,7 @@ const Products = () => {
     setProductViewToggle(true);
     try {
       await axios
-        .get(`http://localhost:3001/productDetail/specific/${id}`, {
+        .get(`http://localhost:3001/productDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -154,7 +169,7 @@ const Products = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/productDetail/specific/${id}`, {
+        .get(`http://localhost:3001/productDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -162,7 +177,7 @@ const Products = () => {
         })
         .then((res) => {
           setUpdateFormOpen(true);
-      
+      setProductPrice(res.data.data.ProductPrice)
           setProductName(res.data.data.ProductName);
           setProductURL(res.data.data.ProductURL);
           setProductDescription(res.data.data.ProductDescription);
@@ -193,6 +208,7 @@ const Products = () => {
     // formData.append('ServiceDescription', ServiceDescription = stripHtmlTags(ServiceDescription));
     ProductDescription = stripHtmlTags(ProductDescription);
     let data = {
+      URL_Alies,
       ProductName,
       ProductImage,
       ProductURL,
@@ -201,7 +217,7 @@ const Products = () => {
     };
     try {
       axios
-        .put(`http://localhost:3001/productDetail/update/${ProductId}`, data, {
+        .put(`http://localhost:3001/productDetail/updateID/${ProductId}`, data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -212,6 +228,7 @@ const Products = () => {
           setFormSubmitLoader(false);
           reloadComponent()
           setTimeout(() => {
+            setProductImage(undefined)
             setUpdateFormOpen(false);
           }, 1000);
         })
@@ -229,7 +246,7 @@ const Products = () => {
     setFormSubmitLoader(true);
     try {
       axios
-        .delete(`http://localhost:3001/productDetail/delete/${id}`, {
+        .delete(`http://localhost:3001/productDetail/deleteID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -548,7 +565,7 @@ const Products = () => {
                 <div className="name">
                   <p>
                     {ProductDescription != undefined
-                      ? ProductDescription
+                      ? stripHtmlTags(ProductDescription)
                       : "N/A"}
                   </p>
                 </div>

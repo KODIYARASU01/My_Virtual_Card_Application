@@ -1,14 +1,16 @@
-import React,{useContext} from 'react'
+import React,{useContext, useEffect} from 'react'
 import './User_Admin_SideNavBar.scss';
 import SuperAdmin_context from "../../SuperAdmin_Context/SuperAdmin_context";
 import { NavLink,useParams} from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import toast from 'react-hot-toast';
+import axios from 'axios';
 const User_Admin_SideNavBar = () => {
 
   let {Index}=useParams();
-  let {   SideNavActions,setSideNavActions,profileOpen,setProfileOpen,searchQuery,setSearchQuery,userName}=useContext(SuperAdmin_context);
-
+  let { URL_Alies,  SideNavActions,setSideNavActions,profileOpen,setProfileOpen,searchQuery,setSearchQuery,userName}=useContext(SuperAdmin_context);
   let menuList=document.querySelectorAll('#menuName');
+  let localStorageURL = localStorage.getItem("URL_Alies");
 
   return (
    <>
@@ -35,15 +37,17 @@ const User_Admin_SideNavBar = () => {
        
         </div>
         <div className="menu">
-          <NavLink onClick={()=>window.location.pathname=`/${userName}/uadmin/user_vcard`} className={window.location.pathname === `/${userName}/uadmin/user_vcard` || window.location.pathname === `/${userName}/uadmin/vcard_form` || window.location.pathname === `/${userName}/uadmin/vcard_form_edit/${userName}/${Index}` ?    'activeMenu' : ''}>
+          <NavLink onClick={()=>window.location.pathname=`/${userName}/uadmin/user_vcard`} className={window.location.pathname === `/${userName}/uadmin/user_vcard` || window.location.pathname === `/${userName}/uadmin/vcard_form/${URL_Alies}` || window.location.pathname === `/${userName}/uadmin/vcard_form_edit/${localStorageURL}` || window.location.pathname === `/${userName}/uadmin/create_new_vcard`  ?    'activeMenu' : ''}>
           
             <i className='bx bxs-home-heart h-auto  d-flex align-self-center justify-content-center text-success'></i>
         <p className={SideNavActions ? 'menuNamesHide':''}id='menuName'>VCards</p>
        
       
           </NavLink>
+
         
         </div>
+     
         <div className="menu">
           <NavLink onClick={()=>window.location.pathname='/sadmin/users'} className={window.location.pathname === '/sadmin/users' ?    'activeMenu' : ''}>
           <i className='bx bxs-user-detail h-auto  d-flex align-self-center justify-content-center text-danger'></i>

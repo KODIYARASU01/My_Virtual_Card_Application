@@ -9,19 +9,24 @@ import { verifyToken } from '../Middleware/verifyToken.js';
 let router=express.Router();
 
 
-router.get('/',verifyToken,GetSocialMediaData);
-router.post('/',verifyToken,PostSocialMediaData);
- //Read Specific user all Data:
- router.get("/specificAll/:userName", verifyToken, getSpecificUserAllData);
- //Read Specific ID Data:
- router.get("/specific/:id", verifyToken, getSpecificIdData);
+router.get('/:URL_Alies',verifyToken,GetSocialMediaData);
+router.post('/:URL_Alies',verifyToken,PostSocialMediaData);
+ //Read Specific VCard Data:
+//  router.get("/:URL_Alies", verifyToken, getSpecificIdData);
  //Update Specific user :
-router.put("/update_by_userName/:userName", verifyToken, updateSpecificUserData);
-//Update Specific user Single Data:
-router.put("/update/:id", verifyToken, updateSpecificUserData_id);
+router.put("/update_by_vcard_URL/:URL_Alies", verifyToken, updateSpecificUserData);
 //Delete Specific user all Data in Basic Detail:
-router.delete("/deleteAll/:userName", verifyToken, deleteSpecificUserAllData);
-//Delete Specific user document Data in Basic Detail:
-router.delete("/delete/:id", verifyToken, deleteSpecificUserData);
+router.delete("/delete_by_vcard_URL/:URL_Alies", verifyToken, deleteSpecificUserAllData);
+
+
+
+// //Update Specific user Single Data:
+// router.put("/update/:id", verifyToken, updateSpecificUserData_id);
+
+//  //Read Specific user all Data:
+//  router.get("/specificAll/:userName", verifyToken, getSpecificUserAllData);
+
+// //Delete Specific user document Data in Basic Detail:
+// router.delete("/delete/:id", verifyToken, deleteSpecificUserData);
 
 export default router;

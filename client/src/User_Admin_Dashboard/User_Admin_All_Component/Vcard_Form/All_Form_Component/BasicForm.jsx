@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import "./form_styles/BasicForm.scss";
 import { Editor } from "primereact/editor";
 import "primereact/resources/themes/saga-blue/theme.css"; // Choose a theme
@@ -10,11 +10,15 @@ import {
   convertToBase64Banner,
   convertToBase64Profile,
 } from "../../../../Helper/convert";
+import { useParams } from "react-router-dom";
 import { BasicDetailValidate } from "../../../../Helper/BasicDetailValiate";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Toaster, toast } from "react-hot-toast";
 const BasicForm = () => {
+
+  let {URL_Alies}=useParams();
+
   let { FormSubmitLoader, setFormSubmitLoader, userName } =
     useContext(SuperAdmin_context);
   let [BasicDetailLoader, setBasicDetailLoader] = useState(false);
@@ -48,6 +52,25 @@ const BasicForm = () => {
     return div.textContent || div.innerText || "";
   };
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
+  useEffect(()=>{
+    axios.get(`http://localhost:3001/vcard_URL/specific_vcard/${URL_Alies}`,{
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorageDatas.token}`,
+      },
+    }).then((res)=>{
+      
+      setVCardName(res.data.data.VCardName);
+      setOccupation(res.data.data.Occupation);
+      setDescription(res.data.data.Description);
+      setProfile(res.data.data.Profile)
+      setBanner(res.data.data.Banner)
+   
+    }).catch((error)=>{
+      console.log(error)
+    })
+  },[]);
+
   const onUploadProfile = async (e) => {
     let base64 = await convertToBase64Profile(e.target.files[0]);
 
@@ -61,12 +84,7 @@ const BasicForm = () => {
 
   let formik = useFormik({
     initialValues: {
-      VCardName: "",
-      Occupation: "",
-      Description: "",
-      Profile: undefined,
-      Banner: null,
-      BannerName: "",
+      URL_Alies:URL_Alies,
       FirstName: "",
       LastName: "",
       Email: "",
@@ -86,13 +104,13 @@ const BasicForm = () => {
 
     onSubmit: async (values) => {
 
-
+// values.URL_Alies=URL_Alies
       values = await Object.assign(values, { Profile: Profile || "" });
       values = await Object.assign(values, { Banner: Banner || "" });
       values.Description = stripHtmlTags(Description);
       setFormSubmitLoader(true);
       await axios
-        .post("http://localhost:3001/basicDetail", values, {
+        .post(`http://localhost:3001/basicDetail/${URL_Alies}`, values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -109,6 +127,7 @@ const BasicForm = () => {
         });
     },
   });
+  console.log(URL_Alies)
   return (
     <>
       <div className="basicform_container">
@@ -119,6 +138,18 @@ const BasicForm = () => {
             onSubmit={formik.handleSubmit}
             method="POST"
           >
+               <div className="form_group">
+              <label htmlFor="URL_Alies">
+                VCard URL <sup>*</sup>
+              </label>
+              <input
+                type="text"
+                placeholder="Enter VCard URL"
+                // value={URL_Alies}
+          // onChange={()=>setFieldValue('URL_Alies',URL_Alies)}
+              {...formik.getFieldProps("URL_Alies",URL_Alies)}
+              />
+            </div>
             <div className="form_group">
               <label htmlFor="VCardName">
                 VCard Name <sup>*</sup>
@@ -126,9 +157,8 @@ const BasicForm = () => {
               <input
                 type="text"
                 placeholder="Enter VCard Name"
-                // value={VCardName}
-                // onChange={() => setVCardName(e.target.value)}
-                {...formik.getFieldProps("VCardName")}
+                value={VCardName}
+        
               />
             </div>
             <div className="form_group">
@@ -138,9 +168,8 @@ const BasicForm = () => {
               <input
                 type="text"
                 placeholder="Enter Occupation"
-                // value={Occupation}
-                // onChange={() => setOccupation(e.target.value)}
-                {...formik.getFieldProps("Occupation")}
+                value={Occupation}
+             
               />
             </div>
             <div className="form_group">
@@ -148,9 +177,9 @@ const BasicForm = () => {
                 Description<sup>*</sup>
               </label>
               <Editor
-                {...formik.getFieldProps("Description")}
-                value={formik.values.Description}
-                onTextChange={(e) => setDescription(e.htmlValue)}
+       
+                value={Description}
+                // onTextChange={(e) => setDescription(e.htmlValue)}
                 id="Description"
                 name="Description"
                 style={{ height: "180px" }}

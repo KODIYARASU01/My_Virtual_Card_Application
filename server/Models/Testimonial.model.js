@@ -5,6 +5,10 @@ let TestimonialSchema=new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true,  
       },
+      URL_Alies:{
+        type:String,
+        required:true,
+      },
     ClientName:{
         type:String,
         required:true

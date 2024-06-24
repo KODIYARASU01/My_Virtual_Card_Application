@@ -6,6 +6,11 @@ let GallerySchema=new mongoose.Schema({
       type: mongoose.Schema.Types.String,
         required: true,  
       },
+      URL_Alies:{
+        type:String,
+        required:true,
+
+      },
       GalleryImage:{
         // data:Buffer,
         // contentType:String,

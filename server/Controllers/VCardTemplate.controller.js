@@ -15,6 +15,7 @@ export const postTemplateData = async (req, res) => {
     }else{
       let data = {
         user: req.user.userName,
+        URL_Alies:req.body.URL_Alies,
         currentTemplate: req.body.currentTemplate,
       };
 
@@ -52,7 +53,7 @@ export const getTemplateData = async (req, res) => {
 export const getSpecificUserAllData = async (req, res) => {
   try {
     let getSpecificData = await Current_VCardTemplate.find({
-      user: req.user.userName,
+      URL_Alies: req.params.URL_Alies,
     });
 
     if (!getSpecificData) {
@@ -94,12 +95,20 @@ export const updateSpecificUserData = async (req, res) => {
   try {
     let data = req.body;
     let updateSpecificData = await Current_VCardTemplate.findOneAndUpdate(
-      {user:req.user.userName},
+      {  URL_Alies: req.params.URL_Alies},
       data
     );
 
     if (!updateSpecificData) {
-      res.status(400).json({ message: "Data Not Found!" });
+      let data = {
+        user: req.user.userName,
+        URL_Alies:req.body.URL_Alies,
+        currentTemplate: req.body.currentTemplate,
+      };
+
+      const result = await Current_VCardTemplate.create(data);
+
+      return res.status(201).json({ message: "Card Selected!", data: result });
     } else {
       res
         .status(201)
@@ -136,7 +145,7 @@ export const updateSpecificUserData_id = async (req, res) => {
 export const deleteSpecificUserAllData = async (req, res) => {
   try {
     let deleteSpecificData = await Current_VCardTemplate.deleteMany({
-      user: req.user.userName,
+      URL_Alies: req.params.URL_Alies,
     });
 
     if (!deleteSpecificData) {

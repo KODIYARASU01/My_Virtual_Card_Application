@@ -12,6 +12,7 @@ import mongoose from "mongoose";
 //All api route importing
 import RegisterRoute from './Routes/Register.route.js';
 import LoginRoute from './Routes/Login.route.js';
+import VCardURL_Route from './Routes/VCard_URL.route.js'
 import BasicDetailRoute from './Routes/BasicDetail.route.js';
 import TemplateRoute from './Routes/VCardTemplate.route.js';
 import ServiceDetailRoute from './Routes/Services.route.js';
@@ -58,6 +59,7 @@ app.get("/", (req, res) => {
 app.use('/auth',RegisterRoute);
 app.use('/currentplan',PlanDetailRoute);
 app.use('/auth',LoginRoute);
+app.use('/vcard_URL',VCardURL_Route)
 app.use('/basicDetail',BasicDetailRoute);
 app.use('/templateDetail',TemplateRoute);
 app.use('/serviceDetail',ServiceDetailRoute);

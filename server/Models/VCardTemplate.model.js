@@ -7,6 +7,11 @@ let TemplateSchema=new mongoose.Schema({
         required:true,
         ref:'User'
     },
+    URL_Alies:{
+        type:String,
+        required:true,
+        unique:true
+      },
     currentTemplate:{
         type:Number,
         required:[true,'Select Your VCard Template!']

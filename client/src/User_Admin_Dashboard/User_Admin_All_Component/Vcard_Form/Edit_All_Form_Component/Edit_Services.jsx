@@ -5,12 +5,14 @@ import { Editor } from "primereact/editor";
 import "primereact/resources/themes/saga-blue/theme.css"; // Choose a theme
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import { convertToBase64ServiceImage } from "../../../../Helper/convert";
 import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_context";
 import currentPlan from "../../../../../../server/Models/Plan.model";
 const Services = () => {
+  let { URL_Alies } = useParams();
   let {
     currentPlan,
     setCurrentPlan,
@@ -39,17 +41,16 @@ const Services = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(
-          `http://localhost:3001/serviceDetail/specificAll/${localStorageDatas.userName}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorageDatas.token}`,
-            },
-          }
-        )
+        .get(`http://localhost:3001/serviceDetail/${URL_Alies}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        })
         .then((res) => {
+          console.log(res);
           if (res.data.data.length == 0) {
+   
             toast.error("No service added!");
             setFormSubmitLoader(false);
           } else {
@@ -81,6 +82,7 @@ const Services = () => {
   };
   let formik = useFormik({
     initialValues: {
+      URL_Alies: URL_Alies,
       ServiceName: "",
       ServiceURL: "",
       ServiceDescription: "",
@@ -94,6 +96,7 @@ const Services = () => {
       setFormSubmitLoader(true);
       // values = await Object.assign(values, { ServiceImage: ServiceImage || "" });
       const formData = new FormData();
+      formData.append("URL_Alies", URL_Alies);
       formData.append("ServiceImage", ServiceImage);
       formData.append("ServiceName", values.ServiceName);
       formData.append("ServiceURL", values.ServiceURL);
@@ -103,7 +106,7 @@ const Services = () => {
       );
 
       await axios
-        .post("http://localhost:3001/serviceDetail", formData, {
+        .post(`http://localhost:3001/serviceDetail/${URL_Alies}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -114,6 +117,12 @@ const Services = () => {
           toast.success(res.data.message);
           reloadComponent();
           setTimeout(() => {
+            values.ServiceName = "";
+
+            values.ServiceURL = "";
+            values.ServiceDescription = "";
+            values.ServiceImage = undefined;
+            setServiceImage(undefined);
             setServiceFormOpen(false);
           }, 500);
         })
@@ -127,7 +136,7 @@ const Services = () => {
     setViewServiceDetail(true);
     try {
       await axios
-        .get(`http://localhost:3001/serviceDetail/specific/${id}`, {
+        .get(`http://localhost:3001/serviceDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -159,7 +168,7 @@ const Services = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/serviceDetail/specific/${id}`, {
+        .get(`http://localhost:3001/serviceDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -194,26 +203,31 @@ const Services = () => {
     // formData.append('ServiceDescription', ServiceDescription = stripHtmlTags(ServiceDescription));
     ServiceDescription = stripHtmlTags(ServiceDescription);
     let data = {
+      URL_Alies,
       ServiceName,
       ServiceImage,
       ServiceURL,
       ServiceDescription,
     };
-    console.log(ServiceId);
     try {
       axios
-        .put(`http://localhost:3001/serviceDetail/update/${ServiceId}`, data, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorageDatas.token}`,
-          },
-        })
+        .put(
+          `http://localhost:3001/serviceDetail/updateID/${ServiceId}`,
+          data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorageDatas.token}`,
+            },
+          }
+        )
         .then((res) => {
           toast.success(res.data.message);
 
           setFormSubmitLoader(false);
           reloadComponent();
           setTimeout(() => {
+            setServiceImage(undefined)
             setUpdateFormOpen(false);
           }, 1000);
         })
@@ -230,7 +244,7 @@ const Services = () => {
     setFormSubmitLoader(true);
     try {
       axios
-        .delete(`http://localhost:3001/serviceDetail/delete/${id}`, {
+        .delete(`http://localhost:3001/serviceDetail/deleteID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -240,7 +254,6 @@ const Services = () => {
           toast.success(res.data.message);
           reloadComponent();
           setFormSubmitLoader(false);
-    
         })
         .catch((error) => {
           toast.error(error.response.data.message);
@@ -276,7 +289,7 @@ const Services = () => {
               </tr>
             </thead>
             <tbody className="shadow-sm">
-              {AllService != undefined ? (
+              {AllService != undefined  ? (
                 <>
                   {AllService.map((data, index) => {
                     return (
@@ -324,10 +337,10 @@ const Services = () => {
                 </>
               ) : (
                 <tr>
-                <td colSpan='6' className="text-center">
-                No Service Added!
-                </td>
-            </tr>
+                  <td colSpan="6" className="text-center">
+                    No Service Added!
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
@@ -536,7 +549,7 @@ const Services = () => {
                 <div className="name">
                   <p>
                     {ServiceDescription != undefined
-                      ? ServiceDescription
+                      ? stripHtmlTags(ServiceDescription)
                       : "N/A"}
                   </p>
                 </div>
@@ -553,7 +566,11 @@ const Services = () => {
                 <div className="service_title">Service Image</div>
                 <div className="service_image">
                   <img
-                    src="https://img.freepik.com/free-photo/texture-cold-gray-background-copy-space-generative-ai_169016-29494.jpg?t=st=1719067458~exp=1719071058~hmac=cd83aaa24c4e3db687a13e63bc286a6ae631fa31fc3c17a55273372b6a109a0f&w=1060"
+                    src={
+                      ServiceImage != undefined
+                        ? ServiceImage
+                        : "https://img.freepik.com/free-photo/texture-cold-gray-background-copy-space-generative-ai_169016-29494.jpg?t=st=1719067458~exp=1719071058~hmac=cd83aaa24c4e3db687a13e63bc286a6ae631fa31fc3c17a55273372b6a109a0f&w=1060"
+                    }
                     alt="service"
                   />
                 </div>

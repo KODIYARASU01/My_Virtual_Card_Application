@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef,useEffect } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import "./Edit_form_styles/Edit_BasicForm.scss";
 import { Editor } from "primereact/editor";
 import "primereact/resources/themes/saga-blue/theme.css"; // Choose a theme
@@ -10,15 +10,17 @@ import {
   convertToBase64Banner,
   convertToBase64Profile,
 } from "../../../../Helper/convert";
-import {useParams} from 'react-router-dom'
+import { useParams } from "react-router-dom";
 import { BasicDetailValidate } from "../../../../Helper/BasicDetailValiate";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Toaster, toast } from "react-hot-toast";
 const BasicForm = () => {
-  let {Index}=useParams();
-  let { FormSubmitLoader, setFormSubmitLoader, userName } =
+  let { URL_Alies } = useParams();
+  let { setURL_Alies, FormSubmitLoader, setFormSubmitLoader, userName } =
     useContext(SuperAdmin_context);
+
+    let[UpdateButtonToggle,setUpdateButtonToggle]=useState(false);
   let [BasicDetailLoader, setBasicDetailLoader] = useState(false);
   const [VCardName, setVCardName] = useState();
   const [Occupation, setOccupation] = useState();
@@ -43,8 +45,6 @@ const BasicForm = () => {
 
   let [imagePath, setImagePath] = useState(null);
 
- 
-
   const stripHtmlTags = (html) => {
     const div = document.createElement("div");
     div.innerHTML = html;
@@ -61,55 +61,94 @@ const BasicForm = () => {
 
     setBanner(base64);
   };
-  console.log(Index)
-  async function fetchBasicData(){
-    try{
-      setFormSubmitLoader(true)
+  async function fetchURL_Form() {
+    try {
+      setFormSubmitLoader(true);
       axios
-      .get(
-        `http://localhost:3001/basicDetail/specificAll/${localStorageDatas.userName}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorageDatas.token}`,
-          },
-        }
-      )
-      .then((res) => {
-   
-      setVCardName(res.data.data[Index].VCardName);
-      setOccupation(res.data.data[Index].Occupation);
-      setDescription(res.data.data[Index].Description);
-      setProfile(res.data.data[Index].Profile);
-      setBanner(res.data.data[Index].Banner);
-      setFirstName(res.data.data[Index].FirstName);
-      setLastName(res.data.data[Index].LastName);
-      setEmail(res.data.data[Index].Email);
-      setMobileNumber(res.data.data[Index].MobileNumber);
-      setAlternateEmail(res.data.data[Index].AlternateEmail);
-      setAlternateMobileNumber(res.data.data[Index].AlternateMobileNumber);
-      setLocation(res.data.data[Index].Location);
-      setJobTitle(res.data.data[Index].JobTitle);
-      setInquiryToggleSwitch(res.data.data[Index].InquiryToggleSwitch);
-      setQRToggleSwitch(res.data.data[Index].QRToggleSwitch);
-      setAppoinmentToggleSwitch(res.data.data[Index].AppoinmentToggleSwitch);
-      setAppoinmentToggleSwitch(res.data.data[Index].AppoinmentToggleSwitch)
-      setFormSubmitLoader(false)
-      })
-      .catch((error) => {
-        console.log(error);
-        setFormSubmitLoader(false)
-      });
+        .get(
+          `http://localhost:3001/vcard_URL/specific_vcard/${URL_Alies}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorageDatas.token}`,
+            },
+          }
+        )
+        .then((res) => {
+          setURL_Alies(URL_Alies)
+          setVCardName(res.data.data.VCardName);
+          setOccupation(res.data.data.Occupation);
+          setDescription(res.data.data.Description);
+          setProfile(res.data.data.Profile);
+          setBanner(res.data.data.Banner);
+         
+          setFormSubmitLoader(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          setFormSubmitLoader(false);
+        });
+    } catch (error) {
+      console.log(error);
+      setFormSubmitLoader(false);
     }
-    catch(error){
-      console.log(error)
-      setFormSubmitLoader(false)
+  }
+  async function fetchBasicData() {
+    try {
+      setFormSubmitLoader(true);
+      axios
+        .get(
+          `http://localhost:3001/basicDetail/${URL_Alies}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorageDatas.token}`,
+            },
+          }
+        )
+        .then((res) => {
+
+          if(res.data.data.length == 1){
+            setUpdateButtonToggle(true)
+            setFirstName(res.data.data[0].FirstName);
+            setLastName(res.data.data[0].LastName);
+            setEmail(res.data.data[0].Email);
+            setMobileNumber(res.data.data[0].MobileNumber);
+            setAlternateEmail(res.data.data[0].AlternateEmail);
+            setAlternateMobileNumber(res.data.data[0].AlternateMobileNumber);
+            setLocation(res.data.data[0].Location);
+            setJobTitle(res.data.data[0].JobTitle);
+            setInquiryToggleSwitch(res.data.data[0].InquiryToggleSwitch);
+            setQRToggleSwitch(res.data.data[0].QRToggleSwitch);
+            setAppoinmentToggleSwitch(
+              res.data.data[0].AppoinmentToggleSwitch
+            );
+            setAppoinmentToggleSwitch(
+              res.data.data[0].AppoinmentToggleSwitch
+            );
+            setFormSubmitLoader(false);
+          }
+          else{
+            toast.error('Basic Detail Not Created!');
+            setUpdateButtonToggle(false)
+            setFormSubmitLoader(false)
+          }
+     
+        })
+        .catch((error) => {
+          console.log(error.message);
+          toast.error(error.response.data.message)
+          setFormSubmitLoader(false);
+        });
+    } catch (error) {
+      console.log(error);
+      setFormSubmitLoader(false);
     }
   }
   useEffect(() => {
+    fetchURL_Form()
     fetchBasicData();
   }, []);
-
 
   // let formik = useFormik({
   //   initialValues: {
@@ -138,7 +177,6 @@ const BasicForm = () => {
 
   //   onSubmit: async (values) => {
 
-
   //     values = await Object.assign(values, { Profile: Profile || "" });
   //     values = await Object.assign(values, { Banner: Banner || "" });
   //     values.Description = stripHtmlTags(Description);
@@ -161,16 +199,47 @@ const BasicForm = () => {
   //       });
   //   },
   // });
-
-async function handleFormUpdate(e){
-e.preventDefault();
-  let data={
+  async function handleURLFormUpdate(e) {
+    e.preventDefault();
+    let data = {
+      URL_Alies,
       VCardName,
       Occupation,
       Description,
       Profile,
-      Banner,
-      BannerName,
+      Banner
+    };
+    setFormSubmitLoader(true);
+    try {
+      axios
+        .put(
+          `http://localhost:3001/vcard_URL/update_by_vcardUrl/${URL_Alies}`,
+          data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorageDatas.token}`,
+            },
+          }
+        )
+        .then((res) => {
+          toast.success(res.data.message);
+          setFormSubmitLoader(false);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+          console.log(error);
+          setFormSubmitLoader(false);
+        });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+  async function handleBasicDetailSave(e){
+    setFormSubmitLoader(true)
+    e.preventDefault();
+    let data = {
+      URL_Alies,
       FirstName,
       LastName,
       Email,
@@ -182,42 +251,87 @@ e.preventDefault();
       InquiryToggleSwitch,
       QRToggleSwitch,
       AppoinmentToggleSwitch,
-      ContactToggleSwitch
+      ContactToggleSwitch,
+    };
+    await axios
+    .post(`http://localhost:3001/basicDetail/${URL_Alies}`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorageDatas.token}`,
+      },
+    })
+    .then((res) => {
+      toast.success(res.data.message);
+      setFormSubmitLoader(false);
 
+    })
+    .catch((error) => {
+      toast.error(error.response.data.message);
+      console.log(error);
+      setFormSubmitLoader(false);
+    });
   }
-  setFormSubmitLoader(true)
-  try{
-    axios.put(`http://localhost:3001/basicDetail/update_by_userName/${localStorageDatas.userName}`, data, {
+  async function handleBasicFormUpdate(e) {
+    e.preventDefault();
+    let data = {
+      FirstName,
+      LastName,
+      Email,
+      MobileNumber,
+      AlternateEmail,
+      AlternateMobileNumber,
+      Location,
+      JobTitle,
+      InquiryToggleSwitch,
+      QRToggleSwitch,
+      AppoinmentToggleSwitch,
+      ContactToggleSwitch,
+    };
+    setFormSubmitLoader(true);
+    try {
+      axios
+        .put(
+          `http://localhost:3001/basicDetail/update_by_vcard_URL/${URL_Alies}`,
+          data,
+          {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorageDatas.token}`,
             },
-          })
-          .then((res) => {
-            toast.success(res.data.message);
-            setFormSubmitLoader(false);
-          })
-          .catch((error) => {
-            toast.error(error.response.data.message);
-            console.log(error);
-            setFormSubmitLoader(false);
-          });
+          }
+        )
+        .then((res) => {
+          toast.success(res.data.message);
+          setFormSubmitLoader(false);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+          console.log(error);
+          setFormSubmitLoader(false);
+        });
+    } catch (error) {
+      toast.error(error.message);
+    }
   }
-  catch(error){
-    toast.error(error.message)
-  }
-}
 
   return (
     <>
       <div className="basicform_container">
         <Toaster position="top-right" />
         <div className="form1_container_box">
-          <form
-            encType="multipart/form-data"
-            onSubmit={handleFormUpdate}
-        
-          >
+          <form encType="multipart/form-data" onSubmit={handleURLFormUpdate}>
+            <div className="form_group">
+              <label htmlFor="URL_Alies">
+                VCard URL <sup>*</sup>
+              </label>
+              <input
+                type="text"
+                placeholder="Enter VCard URL"
+                value={URL_Alies}
+                onChange={(e)=>setURL_Alies(e.target.value)}
+                // {...formik.getFieldProps("URL_Alies", URL_Alies)}
+              />
+            </div>
             <div className="form_group">
               <label htmlFor="VCardName">
                 VCard Name <sup>*</sup>
@@ -227,7 +341,6 @@ e.preventDefault();
                 placeholder="Enter VCard Name"
                 value={VCardName}
                 onChange={(e) => setVCardName(e.target.value)}
-              
               />
             </div>
             <div className="form_group">
@@ -239,7 +352,6 @@ e.preventDefault();
                 placeholder="Enter Occupation"
                 value={Occupation}
                 onChange={(e) => setOccupation(e.target.value)}
-             
               />
             </div>
             <div className="form_group">
@@ -247,7 +359,6 @@ e.preventDefault();
                 Description<sup>*</sup>
               </label>
               <Editor
-           
                 value={Description}
                 onTextChange={(e) => setDescription(e.htmlValue)}
                 id="Description"
@@ -300,14 +411,21 @@ e.preventDefault();
                 <small>Allowed file types: png, jpg, jpeg.</small>
                 <input
                   type="file"
-           
                   onChange={onUploadBanner}
-             
                   name="Banner"
                   id="Banner"
                 />
               </div>
             </div>
+            
+
+            <div className="form_submit_actions">
+              <button className="save" type="submit">
+                Update
+              </button>
+            </div>
+          </form>
+          <form encType="multipart/form-data" onSubmit={UpdateButtonToggle ? handleBasicFormUpdate : handleBasicDetailSave} >
             <div className="form2_title">
               <h4>VCard Details</h4>
             </div>
@@ -320,7 +438,6 @@ e.preventDefault();
                 placeholder="Enter Your FirstName"
                 value={FirstName}
                 onChange={(e) => setFirstName(e.target.value)}
-    
               />
             </div>
             <div className="form_group">
@@ -332,7 +449,6 @@ e.preventDefault();
                 placeholder="Enter Your LastName"
                 value={LastName}
                 onChange={(e) => setLastName(e.target.value)}
-       
               />
             </div>
             <div className="form_group">
@@ -344,7 +460,6 @@ e.preventDefault();
                 placeholder="Enter Your Email"
                 value={Email}
                 onChange={(e) => setEmail(e.target.value)}
-      
               />
             </div>
             <div className="form_group">
@@ -356,7 +471,6 @@ e.preventDefault();
                 placeholder="Enter Your Phone Number"
                 value={MobileNumber}
                 onChange={(e) => setMobileNumber(e.target.value)}
-   
               />
             </div>
             <div className="form_group">
@@ -366,7 +480,6 @@ e.preventDefault();
                 placeholder="Alternate Email"
                 value={AlternateEmail}
                 onChange={(e) => setAlternateEmail(e.target.value)}
-
               />
             </div>
             <div className="form_group">
@@ -376,7 +489,6 @@ e.preventDefault();
                 placeholder="Alternate Phone"
                 value={AlternateMobileNumber}
                 onChange={(e) => setAlternateMobileNumber(e.target.value)}
-      
               />
             </div>
             <div className="form_group">
@@ -388,7 +500,6 @@ e.preventDefault();
                 placeholder="Location"
                 value={Location}
                 onChange={(e) => setLocation(e.target.value)}
-
               />
             </div>
             <div className="form_group">
@@ -400,7 +511,6 @@ e.preventDefault();
                 placeholder="Enter Job Title"
                 value={JobTitle}
                 onChange={(e) => setJobTitle(e.target.value)}
-
               />
             </div>
 
@@ -411,7 +521,6 @@ e.preventDefault();
                 name="InquiryToggleSwitch"
                 type="checkbox"
                 checked={InquiryToggleSwitch}
-           
               />
             </div>
             <div className="actions">
@@ -421,7 +530,6 @@ e.preventDefault();
                 name="QRToggleSwitch"
                 type="checkbox"
                 checked={QRToggleSwitch}
-           
               />
             </div>
             <div className="actions">
@@ -445,7 +553,6 @@ e.preventDefault();
                 name="AppoinmentToggleSwitch"
                 type="checkbox"
                 checked={AppoinmentToggleSwitch}
-         
               />
             </div>
             <div className="actions">
@@ -455,14 +562,15 @@ e.preventDefault();
                 name="ContactToggleSwitch"
                 type="checkbox"
                 checked={ContactToggleSwitch}
-         
               />
             </div>
 
             <div className="form_submit_actions">
-              <button className="save" type="submit">
+            {UpdateButtonToggle ? <button className="save" type="submit">
                 Update
-              </button>
+              </button> : <button className="save" type="submit" >
+                Save
+              </button>}  
             </div>
           </form>
         </div>

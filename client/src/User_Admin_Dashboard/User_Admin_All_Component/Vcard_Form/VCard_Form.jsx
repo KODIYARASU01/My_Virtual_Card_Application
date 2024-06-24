@@ -63,13 +63,13 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
         </div>
         <div className="vcard_form_box">
      
-          <div className="form_sidenav">
+     <div className="form_sidenav">
           <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "Choose Your Plan" ? "menu_active" : ""}
             >
-              {/* <i className="bx bxs-spreadsheet" style={{ color: "green" }}></i> */}
+          
               <img width="24" height="24" src="https://img.icons8.com/3d-fluency/94/cash-in-hand.png" alt="cash-in-hand"/>
 
               <small>Choose Your Plan</small>
@@ -236,7 +236,7 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
             </div>
         
            
-          </div>
+          </div> 
           <div className="all_form_inputs">
             {ShowForm === "Basic Detail" ? <BasicForm /> : ""}
             {ShowForm === "Choose Your Plan" ? <Plan /> : ""}

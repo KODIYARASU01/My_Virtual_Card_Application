@@ -25,7 +25,7 @@ router.get('/allDataAPI',async(req,res)=>{
           res.status(400).json({ message: "Specific Data Not Found" });
         } else {
           result["BasicDetails"] = getSpecificData;
-        }
+        };
     
         // let ContactDetails_data = await ContactDetails.find({ user: userid });
     

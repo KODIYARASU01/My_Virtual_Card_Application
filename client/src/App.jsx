@@ -36,8 +36,14 @@ import ForgotPassword from "./Authentication/ForgotPassword/ForgotPassword";
 import ResetPassword from "./Authentication/ResetPassword/ResetPassword";
 import VCard_Form_Edit from "./User_Admin_Dashboard/User_Admin_All_Component/Vcard_Form/VCard_Form_Edit";
 import toast from "react-hot-toast";
+import VCard_URL_Form from "./User_Admin_Dashboard/User_Admin_All_Component/VCard_URL_Form";
+import Plan from "./User_Admin_Dashboard/User_Admin_All_Component/Vcard_Form/All_Form_Component/Plan";
 
 const App = () => {
+
+  //URL Name state:
+  let [URL_Alies,setURL_Alies]=useState('demo');
+
   let [SideNavActions, setSideNavActions] = useState(false);
   let [profileOpen, setProfileOpen] = useState(false);
   let [searchQuery, setSearchQuery] = useState("");
@@ -199,60 +205,14 @@ const App = () => {
       setUserName("Jayakumar");
     }
   }, [navigate]);
-  let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
-  // useEffect(() => {
-  //   axios
-  //     .get(
-  //       `http://localhost:3001/currentplan/specificAll/${localStorageDatas.userName}`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${localStorageDatas.token}`,
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-  //       if (res.data.length <= 0) {
-  //         setCurrentPlan(null);
-  //       } else {
-  //         setCurrentPlan(res.data.data[0].currentPlan);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       toast.error(error.response.data.message);
-  //     });
-  // }, [FormSubmitLoader]);
-  // useEffect(() => {
-  //   axios
-  //     .get(
-  //       `http://localhost:3001/templateDetail/specificAll/${localStorageDatas.userName}`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${localStorageDatas.token}`,
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-      
-
-  //       if (res.data.data[0].currentTemplate === null) {
-  //         setCurrentTemplate(null);
-  //       } else {
-  //         setCurrentTemplate(res.data.data[0].currentTemplate);
-  //         setSavedTemplate(res.data.data[0].currentTemplate);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, [FormSubmitLoader]);
 
   return (
     <>
       <div className="App_container">
         <SuperAdmin_context.Provider
           value={{
+            URL_Alies,setURL_Alies,
+
             currentTemplate,
             setCurrentTemplate,
             savedTemplate,
@@ -546,12 +506,17 @@ const App = () => {
                 path={`/${userName}/uadmin/user_vcard`}
                 element={<User_VCards />}
               />
-              <Route
-                path={`/${userName}/uadmin/vcard_form`}
+                 <Route
+                path={`/${userName}/uadmin/vcard_form/:URL_Alies`}
                 element={<VCard_Form />}
               />
               <Route
-                path={`/${userName}/uadmin/vcard_form_edit/:userName/:Index`}
+                path={`/${userName}/uadmin/create_new_vcard`}
+                element={<VCard_URL_Form/>}
+              />
+             
+              <Route
+                path={`/${userName}/uadmin/vcard_form_edit/:URL_Alies`}
                 element={<VCard_Form_Edit />}
               />
               <Route

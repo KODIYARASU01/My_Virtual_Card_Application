@@ -3,8 +3,25 @@ import currentPlan from "../Models/Plan.model.js";
 import productUpload from "../Multer/product.js";
 import fs from "fs";
 import multer from "multer";
-//Post basic detail data to database:
 
+//Read or get all user product data  from database:
+export const GetProductData = async (req, res) => {
+  try {
+    let datas = await ProductModel.find({  URL_Alies: req.params.URL_Alies});
+    if (!datas) {
+      res.status(400).json({ message: "Data not found!" });
+    } else {
+      res.status(201).json({
+        message: "Data Fetched!",
+        length: datas.length,
+        data: datas,
+      });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+//Post basic detail data to database:
 export const PostProductData =  (req, res) => {
   productUpload(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
@@ -47,14 +64,14 @@ export const PostProductData =  (req, res) => {
         ) {
           //check images
           let checkProductLength = await ProductModel.find({
-            user: req.user.userName,
+            URL_Alies:req.params.URL_Alies
           });
 
 
           if (!checkProductLength) {
             return res
               .status(400)
-              .json({ message: "Image will not be there!", error: err });
+              .json({ message: "Product will not be there!", error: err });
           } else {
             if (checkCurrentPlan[0].PlanPrice === 1499) {
               //Basic Image File limit checked:
@@ -62,6 +79,7 @@ export const PostProductData =  (req, res) => {
                 // Create a new image instance and save to MongoDB
                 const newProduct = new ProductModel({
                   user: req.user.userName,
+                  URL_Alies:req.body.URL_Alies,
                   ProductName: req.body.ProductName,
                   ProductDescription: req.body.ProductDescription,
                   ProductImage:req.body.ProductImage,
@@ -78,13 +96,13 @@ export const PostProductData =  (req, res) => {
                   .save()
                   .then(() => {
                     res.status(200).json({
-                      message: "Image uploaded!",
+                      message: "Product uploaded!",
                       data: newProduct,
                     });
                   })
                   .catch((error) => {
                      res.status(400).json({
-                      message: "Failed to save image to database!",
+                      message: "Failed to save Product to database!",
                       error:error.message
                     
                     });
@@ -104,6 +122,7 @@ export const PostProductData =  (req, res) => {
                 // Create a new image instance and save to MongoDB
                 const newProduct = new ProductModel({
                   user: req.user.userName,
+                  URL_Alies:req.body.URL_Alies,
                   ProductName: req.body.ProductName,
                   ProductDescription: req.body.ProductDescription,
 
@@ -176,29 +195,12 @@ export const PostProductData =  (req, res) => {
   });
 };
 
-//Read or get all user basicDetail data  from database:
-
-export const GetProductData = async (req, res) => {
-  try {
-    let datas = await ProductModel.find({});
-    if (!datas) {
-      res.status(400).json({ message: "Data not found!" });
-    } else {
-      res.status(201).json({
-        message: "Data Fetched!",
-        length: datas.length,
-        data: datas,
-      });
-    }
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+;
 
 //   // //Read or get Specific User all Data  :
 export const readSpecificUserAllData = async (req, res) => {
   try {
-    let getSpecificData = await ProductModel.find({ user: req.user.userName });
+    let getSpecificData = await ProductModel.find({    URL_Alies:req.params.URL_Alies });
 
     if (!getSpecificData) {
       res.status(400).json({ message: "Data Not Found!" });
@@ -238,7 +240,7 @@ export const updateSpecificUserData = async (req, res) => {
         return res
           .status(400)
           .json({
-            message: "Image File size too large. Maximum limit is 2MB.",
+            message: "Product Image File size too large. Maximum limit is 2MB.",
           });
       }
       return res.status(400).json({ message: err.message });
@@ -277,6 +279,7 @@ export const updateSpecificUserData = async (req, res) => {
             let { id } = req.params;
             let data = {
               ProductImage:req.body.ProductImage,
+              URL_Alies:req.body.URL_Alies,
               ProductName:req.body.ProductName,
               ProductURL:req.body.ProductURL,
               ProductPrice:req.body.ProductPrice,
@@ -324,7 +327,7 @@ export const updateSpecificUserData = async (req, res) => {
 export const deleteSpecificUserAllData = async (req, res) => {
   try {
     let deleteSpecificData = await ProductModel.deleteMany({
-      user: req.user.userName,
+      URL_Alies:req.params.URL_Alies
     });
 
     if (!deleteSpecificData) {
@@ -361,202 +364,3 @@ export const deleteSpecificUserData = async (req, res) => {
   }
 };
 
-// export const PostProductData = async (req, res) => {
-//   try {
-//     if (
-//       !req.body.ProductName ||
-//       !req.body.ProductDescription ||
-//       !req.body.ProductImage ||
-//       !req.body.ProductPrice
-//     ) {
-//       return res.status(401).json({ message: "All * fields Mandatory " });
-//     } else {
-//       let data = {
-//         user: req.user.userName,
-//         ProductName: req.body.ProductName,
-//         ProductDescription: req.body.ProductDescription,
-//         ProductImage: req.body.ProductImage,
-//         ProductURL: req.body.ProductURL,
-//         ProductPrice:req.body.ProductPrice
-//       };
-
-//       const result = await ProductModel.create(data);
-
-//       return res.status(201).json({ message: "Data saved!", data: result });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
-
-//....................
-
-//Post basic detail data to database:
-
-// export const PostProductData =  (req, res) => {
-//   productUpload(req, res, async (err) => {
-//     if (err instanceof multer.MulterError) {
-//       if (err.code === "LIMIT_FILE_SIZE") {
-//         return res
-//           .status(400)
-//           .json({ message: "File size too large. Maximum limit is 2MB." });
-//       }
-//       return res.status(400).json({ message: err.message });
-//     } else if (err) {
-//       return res.status(400).json({ message: err.message });
-//     }
-//     if (err) {
-//       res.status(400).json({ message: err });
-//     } else {
-//       if (!req.file) {
-//         return res.status(400).json({ message: "No file choosen!" });
-//       }
-
-//       let checkCurrentPlan = await currentPlan.find({
-//         user: req.user.userName,
-//       });
-
-//       if (!checkCurrentPlan) {
-//         return res
-//           .status(400)
-//           .json({ message: "Plan not be there!", error: err });
-//       }
-//       if (checkCurrentPlan.length <= 0) {
-//         return res
-//           .status(400)
-//           .json({ message: "Choose your Plan first!", error: err });
-//       } else {
-//         //Plan 2 and 3
-//         if (
-//           checkCurrentPlan[0].PlanPrice === 10 ||
-//           checkCurrentPlan[0].PlanPrice === 365 ||
-//           checkCurrentPlan[0].PlanPrice === 799 ||
-//           checkCurrentPlan[0].PlanPrice === 1499
-//         ) {
-//           //check images
-//           let checkProductLength = await ProductModel.find({
-//             user: req.user.userName,
-//           });
-
-
-//           if (!checkProductLength) {
-//             return res
-//               .status(400)
-//               .json({ message: "Image will not be there!", error: err });
-//           } else {
-//             if (checkCurrentPlan[0].PlanPrice === 1499) {
-//               //Basic Image File limit checked:
-//               if (checkProductLength.length < 10) {
-//                 // Create a new image instance and save to MongoDB
-//                 const newProduct = new ProductModel({
-//                   user: req.user.userName,
-//                   ProductName: req.body.ProductName,
-//                   ProductDescription: req.body.ProductDescription,
-
-//                   ProductURL: req.body.ProductURL,
-//                   ProductPrice: req.body.ProductPrice,
-//                   ProductImage: {
-//                     data: fs.readFileSync("uploads/" + req.file.filename),
-//                     contentType: req.file.mimetype,
-//                   },
-//                 });
-
-//                await newProduct
-//                   .save()
-//                   .then(() => {
-//                     res.status(200).json({
-//                       message: "Image uploaded!",
-//                       data: newProduct,
-//                     });
-//                   })
-//                   .catch((err) => {
-//                      res.status(400).json({
-//                       message: "Failed to save image to database!",
-                    
-//                     });
-//                   });
-//               } else {
-//                 res.status(400).json({
-//                   message:
-//                     "Max Product Upload limit crossed..Only accept 10 Product Details! ",
-            
-//                 });
-//               }
-//             }
-//             if (checkCurrentPlan[0].PlanPrice === 799
-//             ) {
-//               //Basic Image File limit checked:
-//               if (checkProductLength.length < 5) {
-//                 // Create a new image instance and save to MongoDB
-//                 const newProduct = new ProductModel({
-//                   user: req.user.userName,
-//                   ProductName: req.body.ProductName,
-//                   ProductDescription: req.body.ProductDescription,
-
-//                   ProductURL: req.body.ProductURL,
-//                   ProductPrice: req.body.ProductPrice,
-//                   ProductImage: {
-//                     data: fs.readFileSync("uploads/" + req.file.filename),
-//                     contentType: req.file.mimetype,
-//                   },
-//                 });
-
-//                 await newProduct
-//                   .save()
-//                   .then(() => {
-//                     res.status(200).json({
-//                       message: "Product uploaded!",
-//                       data: newProduct,
-//                     });
-//                   })
-//                   .catch((err) => {
-//                     console.log(err.message)
-//                     res.status(400).json({
-//                       message: "Failed to save product to database!",
-                 
-//                     });
-//                   });
-//               } else {
-//                 res.status(400).json({
-//                   message:
-//                     "Max Product Upload limit crossed..Only accept 5 Product Details! ",
-                 
-//                 });
-//               }
-//             }
-//             if (checkCurrentPlan[0].PlanPrice === 10) {
-//               //Basic Image File limit checked:
-//               if (checkProductLength.length < 0) {
-//                 res.status(400).json({
-//                   message: "Product Access denied for Demo Plan!",
-//                   data: newProduct,
-//                 });
-//               } else {
-//                 res.status(400).json({
-//                   message: "Product Access denied for Demo Plan!",
-             
-//                 });
-//               }
-//             }
-//             if (checkCurrentPlan[0].PlanPrice === 365) {
-//               //Basic Image File limit checked:
-//               if (checkProductLength.length < 0) {
-//                 res.status(200).json({
-//                   message: "Product Access denied for Demo Plan!",
-//                   data: newProduct,
-//                 });
-//               } else {
-//                 res.status(400).json({
-//                   message: "Product Access denied for Basic Plan!",
-                
-//                 });
-//               }
-//             }
-//           }
-//         } else {
-//           res.status(400).json({ message: "Plan not match!", error: err });
-//         }
-//       }
-//     }
-//   });
-// };

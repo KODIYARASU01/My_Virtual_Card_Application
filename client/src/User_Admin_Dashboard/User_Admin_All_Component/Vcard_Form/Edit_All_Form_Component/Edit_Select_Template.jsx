@@ -14,6 +14,7 @@ import Footer from "../../../UserAdmin_Footer/Footer";
 import selected_gif from "../../../../assets/animations/selected.gif";
 import touch_gif from "../../../../assets/animations/touch.gif";
 import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_context";
+import {useParams} from 'react-router-dom'
 import axios from "axios";
 import { useFormik } from "formik";
 let FreeTemplate = [
@@ -122,6 +123,8 @@ let EnterpriceTemplate = [
 ];
 
 const Select_Template = () => {
+
+  let {URL_Alies}=useParams();
   let {
     FormSubmitLoader,
     setFormSubmitLoader,
@@ -197,7 +200,7 @@ const Select_Template = () => {
     try {
       await axios
         .get(
-          `http://localhost:3001/templateDetail/specificAll/${localStorageDatas.userName}`,
+          `http://localhost:3001/templateDetail/specificAll/${URL_Alies}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -222,8 +225,10 @@ const Select_Template = () => {
   useEffect(() => {
     fetchCurrentTemplate();
   }, []);
+
   let formik = useFormik({
     initialValues: {
+      URL_Alies:URL_Alies,
       currentTemplate: null,
     },
     validateOnChange: false,
@@ -233,9 +238,10 @@ const Select_Template = () => {
     onSubmit: async (values) => {
       setFormSubmitLoader(true);
       values.currentTemplate = currentTemplate;
+      values.URL_Alies=URL_Alies;
       await axios
         .put(
-          `http://localhost:3001/templateDetail/update_with_userName/${localStorageDatas.userName}`,
+          `http://localhost:3001/templateDetail/update_with_userName/${URL_Alies}`,
           values,
           {
             headers: {
@@ -273,7 +279,7 @@ const Select_Template = () => {
 
           {currentTemplate != savedTemplate || savedTemplate == null ? (
             <button onClick={formik.handleSubmit} type="submit">
-              Update
+              {currentTemplate !=null ? 'Update' : 'Save' }
             </button>
           ) : (
             ""

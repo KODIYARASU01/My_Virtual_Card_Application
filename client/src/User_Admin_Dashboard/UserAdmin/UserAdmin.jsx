@@ -14,13 +14,15 @@ import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
 import VCard_Form_Edit from "../User_Admin_All_Component/Vcard_Form/VCard_Form_Edit";
-const UserAdmin = () => {
 
-  let {Index}=useParams()
+import VCard_URL_Form from "../User_Admin_All_Component/VCard_URL_Form";
+import Plan from "../User_Admin_All_Component/Vcard_Form/All_Form_Component/Plan";
+const UserAdmin = () => {
+  let { Index } = useParams();
   let navigate = useNavigate();
 
   let {
-  
+    URL_Alies,
     userData,
     setUserData,
     userName,
@@ -222,6 +224,8 @@ const UserAdmin = () => {
     }
   };
   let userDetails = JSON.parse(localStorage.getItem("datas"));
+  let localStorageURL = localStorage.getItem("URL_Alies");
+
   useEffect(() => {
     axios
       .get(`http://localhost:3001/auth/register/${userDetails.id}`)
@@ -231,7 +235,11 @@ const UserAdmin = () => {
       .catch((error) => {
         console.log(error.response.data.message);
       });
+
+      
   }, [navigate]);
+
+  console.log(URL_Alies)
   return (
     <>
       <div className="userAdmin_container">
@@ -263,19 +271,28 @@ const UserAdmin = () => {
             ) : (
               ""
             )}
+
             {window.location.pathname === `/${userName}/uadmin/user_vcard` ? (
               <User_VCards />
             ) : (
               ""
             )}
+            {window.location.pathname ===
+            `/${userName}/uadmin/create_new_vcard` ? (
+              <VCard_URL_Form />
+            ) : (
+              ""
+            )}
 
-            {window.location.pathname === `/${userName}/uadmin/vcard_form` ? (
+            {window.location.pathname === `/${userName}/uadmin/vcard_form/${URL_Alies}` ? (
               <VCard_Form />
             ) : (
-              ''
+              ""
             )}
+          
             {window.location.pathname ==
-            `/${userName}/uadmin/vcard_form_edit/${userName}/${Index}` ? (
+            `/${userName}/uadmin/vcard_form_edit/${URL_Alies}` || window.location.pathname ==
+            `/${userName}/uadmin/vcard_form_edit/${localStorageURL}` ? (
               <VCard_Form_Edit />
             ) : (
               ""

@@ -5,13 +5,15 @@ import SuperAdmin_context from "../../SuperAdmin_Context/SuperAdmin_context";
 import axios from "axios";
 import toast from "react-hot-toast";
 const User_VCards = () => {
-  let { userName, setFormSubmitLoader } = useContext(SuperAdmin_context);
+  let {  userName, setFormSubmitLoader } =
+    useContext(SuperAdmin_context);
 
   let [VcardDeleteToggle, setVcardDeleteToggle] = useState(false);
-
+  let [Yes, setYes] = useState(false);
   let [VCardCount, setVCardCount] = useState();
 
   let userData = JSON.parse(localStorage.getItem("datas"));
+ 
   const [key, setKey] = useState(0);
 
   const reloadComponent = () => {
@@ -19,12 +21,13 @@ const User_VCards = () => {
   };
   useEffect(() => {
     axios
-      .get("http://localhost:3001/basicDetail", {
+      .get(`http://localhost:3001/vcard_URL/${userName}`, {
         headers: {
           Authorization: `Bearer ${userData.token}`,
         },
       })
       .then((res) => {
+        console.log(res.data);
         setVCardCount(res.data.data);
       })
       .catch((error) => {
@@ -32,28 +35,54 @@ const User_VCards = () => {
       });
   }, [key]);
 
-  async function handleVCardDelete() {
-    setFormSubmitLoader(true);
+
+  async function handleVCardDelete(URL_Alies) {
+
     try {
-      axios
+      setFormSubmitLoader(true);
+     await axios
         .delete(
-          `http://localhost:3001/vcard/all_Data_Delete_API/${userData.userName}`,
-          {
-            headers: {
-              Authorization: `Bearer ${userData.token}`,
-            },
-          }
+          `http://localhost:3001/vcard/all_Data_Delete_API/${URL_Alies}`
         )
         .then((res) => {
+        
           reloadComponent();
           toast.success("Your VCard Sucessfully Deleted!");
           setFormSubmitLoader(false);
-          setVcardDeleteToggle(false)
+       
         })
         .catch((error) => {
+          console.log(error)
+          reloadComponent();
           toast.error("Failed to Delete!");
           setFormSubmitLoader(false);
         });
+      // if (Yes === false) {
+      //   setVcardDeleteToggle(false);
+      //   setFormSubmitLoader(false);
+      // } else {
+   
+      //   setFormSubmitLoader(true);
+      //   axios
+      //     .delete(
+      //       `http://localhost:3001/vcard/all_Data_Delete_API/${URL_Alies}`,
+      //       {
+      //         headers: {
+      //           Authorization: `Bearer ${userData.token}`,
+      //         },
+      //       }
+      //     )
+      //     .then((res) => {
+      //       reloadComponent();
+      //       toast.success("Your VCard Sucessfully Deleted!");
+      //       setFormSubmitLoader(false);
+         
+      //     })
+      //     .catch((error) => {
+      //       toast.error("Failed to Delete!");
+      //       setFormSubmitLoader(false);
+      //     });
+      // }
     } catch (error) {
       toast.error(error.message);
     }
@@ -70,10 +99,10 @@ const User_VCards = () => {
 
             <div className="popup_actions">
               <div className="delete">
-                <button onClick={handleVCardDelete}>Yes</button>
+                <button>Yes</button>
               </div>
               <div className="cancel">
-                <button onClick={() => setVcardDeleteToggle(false)}>No</button>
+                <button >No</button>
               </div>
             </div>
           </div>
@@ -85,21 +114,19 @@ const User_VCards = () => {
           <div className="actions">
             <Link>
               <button
-                onClick={() => {
+                onClick={async () => {
                   setFormSubmitLoader(true);
-                  axios
-                    .get(
-                      `http://localhost:3001/basicDetail/specificAll/${userData.userName}`,
-                      {
-                        headers: {
-                          Authorization: `Bearer ${userData.token}`,
-                        },
-                      }
-                    )
+                  await axios
+                    .get(`http://localhost:3001/vcard_URL/${userName}`, {
+                      headers: {
+                        Authorization: `Bearer ${userData.token}`,
+                      },
+                    })
                     .then((res) => {
-                      if (res.data.length < 1) {
+                      console.log(res);
+                      if (res.data.length < 5) {
                         setFormSubmitLoader(false)(
-                          (window.location.pathname = `${userName}/uadmin/vcard_form`)
+                          (window.location.pathname = `/${userName}/uadmin/create_new_vcard`)
                         );
                       } else {
                         setFormSubmitLoader(false);
@@ -129,61 +156,110 @@ const User_VCards = () => {
               <table className="table table-hover rounded-3" id="example">
                 <thead>
                   <tr>
-                    <th className="text-center">VCARD NAME</th>
-                    <th className=" text-center">PREVIEW URL</th>
+                    <th
+                      className="fw-bold text-center"
+                      style={{ width: "10%" }}
+                    >
+                      Profile
+                    </th>
+                    <th
+                      className="text-center fw-bold"
+                      style={{ width: "20%" }}
+                    >
+                      VCARD NAME
+                    </th>
+                    <th
+                      className="text-center fw-bold"
+                      style={{ width: "20%" }}
+                    >
+                      PREVIEW URL
+                    </th>
 
-                    <th className=" text-center ">PLAN</th>
+                    <th
+                      className="text-center fw-bold "
+                      style={{ width: "10%" }}
+                    >
+                      PLAN
+                    </th>
 
-                    <th className=" text-center ">STATUS</th>
-                    <th className=" text-center ">CREATED AT</th>
-                    <th className=" text-center ">ACTIONS</th>
+                    <th
+                      className="text-center fw-bold "
+                      style={{ width: "10%" }}
+                    >
+                      STATUS
+                    </th>
+                    <th
+                      className="text-center fw-bold "
+                      style={{ width: "10%" }}
+                    >
+                      CREATED AT
+                    </th>
+                    <th
+                      className="text-center fw-bold "
+                      style={{ width: "40%" }}
+                    >
+                      ACTIONS
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  { VCardCount !=undefined ? (
-                   VCardCount.map((data, index) => {
-                      return (
-                        <tr key={index}>
-                          <td className="fw-light">{data.VCardName}</td>
-                          <td className="fw-light">
-                            {" "}
-                            <a href="http://localhost:3001/kodi">
-                              Url Comming Soon
-                            </a>
-                          </td>
-                          <td className="fw-light">Free</td>
+                  {VCardCount != undefined
+                    ? VCardCount.map((data, index) => {
+                        return (
+                          <tr key={index}>
+                            <td className="fw-light">
+                              <img src={data.Profile} alt="profile" />
+                            </td>
+                            <td className="fw-light">{data.VCardName}</td>
+                            <td className="fw-light">
+                              {" "}
+                              <a
+                                href={`https://myvirtualcard.in/${data.URL_Alies}`}
+                                target="_blank"
+                              >
+                                https://myvirtualcard.in/{data.URL_Alies}
+                              </a>
+                            </td>
+                            <td className="fw-light plan">Free</td>
 
-                          <td className="fw-light">
-                            <i className="bx bx-line-chart"></i>
-                          </td>
-                          <td className="fw-light">
-                            {data.createdAt.slice(0, 10)}
-                          </td>
-                          <td className="fw-light">
-                            <i
-                              className="bx bxs-edit"
-                              onClick={async () => {
-                                window.location.pathname = `${data.user}/uadmin/vcard_form_edit/${data.user}/${index}`;
-                              }}
-                            ></i>
-                            <i
-                              className="bx bx-trash"
-                              onClick={() => setVcardDeleteToggle(true)}
-                            ></i>
-                            <i className="bx bx-dots-vertical-rounded"></i>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  ) : (
-                //     <tr>
-                //     <td colSpan='6' className="text-center">
-                //     No Vcard Found!
-                //     </td>
-                // </tr>
-                ''
-                  
-                  )}
+                            <td className="fw-light">
+                              <i
+                                className="bx bx-line-chart"
+                                style={{ color: "green" }}
+                              ></i>
+                            </td>
+                            <td className="fw-light">
+                              {data.createdAt.slice(0, 10)}
+                            </td>
+                            <td className="fw-light">
+                              <i
+                                className="bx bxs-edit"
+                                onClick={async () => {
+                                  localStorage.setItem(
+                                    "URL_Alies",
+                                    data.URL_Alies
+                                  );
+                                  window.location.pathname = `/${userName}/uadmin/vcard_form_edit/${data.URL_Alies}`;
+                                }}
+                              ></i>
+                              <i
+                                className="bx bx-trash"
+                                onClick={() => {
+                                  handleVCardDelete(data.URL_Alies);
+                                 
+                                }}
+                              ></i>
+                              <i className="bx bx-dots-vertical-rounded"></i>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    : //     <tr>
+                      //     <td colSpan='6' className="text-center">
+                      //     No Vcard Found!
+                      //     </td>
+                      // </tr>
+                      ""}
                 </tbody>
               </table>
             </div>

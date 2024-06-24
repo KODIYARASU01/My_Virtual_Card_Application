@@ -127,14 +127,15 @@
 
           tr {
             // width: 100%;
-
+       
             th {
               padding: 0.7rem 0.5rem;
               background-color: #f8f9fa;
               font-size: 0.9rem;
-              font-weight: 500 !important;
-              color: rgb(49, 49, 49);
+font-weight: bold;
+              color: rgb(22, 22, 22);
             }
+         
           }
         }
         tbody {
@@ -154,13 +155,23 @@
             // width: 100%;
 
             td {
-              padding: 1rem 0.5rem;
+              padding: 1rem 0rem;
               font-size: 0.8rem;
               vertical-align: middle;
               font-weight: 500 !important;
               color: rgb(99, 99, 99);
               border-bottom: 1px solid rgb(230, 230, 230);
 
+
+              img{
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                object-fit: cover;
+              object-position: center;
+              border: 1px solid gray;
+              box-shadow: 0px 4px 5px rgba(0,0,0,0.4);
+              }
               i:nth-child(1) {
                 font-size: 1.5rem;
                 padding-left: 10px;
@@ -211,6 +222,13 @@
                 }
               }
             }
+            .plan{
+          color: rgb(152, 60, 228);
+      
+
+         
+            }
+         
           }
         }
       }
