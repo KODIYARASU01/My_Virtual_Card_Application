@@ -23,9 +23,12 @@ import SuperAdmin_context from "../../../SuperAdmin_Context/SuperAdmin_context";
 import Edit_Plan from "./Edit_All_Form_Component/Edit_Plan";
 import toast from "react-hot-toast";
 import Edit_PrivacyPolicy from "./Edit_All_Form_Component/Edit_PrivacyPolicy";
+import Edit_QR_Code from "./Edit_All_Form_Component/Edit_QR_Code";
+
 const VCard_Form_Edit = () => {
 let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
   let navigate = useNavigate();
+  let [formSliderToggle,setFormSliderToggle]=useState(false);
   let [userData, setUserData] = useState("jayakumar");
   let [ShowForm, setShowForm] = useState("Choose Your Plan");
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
@@ -68,6 +71,7 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
         console.log(error.response.data.message);
       });
   }, []);
+  console.log(formSliderToggle)
   return (
     <>
       <div className="vcard_form_container">
@@ -89,7 +93,11 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
         </div>
         <div className="vcard_form_box">
      
-        <div className="form_sidenav">
+        <div className="form_sidenav" id={formSliderToggle ? "slideClose":'slideOpen'}>
+
+          <div className="slider_icon" onClick={()=>setFormSliderToggle(!formSliderToggle)}>
+          <i className='bx bx-slider-alt' ></i>
+          </div>
         <div
               className="menu_item"
               onClick={handleFormShow}
@@ -274,6 +282,7 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
             {ShowForm === "Testimonials" ? <Edit_Testimonial /> : ""}
             {ShowForm === "Iframes" ? <Edit_Iframe /> : ""}
             {ShowForm === "Social Link - Website" ? <Edit_SocialMedias /> : ""}
+            {ShowForm === "Customize QR Code" ? <Edit_QR_Code/>:''}
             {ShowForm === "PopUp Banner" ? <Edit_Banner /> : ""}
             {ShowForm === "Dynamic VCard" ? <Edit_Dynamic_VCard /> : ""}
             {ShowForm === "Appoinment" ? <Edit_Appoinment /> : ""}

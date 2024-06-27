@@ -273,7 +273,7 @@ const Testimonial = () => {
                 <>
                 <i class="bx bx-upload "></i>
                 <small>
-                Demo Plan Client Detail access denied!
+                Max Client Detail addOn limit :<strong> {ClientCount} / 1 </strong>
                 </small>
               </>
      
@@ -285,7 +285,7 @@ const Testimonial = () => {
            <>
            <i class="bx bx-upload "></i>
            <small>
-             Max Client Detail addOn limit :<strong> {ClientCount} / 4 </strong>
+             Max Client Detail addOn limit :<strong> {ClientCount} / 2 </strong>
            </small>
          </>
             ) : (
@@ -296,18 +296,18 @@ const Testimonial = () => {
               <>
                 <i class="bx bx-upload "></i>
                 <small>
-                  Max Client Detail addOn limit :<strong> {ClientCount} / 6 </strong>
+                  Max Client Detail addOn limit :<strong> {ClientCount} / 4 </strong>
                 </small>
               </>
             ) : (
               ""
             )}
 
-            {currentPlan === "Enterprice" ? (
+            {currentPlan === "Enterprises" ? (
                  <>
                  <i class="bx bx-upload "></i>
                  <small>
-                   Max Client Detail addOn limit :<strong> {ClientCount} / 10 </strong>
+                   Max Client Detail addOn limit :<strong> {ClientCount} / 6 </strong>
                  </small>
                </>
             ) : (

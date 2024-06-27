@@ -327,7 +327,7 @@ const Services = () => {
               ""
             )}
 
-            {currentPlan === "Enterprice" ? (
+            {currentPlan === "Enterprises" ? (
                <>
             
                <i class='bx bx-upload ' ></i>

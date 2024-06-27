@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import "./Edit_form_styles/Edit_Gallery.scss";
+import "./Edit_form_styles/Edit_QR_Code.scss";
 import { useFormik } from "formik";
 import { Editor } from "primereact/editor";
 import "primereact/resources/themes/saga-blue/theme.css"; // Choose a theme
@@ -10,12 +10,13 @@ import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import { convertToBase64GalleryImage } from "../../../../Helper/convert";
 import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_context";
-const Gallery = () => {
-  let {URL_Alies}=useParams();
-  let [AllGallery, setAllGallery] = useState();
-  let [GalleryId, setGalleryId] = useState();
+import qrcode from '../../../../assets/Website_page_images/qrcode.png'
+const Edit_QR_Code = () => {
+  let { URL_Alies } = useParams();
+  let [AllQRCode, setAllQRCode] = useState();
+  let [QRCodeId, setQRCodeId] = useState();
   let [updateFormOpen, setUpdateFormOpen] = useState(false);
-  let [galleryFormOpen, setGalleryFormOpen] = useState(false);
+  let [QRFormFormOpen, setQRFormFormOpen] = useState(false);
   let {
     currentPlan,
     setCurrentPlan,
@@ -24,10 +25,8 @@ const Gallery = () => {
     userName,
   } = useContext(SuperAdmin_context);
 
-  let[GalleryCount,setGalleryCount]=useState(0);
-  let [GalleryURL, setGalleryURL] = useState();
-  let [GalleryImage, setGalleryImage] = useState(null);
-  let[GalleryName,setGalleryName]=useState('')
+  let [QRCodeCount, setQRCodeCount] = useState(0);
+  let [QRCodeImage, setQRCodeImage] = useState(null);
   let [fullImageToggle, setFullImageToggle] = useState(false);
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
 
@@ -40,22 +39,19 @@ const Gallery = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(
-          `http://localhost:3001/galleryDetail/${URL_Alies}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorageDatas.token}`,
-            },
-          }
-        )
+        .get(`http://localhost:3001/QRCodeDetail/${URL_Alies}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        })
         .then((res) => {
           if (res.data.data.length == 0) {
-            toast.error("No Gallery added!");
+            toast.error("No QRCode added!");
             setFormSubmitLoader(false);
           } else {
-            setAllGallery(res.data.data);
-            setGalleryCount(res.data.data.length)
+            setAllQRCode(res.data.data);
+            setQRCodeCount(res.data.data.length);
             setFormSubmitLoader(false);
           }
         })
@@ -72,20 +68,13 @@ const Gallery = () => {
   }, [key]);
   const onUploadGalleryImage = async (e) => {
     let base64 = await convertToBase64GalleryImage(e.target.files[0]);
-    setGalleryImage(base64);
+    setQRCodeImage(base64);
   };
-  const [filename, setFilename] = useState("Choose File");
-
-  // const onUploadGalleryImage = (e) => {
-  //   setGalleryImage(e.target.files[0]);
-  //   setFilename(e.target.files[0].name);
-  // };
 
   let formik = useFormik({
     initialValues: {
-      URL_Alies:URL_Alies,
-      GalleryURL: "",
-      GalleryImage: null,
+      URL_Alies: URL_Alies,
+      QRCodeImage: null,
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -93,15 +82,14 @@ const Gallery = () => {
 
     onSubmit: async (values) => {
       values = await Object.assign(values, {
-        GalleryImage: GalleryImage || "",
+        QRCodeImage: QRCodeImage || "",
       });
       const formData = new FormData();
-      formData.append('URL_Alies',URL_Alies)
-      formData.append("GalleryImage", values.GalleryImage);
-      formData.append("GalleryURL", values.GalleryURL);
+      formData.append("URL_Alies", URL_Alies);
+      formData.append("QRCodeImage", values.QRCodeImage);
       setFormSubmitLoader(true);
       await axios
-        .post(`http://localhost:3001/galleryDetail/${URL_Alies}`, formData, {
+        .post(`http://localhost:3001/QRCodeDetail/${URL_Alies}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -110,13 +98,13 @@ const Gallery = () => {
         .then((res) => {
           toast.success(res.data.message);
           setFormSubmitLoader(false);
-setGalleryCount(++GalleryCount)
-          setGalleryImage(null);
-          values.GalleryURL = "";
+          setQRCodeCount(++QRCodeCount);
+          setQRCodeImage(null);
+
           reloadComponent();
-          setTimeout(()=>{
-            setGalleryFormOpen(false)
-          },1000)
+          setTimeout(() => {
+            setQRFormFormOpen(false);
+          }, 500);
         })
         .catch((error) => {
           toast.error(error.response.data.message);
@@ -129,7 +117,7 @@ setGalleryCount(++GalleryCount)
     setFormSubmitLoader(true);
     try {
       axios
-        .get(`http://localhost:3001/galleryDetail/specificID/${id}`, {
+        .get(`http://localhost:3001/QRCodeDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -138,7 +126,7 @@ setGalleryCount(++GalleryCount)
         .then((res) => {
           setFormSubmitLoader(false);
           setFullImageToggle(true);
-          setGalleryImage(res.data.data.GalleryImage);
+          setQRCodeImage(res.data.data.QRCodeImage);
         })
         .catch((error) => {
           toast.error(error.response.data.message);
@@ -152,7 +140,7 @@ setGalleryCount(++GalleryCount)
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/galleryDetail/specificID/${id}`, {
+        .get(`http://localhost:3001/QRCodeDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -160,10 +148,8 @@ setGalleryCount(++GalleryCount)
         })
         .then((res) => {
           setUpdateFormOpen(true);
-
-          setGalleryImage(res.data.data.GalleryImage);
-          setGalleryURL(res.data.data.GalleryURL);
-          setGalleryId(res.data.data._id);
+          setQRCodeImage(res.data.data.QRCodeImage);
+          setQRCodeId(res.data.data._id);
           setFormSubmitLoader(false);
         })
 
@@ -188,12 +174,11 @@ setGalleryCount(++GalleryCount)
 
     let data = {
       URL_Alies,
-      GalleryImage,
-      GalleryURL,
+      QRCodeImage,
     };
     try {
       axios
-        .put(`http://localhost:3001/galleryDetail/updateID/${GalleryId}`, data, {
+        .put(`http://localhost:3001/QRCodeDetail/updateID/${QRCodeId}`, data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -204,7 +189,7 @@ setGalleryCount(++GalleryCount)
           setFormSubmitLoader(false);
           reloadComponent();
           setTimeout(() => {
-            setGalleryImage(null)
+            setQRCodeImage(null);
             setUpdateFormOpen(false);
           }, 1000);
         })
@@ -222,7 +207,7 @@ setGalleryCount(++GalleryCount)
     setFormSubmitLoader(true);
     try {
       axios
-        .delete(`http://localhost:3001/galleryDetail/deleteID/${id}`, {
+        .delete(`http://localhost:3001/QRCodeDetail/deleteID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -230,7 +215,7 @@ setGalleryCount(++GalleryCount)
         })
         .then((res) => {
           toast.success(res.data.message);
-          setGalleryCount(--GalleryCount)
+          setQRCodeCount(--QRCodeCount);
           setFormSubmitLoader(false);
           reloadComponent();
         })
@@ -244,7 +229,7 @@ setGalleryCount(++GalleryCount)
   }
   return (
     <>
-      <div className="update_gallery_container">
+      <div className="update_QRCode_container">
         {fullImageToggle ? (
           <div className="Image_Full_view">
             <div
@@ -253,41 +238,52 @@ setGalleryCount(++GalleryCount)
             >
               <i className="bx bxs-message-square-x"></i>
             </div>
-            <img src={GalleryImage} alt="image" />
+            <img src={QRCodeImage} alt="image" />
           </div>
         ) : (
           ""
         )}
-   
+
+<div className="QRCode_illustration">
+  <img src={qrcode} alt="qrcode" />
+</div>
         <div className="plan_title">
           <p>
             <strong>{currentPlan} plan </strong>&nbsp; Subscribed!
           </p>
         </div>
-        <div className="add_new_gallery">
-          <button onClick={() => setGalleryFormOpen(true)}><i className='bx bx-plus'></i>Add Gallery</button>
-        </div>
+        {QRCodeCount < 1 ? (
+          <div className="add_new_gallery">
+            <button
+              onClick={() => setQRFormFormOpen(true)}
+              type="button"
+              disabled={QRCodeCount == 1}
+            >
+              <i className="bx bx-plus"></i>Add QRCode
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
+
         <div className="plan_based_service_add_note">
           <div className="note">
             {currentPlan === "Demo" ? (
-                <>
+              <>
                 <i class="bx bx-upload "></i>
-                <small>
-                Demo Plan Gallery access denied!
-                </small>
+                <small>Demo Plan QRCode access denied!</small>
               </>
-     
             ) : (
               ""
             )}
 
             {currentPlan === "Basic" ? (
-           <>
-           <i class="bx bx-upload "></i>
-           <small>
-             Max Image addOn limit :<strong> {GalleryCount} / 4 </strong>
-           </small>
-         </>
+              <>
+                <i class="bx bx-upload "></i>
+                <small>
+                  Max QRCode addOn limit :<strong> {QRCodeCount} / 1 </strong>
+                </small>
+              </>
             ) : (
               ""
             )}
@@ -296,7 +292,7 @@ setGalleryCount(++GalleryCount)
               <>
                 <i class="bx bx-upload "></i>
                 <small>
-                  Max Image addOn limit :<strong> {GalleryCount} / 6 </strong>
+                  Max QRCode addOn limit :<strong> {QRCodeCount} / 1 </strong>
                 </small>
               </>
             ) : (
@@ -304,12 +300,12 @@ setGalleryCount(++GalleryCount)
             )}
 
             {currentPlan === "Enterprises" ? (
-                 <>
-                 <i class="bx bx-upload "></i>
-                 <small>
-                   Max Image addOn limit :<strong> {GalleryCount} / 10 </strong>
-                 </small>
-               </>
+              <>
+                <i class="bx bx-upload "></i>
+                <small>
+                  Max QRCode addOn limit :<strong> {QRCodeCount} / 1 </strong>
+                </small>
+              </>
             ) : (
               ""
             )}
@@ -322,23 +318,21 @@ setGalleryCount(++GalleryCount)
                 <tr>
                   <th className="fw-bold">COUNT</th>
                   <th className="fw-bold">IMAGE</th>
-                  <th className="fw-bold">URL</th>
+
                   <th className="fw-bold">ACTIONS</th>
                 </tr>
               </thead>
               <tbody className=" shadow-sm">
-                {AllGallery != undefined ? (
+                {AllQRCode != undefined ? (
                   <>
-                    {AllGallery.map((data, index) => {
+                    {AllQRCode.map((data, index) => {
                       return (
                         <tr key={index}>
                           <td className="h-100 align-middle">{index + 1}</td>
                           <td className="h-100 align-middle">
-                            <img src={data.GalleryImage} alt="gallery_image" />
+                            <img src={data.QRCodeImage ? data.QRCodeImage : 'https://img.freepik.com/free-vector/scan-me-qr-code_78370-2915.jpg?t=st=1719518928~exp=1719522528~hmac=5d5fd1630b2d45a9d58eefe3e32035e8f9bc95ada01500767e6d11f24d17c03f&w=740'} alt="gallery_image" />
                           </td>
-                          <td className="h-100 align-middle fw-semibold">
-                            {data.GalleryURL != "" ? data.GalleryURL : "N/A"}
-                          </td>
+
                           <td className="h-100 align-middle">
                             <i
                               className="bx bxs-show"
@@ -363,7 +357,7 @@ setGalleryCount(++GalleryCount)
                 ) : (
                   <tr>
                     <td colSpan="6" className="text-center">
-                      No Gallery Images Added!
+                      No QRCode Images Added!
                     </td>
                   </tr>
                 )}
@@ -378,32 +372,32 @@ setGalleryCount(++GalleryCount)
 
         <div
           className="create_new_gallerycontainer"
-          id={galleryFormOpen ? "shadow_background" : ""}
+          id={QRFormFormOpen ? "shadow_background" : ""}
         >
           <div
             className="create_new_gellery_box"
-            id={galleryFormOpen ? "galleryOpen" : "galleryClose"}
+            id={QRFormFormOpen ? "galleryOpen" : "galleryClose"}
           >
             <div className="title">
-              <p>New Gallery</p>
+              <p>New QRCode</p>
               <i
                 className="bx bx-x"
-                onClick={() => setGalleryFormOpen(false)}
+                onClick={() => setQRFormFormOpen(false)}
               ></i>
             </div>
             <form action="" onSubmit={formik.handleSubmit}>
               <div className="form_group">
-                <label htmlFor="GalleryImage">
-                  Choose Your Image<sup>*</sup>
+                <label htmlFor="QRCodeImage">
+                  Choose Your QRCode Image<sup>*</sup>
                 </label>
-                <label htmlFor="GalleryImage">
+                <label htmlFor="QRCodeImage">
                   <img
                     src={
-                      GalleryImage != undefined
-                        ? GalleryImage
-                        : "https://img.freepik.com/free-vector/realistic-fog-background_23-2149115275.jpg?t=st=1715977908~exp=1715981508~hmac=1d533445708d92e0d4c40a4db9ebd8a90505fbfa07dcb1b58b5915f9fde4f028&w=900"
+                      QRCodeImage != undefined
+                        ? QRCodeImage
+                        : "https://img.freepik.com/free-vector/illustration-person-scanning-qr-code-with-smartphone_23-2148621302.jpg?t=st=1719519722~exp=1719523322~hmac=a7bc1d77676390d3a1c0f749813b846db973fec681a865121a40d06db24b6eeb&w=740"
                     }
-                    alt="GalleryImage"
+                    alt="QRCodeImage"
                   />
                   <i className="bx bxs-edit-location"></i>
                 </label>
@@ -414,17 +408,9 @@ setGalleryCount(++GalleryCount)
 
                 <input
                   type="file"
-                  id="GalleryImage"
-                  name="GalleryImage"
+                  id="QRCodeImage"
+                  name="QRCodeImage"
                   onChange={onUploadGalleryImage}
-                />
-              </div>
-              <div className="form_group">
-                <label htmlFor="GalleryURL">Image URL</label>
-                <input
-                  type="text"
-                  placeholder="Paste Image URL"
-                  {...formik.getFieldProps("GalleryURL")}
                 />
               </div>
 
@@ -437,7 +423,7 @@ setGalleryCount(++GalleryCount)
                 <div className="discard">
                   <button
                     type="button"
-                    onClick={() => setGalleryFormOpen(false)}
+                    onClick={() => setQRFormFormOpen(false)}
                   >
                     Discard
                   </button>
@@ -457,7 +443,7 @@ setGalleryCount(++GalleryCount)
             id={updateFormOpen ? "galleryUpdateOpen" : "galleryUpdateClose"}
           >
             <div className="title">
-              <p>Update Gallery</p>
+              <p>Update QRCode</p>
               <i
                 className="bx bx-x"
                 onClick={() => setUpdateFormOpen(false)}
@@ -465,17 +451,17 @@ setGalleryCount(++GalleryCount)
             </div>
             <form action="" onSubmit={handleGalleryUpdate}>
               <div className="form_group">
-                <label htmlFor="GalleryImage">
-                  Choose Your Image<sup>*</sup>
+                <label htmlFor="QRCodeImage">
+                  Choose Your QRCode Image<sup>*</sup>
                 </label>
-                <label htmlFor="GalleryImage">
+                <label htmlFor="QRCodeImage">
                   <img
                     src={
-                      GalleryImage != undefined
-                        ? GalleryImage
+                      QRCodeImage != undefined
+                        ? QRCodeImage
                         : "https://img.freepik.com/free-vector/realistic-fog-background_23-2149115275.jpg?t=st=1715977908~exp=1715981508~hmac=1d533445708d92e0d4c40a4db9ebd8a90505fbfa07dcb1b58b5915f9fde4f028&w=900"
                     }
-                    alt="GalleryImage"
+                    alt="QRCodeImage"
                   />
                   <i className="bx bxs-edit-location"></i>
                 </label>
@@ -486,18 +472,9 @@ setGalleryCount(++GalleryCount)
 
                 <input
                   type="file"
-                  id="GalleryImage"
-                  name="GalleryImage"
+                  id="QRCodeImage"
+                  name="QRCodeImage"
                   onChange={onUploadGalleryImage}
-                />
-              </div>
-              <div className="form_group">
-                <label htmlFor="GalleryURL">Image URL</label>
-                <input
-                  type="text"
-                  placeholder="Paste Image URL"
-                  value={GalleryURL}
-                  onChange={() => setGalleryURL(e.target.value)}
                 />
               </div>
 
@@ -516,4 +493,4 @@ setGalleryCount(++GalleryCount)
   );
 };
 
-export default Gallery;
+export default Edit_QR_Code;

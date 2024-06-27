@@ -319,7 +319,7 @@ const Products = () => {
               ""
             )}
 
-            {currentPlan === "Enterprice" ? (
+            {currentPlan === "Enterprises" ? (
                  <>
                  <i class="bx bx-upload "></i>
                  <small>

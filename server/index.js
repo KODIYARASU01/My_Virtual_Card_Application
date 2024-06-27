@@ -18,8 +18,10 @@ import TemplateRoute from './Routes/VCardTemplate.route.js';
 import ServiceDetailRoute from './Routes/Services.route.js';
 import ProductDetailRoute from './Routes/Product.route.js';
 import GalleryDetailRoute from './Routes/Gallery.route.js';
+import QRCodeDetailRoute from './Routes/QRCode.route.js';
 import TestimonialDetailRoute from './Routes/Testimonial.route.js';
 import SocialMediaDetailRoute from './Routes/SocialMedia.route.js';
+import BussinessHourDetailRoute from './Routes/BussinessHour.route.js';
 import PopupBannerDetailRoute from './Routes/PopupBanner.route.js'
 import PlanDetailRoute from './Routes/Plan.route.js';
 import TermConditionRoute from './Routes/Terms&Condition.route.js';
@@ -65,8 +67,10 @@ app.use('/templateDetail',TemplateRoute);
 app.use('/serviceDetail',ServiceDetailRoute);
 app.use('/productDetail',ProductDetailRoute);
 app.use('/galleryDetail',GalleryDetailRoute);
+app.use('/QRCodeDetail',QRCodeDetailRoute);
 app.use('/testimonialDetail',TestimonialDetailRoute);
 app.use('/socialMediaDetail',SocialMediaDetailRoute);
+app.use('/bussinessDetail',BussinessHourDetailRoute)
 app.use('/popupBannerDetail',PopupBannerDetailRoute);
 app.use('/termConditionDetail',TermConditionRoute);
 app.use('/privacyPolicyDetail',PrivacyPolicyRoute)

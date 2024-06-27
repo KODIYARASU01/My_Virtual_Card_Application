@@ -21,6 +21,7 @@ import axios from "axios";
 import SuperAdmin_context from "../../../SuperAdmin_Context/SuperAdmin_context";
 import Plan from "./All_Form_Component/Plan";
 import PrivacyPolicy from "./All_Form_Component/PrivacyPolicy";
+
 const VCard_Form = () => {
 let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
   let navigate = useNavigate();
@@ -249,6 +250,7 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
             {ShowForm === "Testimonials" ? <Testimonial /> : ""}
             {ShowForm === "Iframes" ? <Iframe /> : ""}
             {ShowForm === "Social Link - Website" ? <SocialMedias /> : ""}
+         
             {ShowForm === "PopUp Banner" ? <Banner /> : ""}
             {ShowForm === "Dynamic VCard" ? <Dynamic_VCard /> : ""}
             {ShowForm === "Appoinment" ? <Appoinment /> : ""}
