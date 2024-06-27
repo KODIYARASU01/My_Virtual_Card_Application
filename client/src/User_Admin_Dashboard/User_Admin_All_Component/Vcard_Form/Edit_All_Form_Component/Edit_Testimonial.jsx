@@ -13,12 +13,14 @@ import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_contex
 import { set } from "mongoose";
 const Testimonial = () => {
   let { URL_Alies } = useParams();
+  let [viewTestimonialDetail, setViewTestimonialDetail] = useState(false);
   let [testimonialFormOpen, setTestimonialFormOpen] = useState(false);
   let [updateFormOpen, setUpdateFormOpen] = useState(false);
   let [testimonialId, setTestimonialId] = useState();
   let [AllTestimonial, setAllTestimonial] = useState();
   let { currentPlan, FormSubmitLoader, setFormSubmitLoader, userName } =
     useContext(SuperAdmin_context);
+    let[ClientCount,setClientCount]=useState(0)
   let [ClientName, setClientName] = useState();
   let [ClientFeedback, setClientFeedback] = useState("");
   let [ClientImage, setClientImage] = useState();
@@ -46,6 +48,7 @@ const Testimonial = () => {
             setFormSubmitLoader(false);
           } else {
             setAllTestimonial(res.data.data);
+            setClientCount(res.data.data.length)
             setFormSubmitLoader(false);
           }
         })
@@ -96,6 +99,7 @@ const Testimonial = () => {
         .then((res) => {
           toast.success(res.data.message);
           reloadComponent();
+          setClientCount(++ClientCount)
           setTimeout(() => {
             values.ClientName = "";
             setClientImage(undefined);
@@ -103,7 +107,7 @@ const Testimonial = () => {
             setClientFeedback("");
             values.ClientReviewDate = "";
             setTestimonialFormOpen(false);
-          }, 1000);
+          }, 500);
           setFormSubmitLoader(false);
         })
         .catch((error) => {
@@ -113,6 +117,38 @@ const Testimonial = () => {
         });
     },
   });
+  async function handleTestimonialView(id) {
+    setViewTestimonialDetail(true);
+    try {
+      await axios
+        .get(`http://localhost:3001/testimonialDetail/specificID/${id}`, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        })
+        .then((res) => {
+          setViewTestimonialDetail(true);
+          setClientName(res.data.data.ClientName);
+          setClientReviewDate(res.data.data.ClientReviewDate);
+          setClientFeedback(
+            (res.data.data.ClientFeedback = stripHtmlTags(
+              res.data.data.ClientFeedback
+            ))
+          );
+          setClientImage(res.data.data.ClientImage);
+          // set(res.data.data._id);
+          setFormSubmitLoader(false);
+        })
+
+        .catch((error) => {
+          toast.error(error.response.data.message);
+          setFormSubmitLoader(false);
+        });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
   async function handleTestimonialEdit(id) {
     setFormSubmitLoader(true);
     try {
@@ -207,6 +243,7 @@ const Testimonial = () => {
         .then((res) => {
           reloadComponent();
           toast.success(res.data.message);
+          setClientCount(--ClientCount)
           setFormSubmitLoader(false);
         })
         .catch((error) => {
@@ -219,7 +256,7 @@ const Testimonial = () => {
   }
   return (
     <>
-      <div className="testimonial_container">
+      <div className="update_testimonial_container">
         <div className="plan_title">
           <p>
             <strong>{currentPlan} plan </strong>&nbsp; Subscribed!
@@ -227,10 +264,57 @@ const Testimonial = () => {
         </div>
         <div className="add_new_testimonial">
           <button onClick={() => setTestimonialFormOpen(true)}>
-            Add Testimonial
+          <i className='bx bx-plus'></i>Add Testimonial
           </button>
         </div>
+        <div className="plan_based_service_add_note">
+          <div className="note">
+            {currentPlan === "Demo" ? (
+                <>
+                <i class="bx bx-upload "></i>
+                <small>
+                Demo Plan Client Detail access denied!
+                </small>
+              </>
+     
+            ) : (
+              ""
+            )}
 
+            {currentPlan === "Basic" ? (
+           <>
+           <i class="bx bx-upload "></i>
+           <small>
+             Max Client Detail addOn limit :<strong> {ClientCount} / 4 </strong>
+           </small>
+         </>
+            ) : (
+              ""
+            )}
+
+            {currentPlan === "Standard" ? (
+              <>
+                <i class="bx bx-upload "></i>
+                <small>
+                  Max Client Detail addOn limit :<strong> {ClientCount} / 6 </strong>
+                </small>
+              </>
+            ) : (
+              ""
+            )}
+
+            {currentPlan === "Enterprice" ? (
+                 <>
+                 <i class="bx bx-upload "></i>
+                 <small>
+                   Max Client Detail addOn limit :<strong> {ClientCount} / 10 </strong>
+                 </small>
+               </>
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
         <div className="testimonial_list_table table-responsive container w-100 rounded-3">
           <table className="table rounded-3" id="example">
             <thead className="table-secondary rounded-3">
@@ -273,6 +357,7 @@ const Testimonial = () => {
                           <i
                             className="bx bxs-show"
                             style={{ color: "skyBlue" }}
+                            onClick={()=>handleTestimonialView(data._id)}
                           ></i>
                           <i
                             className="bx bx-edit"
@@ -394,9 +479,7 @@ const Testimonial = () => {
             </form>
           </div>
         </div>
-
         {/* //update New Service Form */}
-
         <div
           className="update_new_testimonial_container"
           id={updateFormOpen ? "shadow_background" : ""}
@@ -434,8 +517,10 @@ const Testimonial = () => {
                   Client Feedback <sup>*</sup>
                 </label>
                 <Editor
-                  value={ClientFeedback}
+                  {...formik.getFieldProps("ClientFeedback", ClientFeedback)}
+                  value={formik.values.ClientFeedback}
                   onTextChange={(e) => setClientFeedback(e.htmlValue)}
+                  s
                   id="ClientFeedback"
                   name="ClientFeedback"
                   style={{ height: "130px" }}
@@ -481,6 +566,64 @@ const Testimonial = () => {
                 </div>
               </div>
             </form>
+          </div>
+        </div>
+        {/* //Testimonial  Detail Box */}
+
+        <div
+          className="view_new_testimonial_container"
+          id={viewTestimonialDetail ? "shadow_background" : ""}
+        >
+          <div
+            className="view_new_testimonial_box"
+            id={
+              viewTestimonialDetail ? "serviceUpdateOpen" : "serviceUpdateClose"
+            }
+          >
+            <div className="title">
+              <p>Testimonial Details</p>
+              <i
+                className="bx bx-x"
+                onClick={() => setViewTestimonialDetail(false)}
+              ></i>
+            </div>
+            <div className="details_container">
+              <div className="service_name">
+                <div className="service_title">Client Name</div>
+                <div className="name">
+                  <p>{ClientName != undefined ? ClientName : "N/A"}</p>
+                </div>
+              </div>
+              <div className="service_desc">
+                <div className="service_title">Client Feedback</div>
+                <div className="name">
+                  <p>
+                    {ClientFeedback != undefined
+                      ? stripHtmlTags(ClientFeedback)
+                      : "N/A"}
+                  </p>
+                </div>
+              </div>
+              <div className="service_url">
+                <div className="service_title">Review Date</div>
+                <div className="name">
+                  <p>{ClientReviewDate != undefined ? ClientReviewDate : "N/A"}</p>
+                </div>
+              </div>
+              <div className="service_image">
+                <div className="service_title">Client Image</div>
+                <div className="service_image">
+                  <img
+                    src={
+                      ClientImage != undefined
+                        ? ClientImage
+                        : "https://img.freepik.com/free-photo/texture-cold-gray-background-copy-space-generative-ai_169016-29494.jpg?t=st=1719067458~exp=1719071058~hmac=cd83aaa24c4e3db687a13e63bc286a6ae631fa31fc3c17a55273372b6a109a0f&w=1060"
+                    }
+                    alt="service"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

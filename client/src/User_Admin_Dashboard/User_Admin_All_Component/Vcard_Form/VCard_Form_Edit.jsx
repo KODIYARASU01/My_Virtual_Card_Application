@@ -22,6 +22,7 @@ import { useParams } from "react-router-dom";
 import SuperAdmin_context from "../../../SuperAdmin_Context/SuperAdmin_context";
 import Edit_Plan from "./Edit_All_Form_Component/Edit_Plan";
 import toast from "react-hot-toast";
+import Edit_PrivacyPolicy from "./Edit_All_Form_Component/Edit_PrivacyPolicy";
 const VCard_Form_Edit = () => {
 let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
   let navigate = useNavigate();
@@ -74,13 +75,15 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
           <div className="title">
             <h5>Update Your VCard</h5>
           </div>
-          <div className="action">
+          <div className="back_action">
             <button
+            className="back"
               onClick={() =>
                 (window.location.pathname = `/${userName}/uadmin/user_vcard`)
               }
             >
               Back
+              <i className='bx bx-exit' ></i>
             </button>
           </div>
         </div>
@@ -275,6 +278,7 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
             {ShowForm === "Dynamic VCard" ? <Edit_Dynamic_VCard /> : ""}
             {ShowForm === "Appoinment" ? <Edit_Appoinment /> : ""}
             {ShowForm === "Business Hours" ? <Edit_Business_Hour /> : ""}
+            {ShowForm === 'Privacy Policy' ?  <Edit_PrivacyPolicy/>: ''}
             {ShowForm === "Fonts" ? <Edit_Font /> : ""}
             {ShowForm === "Terms & Conditions" ? <Edit_Terms_Conditions /> : ""}
             {ShowForm === "Manage Sections" ? <Edit_Manage_Session /> : ""}

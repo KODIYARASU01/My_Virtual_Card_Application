@@ -37,7 +37,7 @@ const User_Admin_SideNavBar = () => {
        
         </div>
         <div className="menu">
-          <NavLink onClick={()=>window.location.pathname=`/${userName}/uadmin/user_vcard`} className={window.location.pathname === `/${userName}/uadmin/user_vcard` || window.location.pathname === `/${userName}/uadmin/vcard_form/${URL_Alies}` || window.location.pathname === `/${userName}/uadmin/vcard_form_edit/${localStorageURL}` || window.location.pathname === `/${userName}/uadmin/create_new_vcard`  ?    'activeMenu' : ''}>
+          <NavLink onClick={()=>window.location.pathname=`/${userName}/uadmin/user_vcard`} className={window.location.pathname === `/${userName}/uadmin/user_vcard` || window.location.pathname === `/${userName}/uadmin/vcard_form_edit/${localStorageURL}` || window.location.pathname === `/${userName}/uadmin/create_new_vcard`  ?    'activeMenu' : ''}>
           
             <i className='bx bxs-home-heart h-auto  d-flex align-self-center justify-content-center text-success'></i>
         <p className={SideNavActions ? 'menuNamesHide':''}id='menuName'>VCards</p>

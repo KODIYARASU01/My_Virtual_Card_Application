@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import "./Edit_form_styles/Edit_Gallery.scss";
 import { useFormik } from "formik";
 import { Editor } from "primereact/editor";
@@ -23,10 +23,14 @@ const Gallery = () => {
     setFormSubmitLoader,
     userName,
   } = useContext(SuperAdmin_context);
+
+  let[GalleryCount,setGalleryCount]=useState(0);
   let [GalleryURL, setGalleryURL] = useState();
   let [GalleryImage, setGalleryImage] = useState(null);
+  let[GalleryName,setGalleryName]=useState('')
   let [fullImageToggle, setFullImageToggle] = useState(false);
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
+
   const [key, setKey] = useState(0);
 
   const reloadComponent = () => {
@@ -51,6 +55,7 @@ const Gallery = () => {
             setFormSubmitLoader(false);
           } else {
             setAllGallery(res.data.data);
+            setGalleryCount(res.data.data.length)
             setFormSubmitLoader(false);
           }
         })
@@ -105,7 +110,7 @@ const Gallery = () => {
         .then((res) => {
           toast.success(res.data.message);
           setFormSubmitLoader(false);
-
+setGalleryCount(++GalleryCount)
           setGalleryImage(null);
           values.GalleryURL = "";
           reloadComponent();
@@ -225,6 +230,7 @@ const Gallery = () => {
         })
         .then((res) => {
           toast.success(res.data.message);
+          setGalleryCount(--GalleryCount)
           setFormSubmitLoader(false);
           reloadComponent();
         })
@@ -238,7 +244,7 @@ const Gallery = () => {
   }
   return (
     <>
-      <div className="gallery_container">
+      <div className="update_gallery_container">
         {fullImageToggle ? (
           <div className="Image_Full_view">
             <div
@@ -252,15 +258,63 @@ const Gallery = () => {
         ) : (
           ""
         )}
+   
         <div className="plan_title">
           <p>
             <strong>{currentPlan} plan </strong>&nbsp; Subscribed!
           </p>
         </div>
         <div className="add_new_gallery">
-          <button onClick={() => setGalleryFormOpen(true)}>Add Gallery</button>
+          <button onClick={() => setGalleryFormOpen(true)}><i className='bx bx-plus'></i>Add Gallery</button>
         </div>
+        <div className="plan_based_service_add_note">
+          <div className="note">
+            {currentPlan === "Demo" ? (
+                <>
+                <i class="bx bx-upload "></i>
+                <small>
+                Demo Plan Gallery access denied!
+                </small>
+              </>
+     
+            ) : (
+              ""
+            )}
 
+            {currentPlan === "Basic" ? (
+           <>
+           <i class="bx bx-upload "></i>
+           <small>
+             Max Image addOn limit :<strong> {GalleryCount} / 4 </strong>
+           </small>
+         </>
+            ) : (
+              ""
+            )}
+
+            {currentPlan === "Standard" ? (
+              <>
+                <i class="bx bx-upload "></i>
+                <small>
+                  Max Image addOn limit :<strong> {GalleryCount} / 6 </strong>
+                </small>
+              </>
+            ) : (
+              ""
+            )}
+
+            {currentPlan === "Enterprice" ? (
+                 <>
+                 <i class="bx bx-upload "></i>
+                 <small>
+                   Max Image addOn limit :<strong> {GalleryCount} / 10 </strong>
+                 </small>
+               </>
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
         {!fullImageToggle ? (
           <div className="gallery_list_table table-responsive container w-100 rounded-3">
             <table className="table rounded-3" id="example">
@@ -277,7 +331,7 @@ const Gallery = () => {
                   <>
                     {AllGallery.map((data, index) => {
                       return (
-                        <tr>
+                        <tr key={index}>
                           <td className="h-100 align-middle">{index + 1}</td>
                           <td className="h-100 align-middle">
                             <img src={data.GalleryImage} alt="gallery_image" />

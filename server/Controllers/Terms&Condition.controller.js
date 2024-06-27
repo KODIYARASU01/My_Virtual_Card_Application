@@ -26,7 +26,7 @@ export const PostTermConditionsData = async (req, res) => {
       ) {
         //check images
         let checkTermsLength = await TermConditionModel.find({
-          user: req.user.userName,
+          URL_Alies: req.params.URL_Alies
         });
 
         if (!checkTermsLength) {
@@ -37,6 +37,7 @@ export const PostTermConditionsData = async (req, res) => {
             // Create a new image instance and save to MongoDB
             const newTerms= new TermConditionModel({
               user: req.user.userName,
+              URL_Alies:req.params.URL_Alies,
               Terms_Conditions: req.body.Terms_Conditions
             });
 
@@ -73,7 +74,7 @@ export const PostTermConditionsData = async (req, res) => {
 
 export const GetTermConditionsData = async (req, res) => {
   try {
-    let datas = await TermConditionModel.find({});
+    let datas = await TermConditionModel.find({URL_Alies: req.params.URL_Alies});
     if (!datas) {
       res.status(400).json({ message: "Data not found!" });
     } else {
@@ -132,7 +133,7 @@ export const updateSpecificUserData = async (req, res) => {
   try {
     let { id } = req.params;
     let data = req.body;
-    let updateSpecificData = await TermConditionModel.findByIdAndUpdate(id, data);
+    let updateSpecificData = await TermConditionModel.findOneAndUpdate( { URL_Alies: req.params.URL_Alies }, data);
 
     if (!updateSpecificData) {
       res.status(400).json({ message: "Data Not Found!" });
@@ -171,7 +172,7 @@ export const deleteSpecificUserData = async (req, res) => {
   try {
     let { id } = req.params;
 
-    let deleteSpecificData = await TermConditionModel.findByIdAndDelete(id);
+    let deleteSpecificData = await TermConditionModel.findOneAndDelete({ URL_Alies: req.params.URL_Alies });
 
     if (!deleteSpecificData) {
       res.status(400).json({ message: "Data Not Found!" });
@@ -185,35 +186,3 @@ export const deleteSpecificUserData = async (req, res) => {
   }
 };
 
-//.....................
-//Post basic detail data to database:
-
-// export const PostSocialMediaData = async (req, res) => {
-//   try {
-//     if (!req.body.WhatsUp) {
-//       return res
-//         .status(401)
-//         .json({ message: "Mandatory:WhatsUp" });
-//     } else {
-//       let data = {
-//         user: req.user.userName,
-//         Website:req.body.Website,
-//         Facebook: req.body.Facebook,
-//         LinkedIn: req.body.LinkedIn,
-//         WhatsUp: req.body.WhatsUp,
-//         Instagram: req.body.Instagram,
-//         Twiter: req.body.Twiter,
-//         YouTube:req.body.YouTube,
-//         Github:req.body.Github
-//       };
-// console.log(req.user)
-//       const result = await SocialMediaModel.create(data);
-
-//       return res
-//         .status(201)
-//         .json({ message: "Data saved!", data:result });
-//     }
-//   } catch (error) {
-//     res.status(400).json({error:error.message});
-//   }
-// };

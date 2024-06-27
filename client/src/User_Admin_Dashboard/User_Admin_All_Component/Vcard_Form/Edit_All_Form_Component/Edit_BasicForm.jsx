@@ -521,6 +521,7 @@ const BasicForm = () => {
                 name="InquiryToggleSwitch"
                 type="checkbox"
                 checked={InquiryToggleSwitch}
+                onClick={()=>setInquiryToggleSwitch(!InquiryToggleSwitch)}
               />
             </div>
             <div className="actions">
@@ -530,29 +531,19 @@ const BasicForm = () => {
                 name="QRToggleSwitch"
                 type="checkbox"
                 checked={QRToggleSwitch}
+                onClick={()=>setQRToggleSwitch(!QRToggleSwitch)}
               />
             </div>
             <div className="actions">
               <p>Enable Appoinment:</p>
-              {/* {AppoinmentToggleSwitch ? (
-                <i
-                  className="bx bxs-toggle-right on"
-                
-                  onChange={formik.values.AppoinmentToggleSwitch}
-                  onClick={() => setAppoinmentToggleSwitch(!AppoinmentToggleSwitch)}
-                ></i>
-              ) : (
-                <i
-                  class="bx bxs-toggle-left off"
-                  checked={formik.values.AppoinmentToggleSwitch}
-                  onClick={() => setAppoinmentToggleSwitch(!AppoinmentToggleSwitch)}
-                ></i>
-              )} */}
+       
+          
               <input
                 id="AppoinmentToggleSwitch"
                 name="AppoinmentToggleSwitch"
                 type="checkbox"
                 checked={AppoinmentToggleSwitch}
+                onClick={()=>setAppoinmentToggleSwitch(!AppoinmentToggleSwitch)}
               />
             </div>
             <div className="actions">
@@ -562,6 +553,7 @@ const BasicForm = () => {
                 name="ContactToggleSwitch"
                 type="checkbox"
                 checked={ContactToggleSwitch}
+                onClick={()=>setContactToggleSwitch(!ContactToggleSwitch)}
               />
             </div>
 

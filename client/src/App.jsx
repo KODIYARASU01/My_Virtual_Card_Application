@@ -43,7 +43,7 @@ import Inquiries from "./User_Admin_Dashboard/User_Admin_All_Component/Inquiries
 const App = () => {
 
   //URL Name state:
-  let [URL_Alies,setURL_Alies]=useState('demo');
+  let [URL_Alies,setURL_Alies]=useState('');
 
   let [SideNavActions, setSideNavActions] = useState(false);
   let [profileOpen, setProfileOpen] = useState(false);
@@ -202,6 +202,7 @@ const App = () => {
     if (Token) {
       setUser(Token);
       setUserName(Token.userName);
+   
     } else {
       setUserName("Jayakumar");
     }

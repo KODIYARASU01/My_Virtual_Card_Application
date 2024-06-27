@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import "./Edit_form_styles/Edit_Services.scss";
 import { useFormik } from "formik";
 import { Editor } from "primereact/editor";
+import { Editor as UpdateEditor } from "primereact/editor";
 import "primereact/resources/themes/saga-blue/theme.css"; // Choose a theme
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -20,7 +21,8 @@ const Services = () => {
     setFormSubmitLoader,
     userName,
   } = useContext(SuperAdmin_context);
-  let [AllService, setAllService] = useState();
+  let[ServiceCount,setServiceCount]=useState(0)
+  let [AllService, setAllService] = useState([]);
   let [serviceFormOpen, setServiceFormOpen] = useState(false);
   let [updateFormOpen, setUpdateFormOpen] = useState(false);
   let [viewServiceDetail, setViewServiceDetail] = useState(false);
@@ -50,11 +52,11 @@ const Services = () => {
         .then((res) => {
           console.log(res);
           if (res.data.data.length == 0) {
-   
             toast.error("No service added!");
             setFormSubmitLoader(false);
           } else {
             setAllService(res.data.data);
+            setServiceCount(res.data.data.length)
             setFormSubmitLoader(false);
           }
         })
@@ -116,6 +118,7 @@ const Services = () => {
           setFormSubmitLoader(false);
           toast.success(res.data.message);
           reloadComponent();
+          setServiceCount(++ServiceCount)
           setTimeout(() => {
             values.ServiceName = "";
 
@@ -227,7 +230,10 @@ const Services = () => {
           setFormSubmitLoader(false);
           reloadComponent();
           setTimeout(() => {
-            setServiceImage(undefined)
+            setServiceName("");
+            setServiceURL("");
+            setServiceDescription("");
+            setServiceImage(undefined);
             setUpdateFormOpen(false);
           }, 1000);
         })
@@ -253,6 +259,7 @@ const Services = () => {
         .then((res) => {
           toast.success(res.data.message);
           reloadComponent();
+          setServiceCount(--ServiceCount)
           setFormSubmitLoader(false);
         })
         .catch((error) => {
@@ -264,9 +271,10 @@ const Services = () => {
     }
   }
 
+
   return (
     <>
-      <div className="service_container">
+      <div className="update_service_container">
         <div className="service_plan_title">
           <p>
             <strong>{currentPlan} plan </strong>&nbsp; Subscribed!
@@ -274,9 +282,65 @@ const Services = () => {
         </div>
 
         <div className="add_new_service">
-          <button onClick={() => setServiceFormOpen(true)}>Add Service</button>
+          <button onClick={() => setServiceFormOpen(true)}>
+            <i className="bx bx-plus"></i>Add Service
+          </button>
         </div>
+        <div className="plan_based_service_add_note">
+          <div className="note">
+            {currentPlan === "Demo" ? (
+                 <>
+            
+                 <i class='bx bx-upload ' ></i>
+                 <small>
+                 Demo Plan service access denied!    
+                 </small>
+                 </>
+        
+            ) : (
+              ""
+            )}
 
+            {currentPlan === "Basic" ? (
+                <>
+            
+                <i class='bx bx-upload ' ></i>
+                <small>
+                  Max Service addOn limit :<strong> { ServiceCount} / 4 </strong>
+  
+                </small>
+                </>
+            ) : (
+              ""
+            )}
+
+            {currentPlan === "Standard" ? (
+              <>
+            
+              <i class='bx bx-upload ' ></i>
+              <small>
+                Max Service addOn limit :<strong> { ServiceCount} / 6 </strong>
+
+              </small>
+              </>
+            ) : (
+              ""
+            )}
+
+            {currentPlan === "Enterprice" ? (
+               <>
+            
+               <i class='bx bx-upload ' ></i>
+               <small>
+                 Max Service addOn limit :<strong> { ServiceCount} / 8 </strong>
+ 
+               </small>
+               </>
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
         <div className="service_list_table table-responsive container w-100 rounded-3">
           <table className="table rounded-3" id="example">
             <thead className="table-secondary rounded-3">
@@ -289,14 +353,19 @@ const Services = () => {
               </tr>
             </thead>
             <tbody className="shadow-sm">
-              {AllService != undefined  ? (
+              {AllService != undefined ? (
                 <>
                   {AllService.map((data, index) => {
+                    console.log(data.ServiceImage.length);
                     return (
                       <tr key={index}>
                         <td className="h-100 align-middle">
                           <img
-                            src={data.ServiceImage}
+                            src={
+                              data.ServiceImage != 'undefined'
+                                ? data.ServiceImage
+                                : `https://img.freepik.com/free-vector/flat-customer-support-illustration_23-2148899114.jpg?t=st=1719422605~exp=1719426205~hmac=bcd7dd8b57efc2e804d100a8b88ba5f9d6c24e865de29bacaa28f2ab02a248f8&w=740`
+                            }
                             alt="ServiceImage"
                             name="ServiceImage"
                           />
@@ -309,9 +378,7 @@ const Services = () => {
                         </td>
                         <td className="h-100 align-middle">
                           <a href={data.ServiceURL} target="_blank">
-                            {data.ServiceURL != undefined
-                              ? data.ServiceURL
-                              : ""}
+                            {data.ServiceURL != "" ? data.ServiceURL : "N/A"}
                           </a>
                         </td>
                         <td className="h-100 align-middle">
@@ -402,7 +469,7 @@ const Services = () => {
                 <label htmlFor="ServiceImage">
                   <img
                     src={
-                      ServiceImage != undefined
+                      ServiceImage != 'undefined'
                         ? ServiceImage
                         : "https://img.freepik.com/free-vector/autumn-background_23-2149054409.jpg?t=st=1715971926~exp=1715975526~hmac=064e47d99740a4e25fb7345c45d5bc744da1c1ad7f5f1e14668eaae2cc601381&w=900"
                     }
@@ -442,7 +509,7 @@ const Services = () => {
           id={updateFormOpen ? "shadow_background" : ""}
         >
           <div
-            className="create_new_service_box"
+            className="update_new_service_box"
             id={updateFormOpen ? "serviceUpdateOpen" : "serviceUpdateClose"}
           >
             <div className="title">
@@ -478,8 +545,12 @@ const Services = () => {
                 <label htmlFor="ServiceDescription">
                   Description <sup>*</sup>
                 </label>
-                <Editor
-                  value={ServiceDescription}
+                <UpdateEditor
+                  {...formik.getFieldProps(
+                    "ServiceDescription",
+                    ServiceDescription
+                  )}
+                  value={formik.values.ServiceDescription}
                   onTextChange={(e) => setServiceDescription(e.htmlValue)}
                   id="ServiceDescription"
                   name="ServiceDescription"
@@ -493,9 +564,9 @@ const Services = () => {
                 <label htmlFor="ServiceImage">
                   <img
                     src={
-                      ServiceImage != undefined
+                      ServiceImage != 'undefined'
                         ? ServiceImage
-                        : "https://img.freepik.com/free-vector/autumn-background_23-2149054409.jpg?t=st=1715971926~exp=1715975526~hmac=064e47d99740a4e25fb7345c45d5bc744da1c1ad7f5f1e14668eaae2cc601381&w=900"
+                        : "https://img.freepik.com/free-vector/flat-customer-support-illustration_23-2148899114.jpg?t=st=1719422605~exp=1719426205~hmac=bcd7dd8b57efc2e804d100a8b88ba5f9d6c24e865de29bacaa28f2ab02a248f8&w=740"
                     }
                     alt="ServiceImage"
                   />
@@ -567,9 +638,9 @@ const Services = () => {
                 <div className="service_image">
                   <img
                     src={
-                      ServiceImage != undefined
+                      ServiceImage != 'undefined'
                         ? ServiceImage
-                        : "https://img.freepik.com/free-photo/texture-cold-gray-background-copy-space-generative-ai_169016-29494.jpg?t=st=1719067458~exp=1719071058~hmac=cd83aaa24c4e3db687a13e63bc286a6ae631fa31fc3c17a55273372b6a109a0f&w=1060"
+                        : "https://img.freepik.com/free-vector/flat-customer-support-illustration_23-2148899114.jpg?t=st=1719422605~exp=1719426205~hmac=bcd7dd8b57efc2e804d100a8b88ba5f9d6c24e865de29bacaa28f2ab02a248f8&w=740"
                     }
                     alt="service"
                   />

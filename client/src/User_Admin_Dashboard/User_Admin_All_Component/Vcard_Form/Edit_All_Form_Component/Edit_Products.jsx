@@ -1,4 +1,4 @@
-import React, { useState,useContext,useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "./Edit_form_styles/Edit_Products.scss";
 import { useFormik } from "formik";
 import { Editor } from "primereact/editor";
@@ -11,11 +11,17 @@ import { Toaster, toast } from "react-hot-toast";
 import { convertToBase64ProductImage } from "../../../../Helper/convert";
 import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_context";
 const Products = () => {
-  let {URL_Alies}=useParams();
-  let { currentPlan, setCurrentPlan,FormSubmitLoader, setFormSubmitLoader, userName } =
-    useContext(SuperAdmin_context);
-    let [AllProduct, setAllProduct] = useState();
-    let[ProductViewToggle,setProductViewToggle]=useState(false)
+  let { URL_Alies } = useParams();
+  let {
+    currentPlan,
+    setCurrentPlan,
+    FormSubmitLoader,
+    setFormSubmitLoader,
+    userName,
+  } = useContext(SuperAdmin_context);
+  let [AllProduct, setAllProduct] = useState();
+  let [ProductCount, setProductCount] = useState(0);
+  let [ProductViewToggle, setProductViewToggle] = useState(false);
   let [productFormOpen, setProductFormOpen] = useState(false);
   let [updateFormOpen, setUpdateFormOpen] = useState(false);
   let [ProductName, setProductName] = useState();
@@ -44,22 +50,19 @@ const Products = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(
-          `http://localhost:3001/productDetail/${URL_Alies}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorageDatas.token}`,
-            },
-          }
-        )
+        .get(`http://localhost:3001/productDetail/${URL_Alies}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        })
         .then((res) => {
           if (res.data.data.length == 0) {
             toast.error("No Product added!");
             setFormSubmitLoader(false);
           } else {
-
             setAllProduct(res.data.data);
+            setProductCount(res.data.data.length);
             setFormSubmitLoader(false);
           }
         })
@@ -77,7 +80,7 @@ const Products = () => {
   let formik = useFormik({
     initialValues: {
       ProductName: "",
-      URL_Alies:URL_Alies,
+      URL_Alies: URL_Alies,
       ProductURL: "",
       ProductDescription: "",
       ProductImage: null,
@@ -88,20 +91,20 @@ const Products = () => {
     // validate:BasicDetailValidate,
 
     onSubmit: async (values) => {
-
-
       const formData = new FormData();
-      formData.append('URL_Alies',URL_Alies),
-   formData.append("ProductImage", ProductImage);
-   formData.append('ProductName',values.ProductName);
-   formData.append('ProductURL',values.ProductURL);
-   formData.append('ProductDescription', values.ProductDescription = stripHtmlTags(ProductDescription));
-   formData.append('ProductPrice',values.ProductPrice);
+      formData.append("URL_Alies", URL_Alies),
+        formData.append("ProductImage", ProductImage);
+      formData.append("ProductName", values.ProductName);
+      formData.append("ProductURL", values.ProductURL);
+      formData.append(
+        "ProductDescription",
+        (values.ProductDescription = stripHtmlTags(ProductDescription))
+      );
+      formData.append("ProductPrice", values.ProductPrice);
       // values = await Object.assign(values, {
       //   ProductImage: ProductImage || "",
       // });
 
-     
       setFormSubmitLoader(true);
       await axios
         .post(`http://localhost:3001/productDetail/${URL_Alies}`, formData, {
@@ -111,21 +114,20 @@ const Products = () => {
           },
         })
         .then((res) => {
-          reloadComponent()
+          reloadComponent();
+          setProductCount(++ProductCount);
           toast.success(res.data.message);
           setFormSubmitLoader(false);
           setProductFormOpen(false);
 
-          setTimeout(()=>{
-values.ProductName='';
-values.ProductPrice='';
-values.ProductURL='';
-values.ProductDescription='';
-values.ProductImage=undefined
-setProductImage(undefined)
-
-          },[])
-        
+          setTimeout(() => {
+            values.ProductName = "";
+            values.ProductPrice = "";
+            values.ProductURL = "";
+            values.ProductDescription = "";
+            values.ProductImage = undefined;
+            setProductImage(undefined);
+          }, []);
         })
         .catch((error) => {
           toast.error(error.response.data.message);
@@ -148,7 +150,7 @@ setProductImage(undefined)
           setProductName(res.data.data.ProductName);
           setProductImage(res.data.data.ProductImage);
           setProductPrice(res.data.data.ProductPrice);
-          setProductURL(res.data.data.ProductURL)
+          setProductURL(res.data.data.ProductURL);
           setProductDescription(
             (res.data.data.ProductDescription = stripHtmlTags(
               res.data.data.ProductDescription
@@ -177,14 +179,13 @@ setProductImage(undefined)
         })
         .then((res) => {
           setUpdateFormOpen(true);
-      setProductPrice(res.data.data.ProductPrice)
+          setProductPrice(res.data.data.ProductPrice);
           setProductName(res.data.data.ProductName);
           setProductURL(res.data.data.ProductURL);
           setProductDescription(res.data.data.ProductDescription);
           setProductImage(res.data.data.ProductImage);
           setProductId(res.data.data._id);
           setFormSubmitLoader(false);
-       
         })
 
         .catch((error) => {
@@ -195,7 +196,6 @@ setProductImage(undefined)
       toast.error(error.message);
     }
   }
-
 
   async function handleProductUpdate(e) {
     e.preventDefault();
@@ -217,18 +217,22 @@ setProductImage(undefined)
     };
     try {
       axios
-        .put(`http://localhost:3001/productDetail/updateID/${ProductId}`, data, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorageDatas.token}`,
-          },
-        })
+        .put(
+          `http://localhost:3001/productDetail/updateID/${ProductId}`,
+          data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorageDatas.token}`,
+            },
+          }
+        )
         .then((res) => {
           toast.success(res.data.message);
           setFormSubmitLoader(false);
-          reloadComponent()
+          reloadComponent();
           setTimeout(() => {
-            setProductImage(undefined)
+            setProductImage(undefined);
             setUpdateFormOpen(false);
           }, 1000);
         })
@@ -253,15 +257,14 @@ setProductImage(undefined)
           },
         })
         .then((res) => {
+          setProductCount(--ProductCount);
           toast.success(res.data.message);
-          reloadComponent()
+          reloadComponent();
           setFormSubmitLoader(false);
-
         })
         .catch((error) => {
           toast.error(error.response.data.message);
           setFormSubmitLoader(false);
-   
         });
     } catch (error) {
       toast.error(error.message);
@@ -270,61 +273,135 @@ setProductImage(undefined)
   return (
     <>
       <div className="product_container">
-      <div className="product_plan_title">
-        <p><strong>{currentPlan} plan </strong>&nbsp; Subscribed!</p>
+        <div className="product_plan_title">
+          <p>
+            <strong>{currentPlan} plan </strong>&nbsp; Subscribed!
+          </p>
         </div>
         <div className="add_new_product">
-          <button onClick={() => setProductFormOpen(true)}>Add Product</button>
+          <button onClick={() => setProductFormOpen(true)}>
+            <i className="bx bx-plus"></i>Add Product
+          </button>
         </div>
+        <div className="plan_based_service_add_note">
+          <div className="note">
+            {currentPlan === "Demo" ? (
+                <>
+                <i class="bx bx-upload "></i>
+                <small>
+                Demo Plan Product access denied!
+                </small>
+              </>
+     
+            ) : (
+              ""
+            )}
 
+            {currentPlan === "Basic" ? (
+           <>
+           <i class="bx bx-upload "></i>
+           <small>
+             Max Product addOn limit :<strong> {ProductCount} / 4 </strong>
+           </small>
+         </>
+            ) : (
+              ""
+            )}
+
+            {currentPlan === "Standard" ? (
+              <>
+                <i class="bx bx-upload "></i>
+                <small>
+                  Max Product addOn limit :<strong> {ProductCount} / 6 </strong>
+                </small>
+              </>
+            ) : (
+              ""
+            )}
+
+            {currentPlan === "Enterprice" ? (
+                 <>
+                 <i class="bx bx-upload "></i>
+                 <small>
+                   Max Product addOn limit :<strong> {ProductCount} / 10 </strong>
+                 </small>
+               </>
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
         <div className="product_list_table table-responsive container w-100 rounded-3">
           <table className="table rounded-3" id="example">
             <thead className="table-secondary rounded-3">
               <tr>
-                <th  className="fw-bold">ICON OR IMAGE</th>
-                <th  className="fw-bold">Name</th>
-                <th  className="fw-bold">DESCRIPTION</th>
+                <th className="fw-bold">ICON OR IMAGE</th>
+                <th className="fw-bold">Name</th>
+                <th className="fw-bold">DESCRIPTION</th>
                 <th className="fw-bold"> PRICE</th>
-                <th  className="fw-bold">ACTIONS</th>
+                <th className="fw-bold">ACTIONS</th>
               </tr>
             </thead>
             <tbody className=" shadow-sm">
-              {AllProduct!=undefined ?  <>
-               {AllProduct.map((data,index)=>{
-
-                return(
-                  <tr key={index}>
-                  <td className="h-100 align-middle">
-                    <img
-                      src={data.ProductImage ? data.ProductImage : 'Loading...'}
-                      alt="service_image"
-                    />
-                  </td>
-                  <td className="h-100 align-middle">{data.ProductName}</td>
-                  <td className="h-100 align-middle">{data.ProductDescription}</td>
-                  <td className="h-100 align-middle">Rs:&nbsp;{data.ProductPrice}</td>
-                  <td className="h-100 align-middle">
-                    <i className="bx bxs-show" style={{ color: "skyBlue" }} onClick={()=>handleProductView(data._id)}></i>
-                    <i className="bx bx-edit" style={{ color: "#6571FF" }}  onClick={() => handleProductEdit(data._id)}></i>
-                    <i className="bx bx-trash-alt" style={{ color: "red" }} onClick={()=>handleProductDelete(data._id)}></i>
+              {AllProduct != undefined ? (
+                <>
+                  {AllProduct.map((data, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="h-100 align-middle">
+                          <img
+                            src={
+                              data.ProductImage != "null"
+                                ? data.ProductImage
+                                : `https://img.freepik.com/free-vector/business-people-working-modern-eco-friendly-office-with-plants-flowers-biophilic-design-room-eco-friendly-workspace-green-office-concept-bright-vibrant-violet-isolated-illustration_335657-578.jpg?t=st=1719430048~exp=1719433648~hmac=20cfde827bdafe402c3db0c259f557d189ac027e0c9f731c0740eaa55c811581&w=900`
+                            }
+                            alt="service_image"
+                          />
+                        </td>
+                        <td className="h-100 align-middle">
+                          {data.ProductName}
+                        </td>
+                        <td className="h-100 align-middle">
+                          {data.ProductDescription}
+                        </td>
+                        <td className="h-100 align-middle">
+                          Rs:&nbsp;{data.ProductPrice}
+                        </td>
+                        <td className="h-100 align-middle">
+                          <i
+                            className="bx bxs-show"
+                            style={{ color: "skyBlue" }}
+                            onClick={() => handleProductView(data._id)}
+                          ></i>
+                          <i
+                            className="bx bx-edit"
+                            style={{ color: "#6571FF" }}
+                            onClick={() => handleProductEdit(data._id)}
+                          ></i>
+                          <i
+                            className="bx bx-trash-alt"
+                            style={{ color: "red" }}
+                            onClick={() => handleProductDelete(data._id)}
+                          ></i>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </>
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center">
+                    No Products Added!
                   </td>
                 </tr>
-                )
-                 
-               })}
-              </>:       <tr>
-                <td colSpan='6' className="text-center">
-                No Products Added!
-                </td>
-            </tr>}
-           
+              )}
             </tbody>
           </table>
         </div>
 
         {/* //Create New Product Form */}
 
-  <div
+        <div
           className="create_new_product_container"
           id={productFormOpen ? "shadow_background" : ""}
         >
@@ -370,7 +447,9 @@ setProductImage(undefined)
                 />
               </div>
               <div className="form_group">
-                <label htmlFor="ProductPrice">Price<sup>*</sup></label>
+                <label htmlFor="ProductPrice">
+                  Price<sup>*</sup>
+                </label>
                 <input
                   type="text"
                   placeholder="Enter Product Price"
@@ -382,7 +461,6 @@ setProductImage(undefined)
                   Description <sup>*</sup>
                 </label>
 
-               
                 <Editor
                   {...formik.getFieldProps("ProductDescription")}
                   value={formik.values.ProductDescription}
@@ -391,16 +469,17 @@ setProductImage(undefined)
                   name="ProductDescription"
                   placeholder="Enter Short Description"
                   style={{ height: "130px" }}
-               
                 />
               </div>
 
               <div className="form_group productImage">
-                <label htmlFor="ProductImage">Product Image<sup>*</sup></label>
+                <label htmlFor="ProductImage">
+                  Product Image<sup>*</sup>
+                </label>
                 <label htmlFor="ProductImage">
                   <img
                     src={
-                      ProductImage != undefined
+                      ProductImage != 'null'
                         ? ProductImage
                         : "https://img.freepik.com/free-vector/autumn-background_23-2149054409.jpg?t=st=1715971926~exp=1715975526~hmac=064e47d99740a4e25fb7345c45d5bc744da1c1ad7f5f1e14668eaae2cc601381&w=900"
                     }
@@ -408,7 +487,9 @@ setProductImage(undefined)
                   />
                   <i className="bx bxs-edit-location"></i>
                 </label>
-                <p><strong>Note :</strong> Max file size limit 2MB</p>
+                <p>
+                  <strong>Note :</strong> Max file size limit 2MB
+                </p>
                 <small>Allowed file types: png, jpg, jpeg,.gif.</small>
                 <input
                   type="file"
@@ -422,15 +503,17 @@ setProductImage(undefined)
                   <button type="submit">Save</button>
                 </div>
                 <div className="discard">
-                  <button type="button" onClick={formik.handleReset}>Clear</button>
+                  <button type="button" onClick={formik.handleReset}>
+                    Clear
+                  </button>
                 </div>
               </div>
             </form>
           </div>
         </div>
-               {/* //uPDATE  Product Form */}
+        {/* //uPDATE  Product Form */}
 
-  <div
+        <div
           className="update_new_product_container"
           id={updateFormOpen ? "shadow_background" : ""}
         >
@@ -453,8 +536,8 @@ setProductImage(undefined)
                 <input
                   type="text"
                   placeholder="Enter Product Title"
-                 value={ProductName}
-                 onChange={(e)=>setProductName(e.target.value)}
+                  value={ProductName}
+                  onChange={(e) => setProductName(e.target.value)}
                 />
               </div>
               <div className="form_group">
@@ -463,7 +546,7 @@ setProductImage(undefined)
                   type="text"
                   placeholder="Paste Product URL"
                   value={ProductURL}
-                  onChange={(e)=>setProductURL(e.target.value)}
+                  onChange={(e) => setProductURL(e.target.value)}
                 />
               </div>
               <div className="form_group">
@@ -478,12 +561,14 @@ setProductImage(undefined)
                 />
               </div>
               <div className="form_group">
-                <label htmlFor="ProductPrice">Price<sup>*</sup></label>
+                <label htmlFor="ProductPrice">
+                  Price<sup>*</sup>
+                </label>
                 <input
                   type="text"
                   placeholder="Enter Product Price"
                   value={ProductPrice}
-                  onChange={(e)=>setProductPrice(e.target.value)}
+                  onChange={(e) => setProductPrice(e.target.value)}
                 />
               </div>
               <div className="form_group productDescription">
@@ -491,25 +576,28 @@ setProductImage(undefined)
                   Description <sup>*</sup>
                 </label>
 
-        
                 <Editor
-              
-                  value={ProductDescription}
+                  {...formik.getFieldProps(
+                    "ProductDescription",
+                    ProductDescription
+                  )}
+                  value={formik.values.ProductDescription}
                   onTextChange={(e) => setProductDescription(e.htmlValue)}
                   id="ProductDescription"
                   name="ProductDescription"
                   placeholder="Enter Short Description"
                   style={{ height: "130px" }}
-               
                 />
               </div>
 
               <div className="form_group productImage">
-                <label htmlFor="ProductImage">Product Image<sup>*</sup></label>
+                <label htmlFor="ProductImage">
+                  Product Image<sup>*</sup>
+                </label>
                 <label htmlFor="ProductImage">
                   <img
                     src={
-                      ProductImage != undefined
+                      ProductImage != 'null'
                         ? ProductImage
                         : "https://img.freepik.com/free-vector/autumn-background_23-2149054409.jpg?t=st=1715971926~exp=1715975526~hmac=064e47d99740a4e25fb7345c45d5bc744da1c1ad7f5f1e14668eaae2cc601381&w=900"
                     }
@@ -517,7 +605,9 @@ setProductImage(undefined)
                   />
                   <i className="bx bxs-edit-location"></i>
                 </label>
-                <p><strong>Note :</strong> Max file size limit 2MB</p>
+                <p>
+                  <strong>Note :</strong> Max file size limit 2MB
+                </p>
                 <small>Allowed file types: png, jpg, jpeg,.gif.</small>
                 <input
                   type="file"
@@ -530,15 +620,14 @@ setProductImage(undefined)
                 <div className="save">
                   <button type="submit">Update</button>
                 </div>
-            
               </div>
             </form>
           </div>
         </div>
 
-            {/* //Product  Detail Box */}
+        {/* //Product  Detail Box */}
 
-            <div
+        <div
           className="view_new_service_container"
           id={ProductViewToggle ? "shadow_background" : ""}
         >
@@ -574,9 +663,7 @@ setProductImage(undefined)
                 <div className="service_title">Product Price</div>
                 <div className="name">
                   <p>
-                    {ProductPrice != undefined
-                      ?`₹ ${ProductPrice}`
-                      : "₹ 0"}
+                    {ProductPrice != undefined ? `₹ ${ProductPrice}` : "₹ 0"}
                   </p>
                 </div>
               </div>
@@ -592,7 +679,11 @@ setProductImage(undefined)
                 <div className="service_title">Product Image</div>
                 <div className="service_image">
                   <img
-                    src={ProductImage != null ? ProductImage :'https://img.freepik.com/free-photo/texture-cold-gray-background-copy-space-generative-ai_169016-29494.jpg?t=st=1719067458~exp=1719071058~hmac=cd83aaa24c4e3db687a13e63bc286a6ae631fa31fc3c17a55273372b6a109a0f&w=1060'}
+                    src={
+                      ProductImage != 'null'
+                        ? ProductImage
+                        : "https://img.freepik.com/free-vector/business-people-working-modern-eco-friendly-office-with-plants-flowers-biophilic-design-room-eco-friendly-workspace-green-office-concept-bright-vibrant-violet-isolated-illustration_335657-578.jpg?t=st=1719430048~exp=1719433648~hmac=20cfde827bdafe402c3db0c259f557d189ac027e0c9f731c0740eaa55c811581&w=900"
+                    }
                     alt="service"
                   />
                 </div>

@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  getAllVCardURLData,
   getVCardURLData,
   postVCardURLData,
   readSpecificUserAllData,
@@ -15,7 +16,7 @@ let router = express.Router();
 
 //Get all basicDetails:
 
-
+router.get("/", verifyToken, getAllVCardURLData);
 router.get("/:userName", verifyToken, getVCardURLData);
 router.post("/",verifyToken, postVCardURLData);
 //Read Specific user all Data:

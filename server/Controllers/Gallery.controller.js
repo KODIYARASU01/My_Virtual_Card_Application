@@ -83,9 +83,10 @@ export const PostGalleryData = async (req, res) => {
             user: req.user.userName,
             URL_Alies:req.body.URL_Alies,
             GalleryURL:req.body.GalleryURL,
+            GalleryName:req.body.GalleryName,
             GalleryImage:req.body.GalleryImage
             // GalleryImage: {
-            //   data: fs.readFileSync("uploads/" + req.file.filename),
+            //   data: fs.readFileSync( 'public/' + req.file.filename),
             //   contentType: req.file.mimetype,
             // },
           });
@@ -120,6 +121,11 @@ export const PostGalleryData = async (req, res) => {
           URL_Alies:req.body.URL_Alies,
           GalleryURL:req.body.GalleryURL,
           GalleryImage:req.body.GalleryImage
+          // GalleryName:req.body.GalleryName,
+          // GalleryImage: {
+          //   data: fs.readFileSync("public/" + req.file.filename),
+          //   contentType: req.file.mimetype,
+          // },
           // GalleryImage: {
           //   data: fs.readFileSync("uploads/" + req.file.filename),
           //   contentType: req.file.mimetype,
@@ -155,7 +161,12 @@ export const PostGalleryData = async (req, res) => {
         user: req.user.userName,
         URL_Alies:req.body.URL_Alies,
         GalleryURL:req.body.GalleryURL,
-        GalleryImage:req.body.GalleryImage
+        GalleryImage:req.body.GalleryImage,
+        // GalleryName:req.body.GalleryName,
+        // GalleryImage: {
+        //   data: fs.readFileSync("public/" + req.file.filename),
+        //   contentType: req.file.mimetype,
+        // },
         // GalleryImage: {
         //   data: fs.readFileSync("uploads/" + req.file.filename),
         //   contentType: req.file.mimetype,

@@ -365,7 +365,7 @@ let EnterPrice_Plans = [
   },
 ];
 const Plan = () => {
-  let {URL_Alies}=useParams();
+  let {userName,URL_Alies}=useParams();
   let {
     currentPlan,
     setCurrentPlan,
@@ -426,7 +426,7 @@ const Plan = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:3001/currentplan/${URL_Alies}`,
+        `http://localhost:3001/currentplan/specificAll/${userName}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -435,7 +435,7 @@ const Plan = () => {
         }
       )
       .then((res) => {
-
+console.log(res.data.data[0])
         if(res.data.data[0].currentPlan == null){
             setCurrentPlan(null)
         }
@@ -472,6 +472,7 @@ const Plan = () => {
                   <div className="plan_title">
                     <h6>{data.PlanName} Plan Access</h6>
                   </div>
+                  
                   <div className="plan_addon_service">
                     <>
                       {data.Access.map((data, index) => {

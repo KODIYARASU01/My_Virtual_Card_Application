@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import "./menuStyles/VCard_URL_Form.scss";
 import { Editor } from "primereact/editor";
 import "primereact/resources/themes/saga-blue/theme.css"; // Choose a theme
@@ -17,13 +17,12 @@ import * as Yup from "yup";
 import { Toaster, toast } from "react-hot-toast";
 const VCard_URL_Form = () => {
   let navigate = useNavigate();
-  let {
-    URL_Alies,
-    setURL_Alies,
-    FormSubmitLoader,
-    setFormSubmitLoader,
-    userName,
-  } = useContext(SuperAdmin_context);
+  let { FormSubmitLoader, setFormSubmitLoader, userName } =
+    useContext(SuperAdmin_context);
+
+  let [All_URL_Alies, setAll_URL_Alies] = useState([]);
+  let [URL_Alies, setURL_Alies] = useState("");
+  let [URL_error_toggle, setURL_error_toggle] = useState();
   let [BasicDetailLoader, setBasicDetailLoader] = useState(false);
   const [tooltip, setTooltip] = useState(false);
   const [VCardName, setVCardName] = useState();
@@ -47,10 +46,23 @@ const VCard_URL_Form = () => {
 
     setBanner(base64);
   };
-
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/vcard_URL", {
+        headers: {
+          Authorization: `Bearer ${localStorageDatas.token}`,
+        },
+      })
+      .then((res) => {
+        setAll_URL_Alies(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   let formik = useFormik({
     initialValues: {
-      URL_Alies: "demo",
+      URL_Alies: URL_Alies,
       VCardName: "",
       Occupation: "",
       Description: "",
@@ -74,13 +86,15 @@ const VCard_URL_Form = () => {
           },
         })
         .then((res) => {
+          console.log(res.data.data.URL_Alies)
           toast.success(res.data.message);
           setURL_Alies(res.data.data.URL_Alies);
+          localStorage.setItem('URL_Alies',res.data.data.URL_Alies)
           setTimeout(() => {
-            navigate(
-              `/${userName}/uadmin/vcard_form_edit/${res.data.data.URL_Alies}`
-            );
-            //  window.location.pathname = `/${userName}/uadmin/vcard_form/${URL_Alies}`
+            // navigate(
+            //   `/${userName}/uadmin/vcard_form_edit/${res.data.data.URL_Alies}`
+            // );
+             window.location.pathname = `/${userName}/uadmin/vcard_form_edit/${res.data.data.URL_Alies}`
           }, 1000);
           setFormSubmitLoader(false);
         })
@@ -91,15 +105,55 @@ const VCard_URL_Form = () => {
         });
     },
   });
+
+
+  async function handleURLErrorHandling() {
+    {All_URL_Alies.length == 0 || All_URL_Alies.length > 0 ? 
+      All_URL_Alies.map((data, index) => {
+        if (data.URL_Alies === formik.values.URL_Alies) {
+          return setURL_error_toggle('failure');
+        } 
+        else if(formik.values.URL_Alies.length > 4 ){
+          return setURL_error_toggle('success');
+        }
+        else if(formik.values.URL_Alies.length <=4 && formik.values.URL_Alies.length > 0 ){
+          return setURL_error_toggle('required');
+        }
+        else if(formik.values.URL_Alies.length <=0 ){
+          return setURL_error_toggle('empty');
+        }
+        else{
+      return ;
+        }
+      }) : ''
+    }
+  }
+
+  useEffect(() => {
+    handleURLErrorHandling();
+  }, [formik.values.URL_Alies]);
+
+
   return (
     <>
       <div className="new_Vcard_url_container">
-        <div className="new_vcardurl_form_title">
-          <h5>Create Your New VCard</h5>
-        </div>
-          <div className="close_new_vcardurl_page">
-              <button type="button" onClick={()=>window.location.pathname =`/${userName}/uadmin/user_vcard`}>Back<i className='bx bx-exit'></i></button>
+        <div className="new_vcardurl_row_one">
+          <div className="title">
+            <h5>Create Your New VCard</h5>
           </div>
+
+          <div className="close_new_vcardurl_page">
+            <button
+              type="button"
+              onClick={() =>
+                (window.location.pathname = `/${userName}/uadmin/user_vcard`)
+              }
+            >
+              Back<i className="bx bx-exit"></i>
+            </button>
+          </div>
+        </div>
+
         <div className="new_vcardURL_container_box">
           {/* Tooltip */}
           {tooltip ? (
@@ -111,7 +165,8 @@ const VCard_URL_Form = () => {
                 </small>
 
                 <p>
-                  <strong>Ex :</strong>&nbsp;https://myvirtualcard.in/{URL_Alies}
+                  <strong>Ex :</strong>&nbsp;https://myvirtualcard.in/
+                  {URL_Alies}
                 </p>
               </div>
             </div>
@@ -126,18 +181,48 @@ const VCard_URL_Form = () => {
             <div className="form_group">
               <label htmlFor="URL_Alies">
                 VCard URL <sup>*</sup>
-                <div className="note" onMouseEnter={()=>setTooltip(true)}onMouseLeave={()=>setTooltip(false)}>
+                <div
+                  className="note"
+                  onMouseEnter={() => setTooltip(true)}
+                  onMouseLeave={() => setTooltip(false)}
+                >
                   <i className="bx bx-question-mark "></i>
                 </div>
               </label>
               <input
                 type="text"
                 placeholder="Enter VCard URL"
+                name="URL_Alies"
+                id="URL_Alies"
                 // value={VCardName}
                 // onChange={() => setVCardName(e.target.value)}
-                {...formik.getFieldProps("URL_Alies")}
+                onChange={formik.handleChange}
+                value={formik.values.URL_Alies}
+
+                // {...formik.getFieldProps("URL_Alies")}
               />
+              <div className="url_error_handle">
+                {URL_error_toggle == 'success' && (
+                  <div className="success">
+                    <i class="bx bxs-check-circle"></i>
+                    <small>Site name is available</small>
+                  </div>
+                ) }
+                {URL_error_toggle == 'failure' && (
+                  <div className="failure">
+                  <i className="uil uil-times-circle"></i>
+                    <small>Site name is not available!</small>
+                  </div>
+                )} 
+                    {URL_error_toggle == 'required' && (
+                  <div className="failure">
+                  <i className="uil uil-times-circle"></i>
+                    <small>Site name must be 5 char!</small>
+                  </div>
+                )} 
+              </div>
             </div>
+
             <div className="form_group">
               <label htmlFor="VCardName">
                 VCard Name <sup>*</sup>

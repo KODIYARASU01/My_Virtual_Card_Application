@@ -189,6 +189,8 @@ const UserAccountSetting = () => {
     axios
       .get(`http://localhost:3001/auth/register/${UserData.id}`)
       .then((responce) => {
+
+        console.log(responce)
         setProfile(responce.data.data.profile);
         setFirstName(responce.data.data.firstName);
         setLastName(responce.data.data.lastName);
@@ -219,7 +221,7 @@ const UserAccountSetting = () => {
           draggable: true,
           progress: undefined,
           theme: "light",
-          transition: Flip,
+          // transition: Flip,
         });
       });
 

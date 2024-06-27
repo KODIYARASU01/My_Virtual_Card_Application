@@ -6,43 +6,50 @@ import "primereact/resources/themes/saga-blue/theme.css"; // Choose a theme
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_context";
 const Banner = () => {
+  let { URL_Alies } = useParams();
+
   let { FormSubmitLoader, setFormSubmitLoader, userName } =
     useContext(SuperAdmin_context);
 
   let [PopupBannerId, setPopUpBannerId] = useState();
-
+let [BannerLength,setBannerLength]=useState();
   let [BannerTitle, setBannerTitle] = useState();
   let [BannerURL, setBannerURL] = useState();
   let [BannerDescription, setBannerDescription] = useState();
   let [BannerButtonName, setBannerButtonName] = useState();
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
+  const [key, setKey] = useState(0);
 
+  const reloadComponent = () => {
+    setKey((prevKey) => prevKey + 1); // Change the key to trigger a remount
+  };
   const stripHtmlTags = (html) => {
     const div = document.createElement("div");
     div.innerHTML = html;
     return div.textContent || div.innerText || "";
   };
+
   async function fetchCurrentPopUpBanner() {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(
-          `http://localhost:3001/popupBannerDetail/specificAll/${localStorageDatas.userName}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorageDatas.token}`,
-            },
-          }
-        )
+        .get(`http://localhost:3001/popupBannerDetail/${URL_Alies}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        })
         .then((res) => {
+          setBannerLength(res.data.data.length);
           if (res.data.data.length == 0) {
             toast.error("No Popup Banner added!");
             setFormSubmitLoader(false);
           } else {
+            
             setBannerTitle(res.data.data[0].BannerTitle);
             setBannerURL(res.data.data[0].BannerURL);
             setBannerDescription(res.data.data[0].BannerDescription);
@@ -58,16 +65,50 @@ const Banner = () => {
     } catch (error) {
       toast.error(error.message);
     }
-  }
+  };
+  
   useEffect(() => {
     fetchCurrentPopUpBanner();
-  }, []);
+  }, [key]);
+
+  async function handleBannerSubmit(e) {
+    e.preventDefault();
+    setFormSubmitLoader(true);
+    let data = {
+      URL_Alies,
+      BannerTitle,
+      BannerURL,
+      BannerDescription,
+      BannerButtonName,
+    };
+    try {
+      await axios
+        .post(`http://localhost:3001/popupBannerDetail/${URL_Alies}`, data, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        })
+        .then((res) => {
+          toast.success(res.data.message);
+          setFormSubmitLoader(false);
+          reloadComponent();
+        })
+        .catch((error) => {
+          setFormSubmitLoader(false);
+          toast.error(error.response.data.message);
+        });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   async function handleBannerUpdate(e) {
     e.preventDefault();
     setFormSubmitLoader(true);
 
     let data = {
+      URL_Alies,
       BannerTitle,
       BannerURL,
       BannerDescription,
@@ -76,7 +117,7 @@ const Banner = () => {
     try {
       await axios
         .put(
-          `http://localhost:3001/popupBannerDetail/update/${PopupBannerId}`,
+          `http://localhost:3001/popupBannerDetail/update/${URL_Alies}`,
           data,
           {
             headers: {
@@ -96,7 +137,8 @@ const Banner = () => {
     } catch (error) {
       toast.error(error.message);
     }
-  }
+  };
+  
   return (
     <>
       <div className="banner_container">
@@ -111,7 +153,7 @@ const Banner = () => {
           </div>
         </div>
         <div className="form_container_box">
-          <form action="" onSubmit={handleBannerUpdate}>
+          <form action="" >
             <div className="form_group">
               <label htmlFor="BannerTitle">
                 Banner Title<sup>*</sup>
@@ -125,6 +167,7 @@ const Banner = () => {
                 }}
               />
             </div>
+
             <div className="form_group">
               <label htmlFor="BannerURL">
                 URL<sup></sup>
@@ -138,6 +181,7 @@ const Banner = () => {
                 }}
               />
             </div>
+
             <div className="form_group">
               <label htmlFor="BannerDescription">
                 Description<sup>*</sup>
@@ -152,6 +196,7 @@ const Banner = () => {
               />
               {/* <textarea name="banner_description" id="banner_description" cols="50" rows="4" placeholder="Enter Short Description" ></textarea> */}
             </div>
+
             <div className="form_group">
               <label htmlFor="BannerButtonName">
                 Banner Button<sup>*</sup>
@@ -167,8 +212,9 @@ const Banner = () => {
             </div>
 
             <div className="form_submit_actions">
-              <button className="save">Update</button>
+              {BannerLength == 1 ?     <button className="save" onClick={handleBannerUpdate}>Update</button> : <button className="save" onClick={handleBannerSubmit}>Save</button> }
             </div>
+
           </form>
         </div>
       </div>

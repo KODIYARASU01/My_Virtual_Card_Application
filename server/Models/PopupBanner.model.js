@@ -6,6 +6,11 @@ let  PopupBannerSchema=new mongoose.Schema({
       type: mongoose.Schema.Types.String,
         required: true,
       },
+      URL_Alies:{
+        type:String,
+        required:true,
+        unique:true
+      },
       BannerTitle: {
         type: String,
         required:true

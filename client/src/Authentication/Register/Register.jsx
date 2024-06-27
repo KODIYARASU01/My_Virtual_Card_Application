@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import "./Register.scss";
 import image from "../../assets/6.png";
 import site_logo from "../../assets/Company_Logo/logo1.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,useParams } from "react-router-dom";
 import SuperAdmin_context from "../../SuperAdmin_Context/SuperAdmin_context";
 import axios, { all } from "axios";
 import { convertToBase64 } from "../../Helper/convert";
@@ -11,6 +11,7 @@ import { Toaster, toast } from "react-hot-toast";
 import { RegisterValidate } from "../../Helper/RegisterValidate";
 
 const Register = () => {
+  
   let [registerLoader, setRegisterLoader] = useState(false);
   let navigate = useNavigate();
 

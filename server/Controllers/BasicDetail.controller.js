@@ -168,7 +168,6 @@ export const deleteSpecificUserAllData = async (req, res) => {
     let deleteSpecificData = await BasicDetails.deleteMany({
       URL_Alies: req.params.URL_Alies,
     });
-
     if (!deleteSpecificData) {
       res.status(400).json({ message: "Data Not Found!" });
     } else {
@@ -180,6 +179,7 @@ export const deleteSpecificUserAllData = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 //Update Specific document withId
 

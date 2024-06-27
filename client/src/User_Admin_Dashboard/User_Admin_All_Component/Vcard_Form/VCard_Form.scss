@@ -17,25 +17,33 @@
         font-weight: bold;
       }
     }
-    .action {
-      button {
-        padding: 8px 1rem;
-        outline: none;
+ 
+    // .action {
+    //   button{
+    //     padding: 6px 1rem !important;
+    //     background-color: royalblue !important;
+    //     font-size: 0.9rem;
+    //     font-weight: 500;
+    //     color: #fff !important;
+    //     border-radius: 5px !important;
+    //     display: flex;
+    //     align-items:center;
+    //     justify-content: center;
+    //     gap: 10px;
+    //     transition: all 0.3s ease-in;
+    //     i{
+    //       display: block !important;
+    //       font-size: 1rem !important;
+    //     }
 
-        border: 1px solid #6571ff;
-        color: #6571ff;
-        outline: none;
-        background: transparent;
-        border-radius: 10px;
-        font-weight: 400;
-        transition: all 0.3s ease;
-        &:hover {
-          background-color: #6571ff;
-          color: #ffffff;
-          border: transparent;
-        }
-      }
-    }
+    //     &:hover{
+    //       background-color: rgb(44, 93, 240);
+    //       box-shadow: 0px 4px 5px rgba(0,0,0,0.4);
+    //       scale: 1.05;
+    //       transition: all 0.3s ease-in;
+    //     }
+    //   }
+    // }
   }
   .vcard_form_box {
     width: 100%;

@@ -73,6 +73,7 @@ let[CurrentPlan,setCurrentPlan]=useState()
           toast.success("Your VCard Sucessfully Deleted!");
           setFormSubmitLoader(false);
           setVcardDeleteToggle(false);
+          localStorage.removeItem('URL_Alies')
         })
         .catch((error) => {
           toast.error("Failed to Delete!");
@@ -112,6 +113,9 @@ let[CurrentPlan,setCurrentPlan]=useState()
         )}
 
         <div className="row_1">
+        <div className="title">
+            <h5 className="fw-medium">All Your VCards</h5>
+          </div>
           <div className="actions">
             <Link>
               <button
@@ -149,13 +153,11 @@ let[CurrentPlan,setCurrentPlan]=useState()
           </div>
         </div>
         <div className="row_2">
-          <div className="title">
-            <h5 className="fw-medium">All Your VCards</h5>
-          </div>
+      
 
           <div className="appoinment_container table-responsive  ">
             <div className="container">
-              <table className="table table-hover rounded-3" id="example">
+              <table className="table table-borderless table-hover w-100 rounded-3" id="example">
                 <thead>
                   <tr>
                     <th
@@ -229,7 +231,7 @@ let[CurrentPlan,setCurrentPlan]=useState()
                             </CopyToClipboard>
                           </td>
                           <td className="fw-light plan">
-                            <small>{CurrentPlan}</small>
+                            <small>{CurrentPlan != null ? CurrentPlan : 'No Plan'}</small>
                           </td>
 
                           <td className="fw-light plan">

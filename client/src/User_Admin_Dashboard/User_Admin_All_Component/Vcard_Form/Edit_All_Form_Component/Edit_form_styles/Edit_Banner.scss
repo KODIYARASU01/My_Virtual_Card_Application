@@ -74,7 +74,15 @@
                 height: 70px;
               }
             }
-    
+            .p-editor-toolbar{
+              border: 1px solid #b9b9b9;
+            }
+            .ql-editor{
+              border: 1px solid #b9b9b9;
+              // border-left: 1px solid #b9b9b9;
+              // border-right: 1px solid #b9b9b9;
+              // border-bottom: 1px solid #b9b9b9;
+            }
             input[type="text"],
             input[type="email"],
             input[type="tel"] {

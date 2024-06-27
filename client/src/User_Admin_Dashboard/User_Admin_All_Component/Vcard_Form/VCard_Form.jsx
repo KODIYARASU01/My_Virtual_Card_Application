@@ -57,7 +57,8 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
           
               }
             >
-              Back
+              Back 
+              <i className='bx bx-exit' ></i>
             </button>
           </div>
         </div>

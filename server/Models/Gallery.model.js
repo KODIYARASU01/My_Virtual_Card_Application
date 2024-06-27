@@ -16,6 +16,13 @@ let GallerySchema=new mongoose.Schema({
         // contentType:String,
         type:String,
         required:true
+   
+      },
+      GalleryName:{
+        // data:Buffer,
+        // contentType:String,
+        type:String,
+
     
       }
     ,

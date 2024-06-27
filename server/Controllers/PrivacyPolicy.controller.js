@@ -26,7 +26,7 @@ export const PostPrivacyPolicyData = async (req, res) => {
       ) {
         //check images
         let checkPrivacyPolicyLength = await PrivacyPolicyModel.find({
-          user: req.user.userName,
+          URL_Alies: req.params.URL_Alies,
         });
 
         if (!checkPrivacyPolicyLength) {
@@ -37,6 +37,7 @@ export const PostPrivacyPolicyData = async (req, res) => {
             // Create a new image instance and save to MongoDB
             const newPolicy= new PrivacyPolicyModel({
               user: req.user.userName,
+              URL_Alies: req.params.URL_Alies,
               PrivacyPolicy: req.body.PrivacyPolicy
             });
 
@@ -73,7 +74,7 @@ export const PostPrivacyPolicyData = async (req, res) => {
 
 export const GetPrivacyPolicyData = async (req, res) => {
   try {
-    let datas = await PrivacyPolicyModel.find({});
+    let datas = await PrivacyPolicyModel.find({  URL_Alies: req.params.URL_Alies});
     if (!datas) {
       res.status(400).json({ message: "Data not found!" });
     } else {
@@ -131,8 +132,11 @@ export const getSpecificIdData = async (req, res) => {
 export const updateSpecificUserData = async (req, res) => {
   try {
     let { id } = req.params;
-    let data = req.body;
-    let updateSpecificData = await PrivacyPolicyModel.findByIdAndUpdate(id, data);
+    let data = {
+      PrivacyPolicy:req.body.PrivacyPolicy,
+      URL_Alies:req.params.URL_Alies
+    }
+    let updateSpecificData = await PrivacyPolicyModel.findOneAndUpdate( { URL_Alies: req.params.URL_Alies }, data);
 
     if (!updateSpecificData) {
       res.status(400).json({ message: "Data Not Found!" });
@@ -149,8 +153,8 @@ export const updateSpecificUserData = async (req, res) => {
 //Delete Specific User Bssic detail All data deleted By using user Id:
 export const deleteSpecificUserAllData = async (req, res) => {
   try {
-    let deleteSpecificData = await PrivacyPolicyModel.deleteMany({
-      user: req.user.userName,
+    let deleteSpecificData = await PrivacyPolicyModel.findByIdAndDelete({
+      URL_Alies: req.params.URL_Alies,
     });
 
     if (!deleteSpecificData) {
@@ -185,35 +189,3 @@ export const deleteSpecificUserData = async (req, res) => {
   }
 };
 
-//.....................
-//Post basic detail data to database:
-
-// export const PostSocialMediaData = async (req, res) => {
-//   try {
-//     if (!req.body.WhatsUp) {
-//       return res
-//         .status(401)
-//         .json({ message: "Mandatory:WhatsUp" });
-//     } else {
-//       let data = {
-//         user: req.user.userName,
-//         Website:req.body.Website,
-//         Facebook: req.body.Facebook,
-//         LinkedIn: req.body.LinkedIn,
-//         WhatsUp: req.body.WhatsUp,
-//         Instagram: req.body.Instagram,
-//         Twiter: req.body.Twiter,
-//         YouTube:req.body.YouTube,
-//         Github:req.body.Github
-//       };
-// console.log(req.user)
-//       const result = await SocialMediaModel.create(data);
-
-//       return res
-//         .status(201)
-//         .json({ message: "Data saved!", data:result });
-//     }
-//   } catch (error) {
-//     res.status(400).json({error:error.message});
-//   }
-// };

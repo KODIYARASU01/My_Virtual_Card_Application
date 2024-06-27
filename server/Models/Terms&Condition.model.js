@@ -5,6 +5,10 @@ let Terms_ConditionSchema=new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true,  
       },
+      URL_Alies:{
+        type:String,
+        required:true
+      },
     Terms_Conditions:{
         type:String,
         required:true

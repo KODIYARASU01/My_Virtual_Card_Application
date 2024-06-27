@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "./Login.scss";
 import image from "../../assets/5.png";
 import site_logo from "../../assets/Company_Logo/logo1.png";
@@ -10,7 +10,7 @@ import SuperAdmin_context from "../../SuperAdmin_Context/SuperAdmin_context";
 import ReCAPTCHA from "react-google-recaptcha";
 const Login = () => {
   let [loginLoader, setLoginLoader] = useState(false);
-  let[capchaValue,setCapchaValue]=useState(null);
+  let [capchaValue, setCapchaValue] = useState(null);
   let navigate = useNavigate();
   let {
     userName,
@@ -41,12 +41,22 @@ const Login = () => {
         : password.setAttribute("type", "password");
     }
   };
-
+  let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
+  const handleSpeak = (userData) => {
+    if ("speechSynthesis" in window) {
+      const utterance =  new SpeechSynthesisUtterance(
+        `Welcome ${userData.firstName} now u proceed to develop your brand..`
+      );
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert("Sorry, your browser does not support text to speech!");
+    }
+  };
   let formik = useFormik({
     initialValues: {
       email: "",
       password: "",
-      capchaValue:null
+      capchaValue: null,
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -58,25 +68,28 @@ const Login = () => {
         .post("http://localhost:3001/auth/login", values)
         .then((res) => {
           toast.success(res.data.message);
-          setLoginLoader(false)
+          setLoginLoader(false);
           const datas = JSON.stringify({
-            userName:res?.data?.userName,
+            userName: res?.data?.userName,
             token: res?.data?.token,
             id: res?.data?.id,
             firstName: res?.data?.name,
-
           });
           localStorage.setItem("datas", datas);
 
           let userData = JSON.parse(localStorage.getItem("datas"));
 
+    
+     
+   
           setTimeout(() => {
+            handleSpeak(userData);
             navigate(`/${userData.userName}/uadmin/dashboard`);
           }, 2000);
         })
         .catch((error) => {
           toast.error(error.response.data.message);
-          setLoginLoader(false)
+          setLoginLoader(false);
         });
     },
   });
@@ -207,18 +220,18 @@ const Login = () => {
                     )}
                   </div>
                 </div>
-             
+
                 <div className="forgot_password">
-                  <Link to='/forgot_password'>
-                     <small>Forgot Password ?</small>
+                  <Link to="/forgot_password">
+                    <small>Forgot Password ?</small>
                   </Link>
                 </div>
-<div className="capcha">
-<ReCAPTCHA
-    sitekey="6LdlmuYpAAAAAOOHZqQQExlLSFlXG5rQsXMF48wI"
-    onChange={onChange}
-  />
-</div>
+                <div className="capcha">
+                  <ReCAPTCHA
+                    sitekey="6LdlmuYpAAAAAOOHZqQQExlLSFlXG5rQsXMF48wI"
+                    onChange={onChange}
+                  />
+                </div>
                 <div className="form_submit">
                   <button type="submit">
                     {loginLoader ? (

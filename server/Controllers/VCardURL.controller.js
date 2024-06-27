@@ -2,7 +2,22 @@ import Vcard_URL from "../Models/Vcard_URL.model.js";
 import currentPlan from "../Models/Plan.model.js";
 
 //DiskStorage:
+//All user URL Data :
+export const getAllVCardURLData = async (req, res) => {
+  try {
+    let getDatas = await Vcard_URL.find({});
+    return res
+      .status(201)
+      .json({
+        message: "Data Fetched sucessfully!",
+        length: getDatas.length,
+        data: getDatas,
+      });
 
+  } catch (error) {
+    return res.status(401).json({ message: error.message });
+  }
+};
 //Get Async allback function..All user basicdata fetching :
 export const getVCardURLData = async (req, res) => {
   try {
@@ -35,6 +50,9 @@ export const postVCardURLData = async (req, res) => {
     URL_Alies: req.body.URL_Alies,
   });
 
+  if(req.body.URL_Alies.length < 5){
+    return res.status(400).json({ message: "URL_Alies Minimum 5 character Required!" });
+  }
   if (checkVCardURLDetail) {
     return res.status(400).json({ message: "This VCard URL already alies!" });
   } else {

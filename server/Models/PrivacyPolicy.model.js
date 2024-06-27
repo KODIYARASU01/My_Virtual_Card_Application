@@ -5,6 +5,10 @@ let PrivacyPolicySchema=new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true,  
       },
+      URL_Alies:{
+        type:String,
+        required:true
+      },
     PrivacyPolicy:{
         type:String,
         required:true

@@ -39,13 +39,13 @@ let PORT = process.env.PORT || 3000;
 //Cors Policy connect frontend and backend with same port:
 app.use(cors());
 //This will help you to send data to server in json formate:
-app.use(express.json({limit:'30mb'}));
+app.use(express.json({limit:'60mb'}));
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({policy:'cross-origin'}))
 //This will help you to allow file upload size limit
-app.use(bodyParser.json({ limit: "30mb", extended: true }));
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-app.use('/uploads',express.static(path.join(__dirname,'uploads')));
+app.use(bodyParser.json({ limit: "60mb", extended: true }));
+app.use(bodyParser.urlencoded({ limit: "60mb", extended: true }));
+app.use(express.static(path.join(__dirname,'public')));
 
 
 

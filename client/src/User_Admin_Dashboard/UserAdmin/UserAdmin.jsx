@@ -28,172 +28,14 @@ const UserAdmin = () => {
     setUserData,
     userName,
     FormSubmitLoader,
-    setFormSubmitLoader,
+
     SideNavActions,
-    setSideNavActions,
+
     profileOpen,
     setProfileOpen,
-    SuperAdminLoader,
-    setSuperAdmin_Loader,
-    loader4,
-    EditUser,
-    setEditUser,
-    setLoader4,
-    AddUser,
-    setAddUser,
-    setServiceId,
-    user,
+
     setUser,
-    UserDetails,
-    setUserDetails,
-    profileView,
-    setProfileView,
-    show,
-    setShow,
-    profile,
-    setProfile,
-    firstName,
-    setFirstName,
-    lastName,
-    setLastName,
-    location,
-    setLocation,
-    mobileNumber,
-    setMobileNumber,
-    email,
-    setEmail,
-    password,
-    setPassword,
-    loader,
-    setLoader,
-    Data,
-    setData,
-    BasicID,
-    setBasicID,
-    ProductId,
-    setProdictId,
-    QRCodeId,
-    setQRCodeId,
-    GallId,
-    setGallId,
-    TestimonialID,
-    setTestimonialID,
-    slideClose,
-    setSlideShow,
-    basicForm,
-    setBasicForm,
-    contactForm,
-    setContactForm,
-    serviceForm,
-    setServiceForm,
-    productForm,
-    setProductForm,
-    galleryForm,
-    setGalleryForm,
-    socialMediaForm,
-    setSocialMediaForm,
-    testimonialForm,
-    setTestimonialForm,
-    QRCodeForm,
-    setQRCodeForm,
-    banner,
-    setBanner,
-    userDetail,
-    setUserDetail,
-    logo,
-    setLogo,
-    fullName,
-    setFullName,
-    profession,
-    setProfession,
-    summary,
-    setSummary,
-    Email1,
-    setEmail1,
-    AlternateEmail,
-    setAlternateEmail,
-    MobileNumber1,
-    setMobileNumber1,
-    AlternateMobileNumber,
-    setAlternateMobileNumber,
-    DOB,
-    setDOB,
-    Address,
-    setAddress,
-    serviceImage,
-    setServiceImage,
-    serviceTitle,
-    setServiceTitle,
-    serviceSummary,
-    setServiceSummary,
-    productImage,
-    setProductImage,
-    productTitle,
-    setProductTitle,
-    productReleaseDate,
-    setProductReleaseDate,
-    productSummary,
-    setProductSummary,
-    galleryImage,
-    setGalleryImage,
-    videoURL,
-    setVideoURL,
-    Facebook,
-    setFacebook,
-    LinkedIn,
-    setLinkedIn,
-    WhatsUp,
-    setWhatsUp,
-    Instagram,
-    setInstagram,
-    Twiter,
-    setTwiter,
-    clientImage,
-    setClientImage,
-    clientName,
-    setClientName,
-    clientFeedbackDate,
-    setClientFeedbackDate,
-    clientFeedback,
-    setClientFeedback,
-    QRCodeImage,
-    setQRCodeImage,
-    ID,
-    setID,
-    loader2,
-    setLoader2,
-    BasicData,
-    setBasicData,
-    ContactData,
-    setContactData,
-    ServiceData,
-    setServiceData,
-    ProductData,
-    setProductData,
-    GalleryData,
-    setGalleryData,
-    SocialMediaData,
-    setSocialMediaData,
-    TestimonialData,
-    setTestimonialData,
-    QRCodeData,
-    setQRCodeData,
-    BasicEdit,
-    setBasicEdit,
-    ContactEdit,
-    setContactEdit,
-    ServiceEdit,
-    setServiceEdit,
-    ProductEdit,
-    setProductEdit,
-    GalleryEdit,
-    setGalleryEdit,
-    SocialMediaEdit,
-    setSocialMediaEdit,
-    TestimonialEdit,
-    setTestimonialEdit,
-    QRCodeEdit,
-    setQRCodeEdit,
+
   } = useContext(SuperAdmin_context);
 
   let [confirmPassToggle, setConfirmPassToggle] = useState(false);
@@ -227,10 +69,13 @@ const UserAdmin = () => {
   let userDetails = JSON.parse(localStorage.getItem("datas"));
   let localStorageURL = localStorage.getItem("URL_Alies");
 
+
   useEffect(() => {
+
     axios
       .get(`http://localhost:3001/auth/register/${userDetails.id}`)
       .then((res) => {
+        console.log(res)
         setUserData(res.data.data);
       })
       .catch((error) => {
@@ -238,7 +83,7 @@ const UserAdmin = () => {
       });
 
       
-  }, [navigate]);
+  }, []);
 
   return (
     <>
@@ -289,11 +134,11 @@ const UserAdmin = () => {
               ""
             )}
 
-            {window.location.pathname === `/${userName}/uadmin/vcard_form/${URL_Alies}` ? (
+            {/* {window.location.pathname === `/${userName}/uadmin/vcard_form/${URL_Alies}` ? (
               <VCard_Form />
             ) : (
               ""
-            )}
+            )} */}
           
             {window.location.pathname ==
             `/${userName}/uadmin/vcard_form_edit/${URL_Alies}` || window.location.pathname ==
@@ -308,50 +153,7 @@ const UserAdmin = () => {
             ) : (
               ""
             )}
-            {/* {window.location.pathname === `/server${userName}/sadmin/users/newUser` ? (
-              <NewUser />
-            ) : (
-              ""
-            )}
-            {window.location.pathname === `/server${userName}/sadmin/users/:id` ? (
-              <SingleUser />
-            ) : (
-              ""
-            )}
-            {window.location.pathname === `/server${userName}/sadmin/vcards` ? <VCards /> : ""}
-            {window.location.pathname === `/server${userName}/sadmin/sell_NFC_cards` ? (
-              <NFC />
-            ) : (
-              ""
-            )}
-            {window.location.pathname === `/server${userName}/sadmin/cash_payments` ? (
-              <CashPayment />
-            ) : (
-              ""
-            )}
-            {window.location.pathname === `/server${userName}/sadmin/vcard_templates` ? (
-              <VCardTemplates />
-            ) : (
-              ""
-            )}
-            {window.location.pathname === `/server${userName}/sadmin/subscribed_plans` ? (
-              <SubscribedPlans />
-            ) : (
-              ""
-            )}
-            {window.location.pathname === `/server${userName}/sadmin/plans` ? <Plans /> : ""}
-            {window.location.pathname === `/server${userName}/sadmin/withdrawals` ? (
-              <Withdrowals />
-            ) : (
-              ""
-            )}
-            {window.location.pathname === `/server${userName}/sadmin/coupon_code` ? (
-              <CouponCode />
-            ) : (
-              ""
-            )}
-            {window.location.pathname === `/server${userName}/sadmin/cms` ? <CMS /> : ""}
-            {window.location.pathname === `/server${userName}/sadmin/settings` ? <Setting /> : ""} */}
+        
           </div>
 
           {/* //User Profile : */}
