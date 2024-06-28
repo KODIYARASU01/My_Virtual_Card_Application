@@ -4,6 +4,7 @@
   height: 100%;
   padding: 1rem;
   .service_plan_title {
+    padding-top: 1rem;
     p {
       display: flex;
       align-items: center;
@@ -88,6 +89,7 @@
     width: 100%;
 
     table {
+      min-width: 100%;
       thead {
         tr {
           th {
@@ -143,6 +145,9 @@
             }
           }
         }
+      }
+      @media screen and (max-width:600px){
+        min-width: 250%;
       }
     }
   }

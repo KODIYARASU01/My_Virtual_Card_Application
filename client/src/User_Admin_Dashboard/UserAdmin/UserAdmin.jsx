@@ -101,7 +101,9 @@ const UserAdmin = () => {
         </div>
         <div className="content_box">
           <div
-            className={SideNavActions ? "content_left_small" : "content_left"}
+            className="content_left"
+
+            id={!SideNavActions ? "slideNavClose" : "SideNavOpen"}
           >
             <User_Admin_SideNavBar />
           </div>
@@ -110,6 +112,7 @@ const UserAdmin = () => {
             onClick={() => {
               setConfirmPassToggle(false), setProfileOpen(false);
             }}
+            id={!SideNavActions ? "content_right_expand" : "content_right_minimize"}
           >
             {window.location.pathname === `/${userName}/uadmin/dashboard` ? (
               <User_Dashboard />

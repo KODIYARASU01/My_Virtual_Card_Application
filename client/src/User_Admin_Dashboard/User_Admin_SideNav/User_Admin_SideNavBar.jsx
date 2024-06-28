@@ -22,7 +22,7 @@ const User_Admin_SideNavBar = () => {
     </div>
 
     <div className="uadmin_menus">
-        <div className="menu ">
+        <div className="menu " onClick={()=>setSideNavActions(false)}>
           <NavLink onClick={()=>{
             window.location.pathname=`/${userName}/uadmin/dashboard`
          

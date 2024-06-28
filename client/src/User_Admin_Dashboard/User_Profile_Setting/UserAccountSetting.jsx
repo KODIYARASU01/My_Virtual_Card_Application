@@ -8,32 +8,9 @@ import { Toaster, toast } from "react-hot-toast";
 import { convertToBase64 } from "../../Helper/convert";
 import { useFormik } from "formik";
 const UserAccountSetting = () => {
-  let[updateLoader,setUpdateLoader]=useState(false)
+  let[updateLoader,setUpdateLoader]=useState(false);
+
   let {
-    userData,
-    setUserData,
-    userName,
-    SideNavActions,
-    setSideNavActions,
-    profileOpen,
-    setProfileOpen,
-    SuperAdminLoader,
-    setSuperAdmin_Loader,
-    loader4,
-    EditUser,
-    setEditUser,
-    setLoader4,
-    AddUser,
-    setAddUser,
-    setServiceId,
-    user,
-    setUser,
-    UserDetails,
-    setUserDetails,
-    profileView,
-    setProfileView,
-    show,
-    setShow,
     profile,
     setProfile,
     firstName,
@@ -46,138 +23,14 @@ const UserAccountSetting = () => {
     setMobileNumber,
     email,
     setEmail,
-    password,
-    setPassword,
-    loader,
     setLoader,
-    Data,
-    setData,
-    BasicID,
-    setBasicID,
-    ProductId,
-    setProdictId,
-    QRCodeId,
-    setQRCodeId,
-    GallId,
-    setGallId,
-    TestimonialID,
-    setTestimonialID,
-    slideClose,
-    setSlideShow,
-    basicForm,
-    setBasicForm,
-    contactForm,
-    setContactForm,
-    serviceForm,
-    setServiceForm,
-    productForm,
-    setProductForm,
-    galleryForm,
-    setGalleryForm,
-    socialMediaForm,
-    setSocialMediaForm,
-    testimonialForm,
-    setTestimonialForm,
-    QRCodeForm,
-    setQRCodeForm,
-    banner,
-    setBanner,
-    userDetail,
-    setUserDetail,
-    logo,
-    setLogo,
-    fullName,
-    setFullName,
-    profession,
-    setProfession,
-    summary,
-    setSummary,
-    Email1,
-    setEmail1,
-    AlternateEmail,
-    setAlternateEmail,
-    MobileNumber1,
-    setMobileNumber1,
-    AlternateMobileNumber,
-    setAlternateMobileNumber,
-    DOB,
-    setDOB,
-    Address,
-    setAddress,
-    serviceImage,
-    setServiceImage,
-    serviceTitle,
-    setServiceTitle,
-    serviceSummary,
-    setServiceSummary,
-    productImage,
-    setProductImage,
-    productTitle,
-    setProductTitle,
-    productReleaseDate,
-    setProductReleaseDate,
-    productSummary,
-    setProductSummary,
-    galleryImage,
-    setGalleryImage,
-    videoURL,
-    setVideoURL,
-    Facebook,
-    setFacebook,
-    LinkedIn,
-    setLinkedIn,
-    WhatsUp,
-    setWhatsUp,
-    Instagram,
-    setInstagram,
-    Twiter,
-    setTwiter,
-    clientImage,
-    setClientImage,
-    clientName,
-    setClientName,
-    clientFeedbackDate,
-    setClientFeedbackDate,
-    clientFeedback,
-    setClientFeedback,
-    QRCodeImage,
-    setQRCodeImage,
-    ID,
-    setID,
-    loader2,
-    setLoader2,
-    BasicData,
-    setBasicData,
-    ContactData,
-    setContactData,
-    ServiceData,
-    setServiceData,
-    ProductData,
-    setProductData,
-    GalleryData,
-    setGalleryData,
-    SocialMediaData,
-    setSocialMediaData,
-    TestimonialData,
-    setTestimonialData,
-    QRCodeData,
-    setQRCodeData,
-    BasicEdit,
-    setBasicEdit,
-    ContactEdit,
-    setContactEdit,
-    ServiceEdit,
-    setServiceEdit,
-    ProductEdit,
-    setProductEdit,
-    GalleryEdit,
-    setGalleryEdit,
-    SocialMediaEdit,
-    setSocialMediaEdit,
-    TestimonialEdit,
-    setTestimonialEdit,
-    QRCodeEdit,
-    setQRCodeEdit,
+    currentPlan,
+    setCurrentPlan,
+    PlanPrice,
+    setPlanPrice,
+    FormSubmitLoader,
+    setFormSubmitLoader,
+    
   } = useContext(SuperAdmin_context);
 
   let navigate = useNavigate();
@@ -186,11 +39,12 @@ const UserAccountSetting = () => {
   //Fetching user Data:
   useEffect(() => {
     setLoader(true);
+    setFormSubmitLoader(true)
     axios
       .get(`http://localhost:3001/auth/register/${UserData.id}`)
       .then((responce) => {
 
-        console.log(responce)
+        setFormSubmitLoader(false)
         setProfile(responce.data.data.profile);
         setFirstName(responce.data.data.firstName);
         setLastName(responce.data.data.lastName);
@@ -223,6 +77,7 @@ const UserAccountSetting = () => {
           theme: "light",
           // transition: Flip,
         });
+        setFormSubmitLoader(false)
       });
 
       axios.get()
@@ -230,7 +85,7 @@ const UserAccountSetting = () => {
   //Update UserDetail
   let handleSubmit = async (e) => {
     e.preventDefault();
-    setUpdateLoader(true);
+    setFormSubmitLoader(true)
     try {
    
       let data = {
@@ -244,10 +99,12 @@ const UserAccountSetting = () => {
       axios
         .put(`http://localhost:3001/auth/register/${UserData.id}`, data)
         .then((res) => {
+          setFormSubmitLoader(false)
           toast.success(res.data.message);
           setUpdateLoader(false);
         })
         .catch((error) => {
+          setFormSubmitLoader(false)
           toast.error(error.response.data.message);
           setUpdateLoader(false);
         });
@@ -266,6 +123,9 @@ const UserAccountSetting = () => {
     <>
       <div className="account_setting_container">
         <Toaster position="top-right" />
+        <div className="setting_title">
+          <h4>Update Your Profile</h4>
+        </div>
         <div className="account_form_box">
           <form action="" onSubmit={handleSubmit}>
             <div className="form_group">

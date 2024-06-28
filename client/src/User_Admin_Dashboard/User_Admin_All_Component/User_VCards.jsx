@@ -155,9 +155,9 @@ let[CurrentPlan,setCurrentPlan]=useState()
         <div className="row_2">
       
 
-          <div className="appoinment_container table-responsive  ">
-            <div className="container">
-              <table className="table table-borderless table-hover w-100 rounded-3" id="example">
+          <div className="appoinment_container  ">
+            <div className="container table-responsive">
+              <table className="table table-borderless table-hover rounded-3" id="example">
                 <thead>
                   <tr>
                     <th

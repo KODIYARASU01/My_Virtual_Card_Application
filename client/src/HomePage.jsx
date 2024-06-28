@@ -4,8 +4,8 @@ import brand_logo from "./assets/Company_Logo/logo1.png";
 import { Link, NavLink } from "react-router-dom";
 import slide_1_image from "./assets/Website_page_images/slide-1.png";
 import offer_sale_gif from "./assets/Website_page_images/offer_price.gif";
-import rocket from './assets/animations/rocket.gif';
-import message from './assets/animations/message.gif'
+import rocket from "./assets/animations/rocket.gif";
+import message from "./assets/animations/message.gif";
 // import slide_1_image from "./assets/Website_page_images/home_page_images.png";
 // import slide_1_image from "./assets/Website_page_images/home_page_right_image.svg";
 // import vcard1 from "./assets/Digicards/1.png";
@@ -16,14 +16,13 @@ import message from './assets/animations/message.gif'
 // import vcard6 from "./assets/Digicards/6.png";
 // import vcard7 from "./assets/Digicards/7.png";
 
-
-import vcard1 from './assets/Digicards/vmob-1.png';
-import vcard2 from './assets/Digicards/vmob-2.png';
-import vcard3 from './assets/Digicards/vmob-3.png';
-import vcard4 from './assets/Digicards/vmob-4.png';
-import vcard5 from './assets/Digicards/vmob-5.png';
-import vcard6 from './assets/Digicards/vmob-6.png';
-import vcard7 from './assets/Digicards/vmob-7.png';
+import vcard1 from "./assets/Digicards/vmob-1.png";
+import vcard2 from "./assets/Digicards/vmob-2.png";
+import vcard3 from "./assets/Digicards/vmob-3.png";
+import vcard4 from "./assets/Digicards/vmob-4.png";
+import vcard5 from "./assets/Digicards/vmob-5.png";
+import vcard6 from "./assets/Digicards/vmob-6.png";
+import vcard7 from "./assets/Digicards/vmob-7.png";
 // import vcard8 from './assets/Digicards/vmob-8.png';
 
 import view1 from "./assets/view/1.svg";
@@ -247,7 +246,7 @@ const HomePage = () => {
   let interval = useRef();
 
   const startTimer = () => {
-    const countdownDate = new Date("June 30, 2024 00:00:00").getTime();
+    const countdownDate = new Date("July 03, 2024 00:00:00").getTime();
     interval = setInterval(() => {
       const now = new Date().getTime();
       const distance = countdownDate - now;
@@ -335,7 +334,7 @@ const HomePage = () => {
       clearInterval(intervalId);
     };
   }, []);
-  
+
   let [selectedQn, setSelectedQn] = useState(null);
   let [multiQnToggle, setMultiQnToggle] = useState(false);
   let [multiSelected, setMultiSelected] = useState([]);
@@ -413,13 +412,12 @@ const HomePage = () => {
           </a>
         </m.div>
         {/* Up Arrow icon */}
-        <div className="up"  onClick={() => scrollToSection(HomeRef)}>
-        {/* <small>Bring me Top</small> */}
-        <i className='bx bx-chevrons-up bx-fade-down' ></i>
-      
+        <div className="up" onClick={() => scrollToSection(HomeRef)}>
+          {/* <small>Bring me Top</small> */}
+          <i className="bx bx-chevrons-up bx-fade-down"></i>
         </div>
         <m.div className="slide_1_page" ref={HomeRef}>
-        <ul class="slide_1_background">
+          <ul class="slide_1_background">
             <li></li>
             <li></li>
             <li></li>
@@ -435,7 +433,7 @@ const HomePage = () => {
             <li></li>
             <li></li>
           </ul>
-      
+
           <m.header>
             <m.div className="top_nav">
               <m.div
@@ -522,7 +520,7 @@ const HomePage = () => {
               animate="show"
             >
               <m.div className="title" variants={left_slide_1Anime}>
-                <h3>Design Your Digital Identity:</h3>
+                <h3>Design Your Digital Identity</h3>
                 <h4>Introducing Custom vCards</h4>
               </m.div>
               <m.div className="sub_title" variants={left_slide_1Anime}>
@@ -655,18 +653,21 @@ const HomePage = () => {
               initial="hide"
               animate="show"
             >
-              <m.img src={slide_1_image} alt=""/>
-           <div className="message_gif">
-<img src={message} alt="message"     variants={right_slide_1Anime}/>
-
-           </div>
+              <m.img src={slide_1_image} alt="" />
+              <div className="message_gif">
+                <img
+                  src={message}
+                  alt="message"
+                  variants={right_slide_1Anime}
+                />
+              </div>
               <m.div className="extra_designs">
                 <m.div className="design1" variants={right_slide_1Anime}>
                   {/* <img
                     src={rocket}
                     alt="rocket"
                   /> */}
-                <i className='bx bx-rocket' ></i>
+                  <i className="bx bx-rocket"></i>
                 </m.div>
                 <m.div
                   className="design2"
@@ -690,14 +691,23 @@ const HomePage = () => {
                   variants={right_slide_1Anime}
                 ></m.div>
               </m.div>
+              {/* <div className="social_medias_icons">
+                <div className="icon">
+                <i className='bx bxl-whatsapp' ></i>
+                </div>
+              </div> */}
             </m.div>
           </m.div>
-      
         </m.div>
         <div className="svg_curve">
-         
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#523ab3" fill-opacity="1" d="M0,224L18.5,234.7C36.9,245,74,267,111,250.7C147.7,235,185,181,222,176C258.5,171,295,213,332,229.3C369.2,245,406,235,443,213.3C480,192,517,160,554,160C590.8,160,628,192,665,181.3C701.5,171,738,117,775,112C812.3,107,849,149,886,186.7C923.1,224,960,256,997,240C1033.8,224,1071,160,1108,144C1144.6,128,1182,160,1218,165.3C1255.4,171,1292,149,1329,165.3C1366.2,181,1403,235,1422,261.3L1440,288L1440,0L1421.5,0C1403.1,0,1366,0,1329,0C1292.3,0,1255,0,1218,0C1181.5,0,1145,0,1108,0C1070.8,0,1034,0,997,0C960,0,923,0,886,0C849.2,0,812,0,775,0C738.5,0,702,0,665,0C627.7,0,591,0,554,0C516.9,0,480,0,443,0C406.2,0,369,0,332,0C295.4,0,258,0,222,0C184.6,0,148,0,111,0C73.8,0,37,0,18,0L0,0Z"></path></svg>
-           </div>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path
+              fill="#523ab3"
+              fill-opacity="1"
+              d="M0,224L18.5,234.7C36.9,245,74,267,111,250.7C147.7,235,185,181,222,176C258.5,171,295,213,332,229.3C369.2,245,406,235,443,213.3C480,192,517,160,554,160C590.8,160,628,192,665,181.3C701.5,171,738,117,775,112C812.3,107,849,149,886,186.7C923.1,224,960,256,997,240C1033.8,224,1071,160,1108,144C1144.6,128,1182,160,1218,165.3C1255.4,171,1292,149,1329,165.3C1366.2,181,1403,235,1422,261.3L1440,288L1440,0L1421.5,0C1403.1,0,1366,0,1329,0C1292.3,0,1255,0,1218,0C1181.5,0,1145,0,1108,0C1070.8,0,1034,0,997,0C960,0,923,0,886,0C849.2,0,812,0,775,0C738.5,0,702,0,665,0C627.7,0,591,0,554,0C516.9,0,480,0,443,0C406.2,0,369,0,332,0C295.4,0,258,0,222,0C184.6,0,148,0,111,0C73.8,0,37,0,18,0L0,0Z"
+            ></path>
+          </svg>
+        </div>
         {/* Slide2 */}
         <m.div className="slide_2_page" ref={TemplateRef}>
           <m.div
@@ -755,7 +765,6 @@ const HomePage = () => {
         </m.div>
         {/* Slide_3 */}
         <m.div className="slide_3_page" ref={FeatureRef}>
-      
           <m.div
             className="slide_3_title"
             variants={title_slide_3Anime}
@@ -882,17 +891,16 @@ const HomePage = () => {
               </div>
             </m.div>
           </m.div>
-       
         </m.div>
         <div className="svg_bottom_slice_3">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-              <path
-                fill="#523ab3"
-                fill-opacity="1"
-                d="M0,96L1440,160L1440,0L0,0Z"
-              ></path>
-            </svg>
-          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path
+              fill="#523ab3"
+              fill-opacity="1"
+              d="M0,96L1440,160L1440,0L0,0Z"
+            ></path>
+          </svg>
+        </div>
         {/* slide_4 */}
         <m.div className="slide_4_page">
           <m.div
@@ -1029,9 +1037,8 @@ const HomePage = () => {
             </m.div>
           </m.div>
           <m.div className="slider_5_nfc_container">
-         
             <m.div className="content_box">
-            {/* <div className="svg_top">
+              {/* <div className="svg_top">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 283.5 27.8"
@@ -1119,7 +1126,6 @@ const HomePage = () => {
                 />
               </m.div>
             </m.div>
-         
           </m.div>
         </m.div>
         {/* Plan */}
@@ -1388,7 +1394,7 @@ const HomePage = () => {
             </m.div>
           </m.div>
         </m.div>
-       
+
         {/* Questions */}
         <m.div
           className="slide_7_page"
@@ -1397,7 +1403,6 @@ const HomePage = () => {
           ref={FAQRef}
         >
           <m.div className="slide_7_title">
-          
             <m.h2 variants={title_slide_7Anime}>
               Frequently Asked <span>Questions</span>
             </m.h2>
@@ -1475,12 +1480,11 @@ const HomePage = () => {
               );
             })}
           </m.div>
-        
         </m.div>
-      
+
         {/* get_intouch */}
         <m.div className="slide_8_page" ref={ContactRef}>
-        {/* <div className="bottom_svg_curve">
+          {/* <div className="bottom_svg_curve">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 283.5 27.8"

@@ -50,9 +50,17 @@
       img{
         width: 250px;
         height: auto;
+
+        @media screen and (max-width:600px){
+          display: none;
+        }
+      }
+      @media screen and (max-width:600px){
+        display: none;
       }
     }
     .plan_title{
+      padding-top: 1rem;
       p{
         display: flex;
         align-items: center;

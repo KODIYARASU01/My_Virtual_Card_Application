@@ -48,9 +48,9 @@ const User_Admin_TopNavBar = () => {
             </div>
           </div>
           <div className="topnav_right d-flex align-items-center justify-content-end">
-            <div className="mode">
+            {/* <div className="mode">
               <i className="bx bx-moon"></i>
-            </div>
+            </div> */}
             <div className="user_profile">
               <img
                 src={

@@ -31,6 +31,7 @@
         height: 100%;
         padding: 0px 10px;
         display: flex;
+        display: block;
         align-items: center;
         justify-content: center;
 
@@ -52,11 +53,16 @@
         cursor: pointer;
         transition: all 0.4s ease-in-out;
 z-index: 800;
+display: none;
         &:hover {
             color: royalblue;
           scale: 1.5;
           filter: drop-shadow(0px 4px 5px rgba(103, 101, 255, 0.5));
           transition: all 0.4s ease-in-out;
+        }
+
+        @media screen and (max-width:600px){
+          display: block;
         }
       }
       .current_menu {
@@ -76,6 +82,11 @@ z-index: 800;
           font-weight: 500;
 
           border-bottom: 2px solid royalblue;
+
+          @media (max-width: 600px) {
+        font-size: 0.7rem;
+        border-bottom: 1px solid royalblue;
+              }
         }
       }
     }
@@ -146,6 +157,10 @@ z-index: 800;
             transition: all 0.4s ease-in-out;
           }
         }
+      }
+      @media (max-width: 600px) {
+    padding: 0px 0.5rem;
+    gap: 1rem;
       }
     }
   }

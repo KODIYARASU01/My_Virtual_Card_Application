@@ -121,7 +121,7 @@
 
         @media (min-width: 600px) {
           .menuNamesHide {
-            display: none;
+            display: block;
           }
         }
 
@@ -191,7 +191,7 @@
 
 //SearchBar Hide::after
 #searchHide {
-  display: none !important;
+  display: block !important;
 }
 
 .activeMenu {

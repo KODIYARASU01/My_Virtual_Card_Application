@@ -80,12 +80,17 @@ z-index: -100;
             color: #ffffff;
             font-weight: 500;
             @media screen and (max-width: 740px) {
-              font-size: 0.8rem;
+              font-size: 0.7rem;
             }
           }
         }
         @media screen and (max-width: 740px) {
           width: 170px;
+          height: 100px;
+          margin: auto;
+        }
+        @media screen and (max-width: 600px) {
+          width: 140px;
           height: 100px;
           margin: auto;
         }
@@ -131,16 +136,18 @@ z-index: -100;
     }
    .row_2{
     width: 100%;
-    margin: 2rem 1rem;
+    margin: 2rem 0.5rem;
     position: relative;
 
   
     .appoinment_container{
       margin: 0.5rem auto;
-  padding: 1rem;
+  padding: 1rem 0rem;
 
       .table{
-        width: 100%;
+        // width: 100%;
+        min-width: 100%;
+        width: auto;
         margin: auto;
         border-radius: 1rem;
         border: transparent;
@@ -180,6 +187,9 @@ z-index: -100;
               border-bottom: 1px solid rgb(230, 230, 230);
             }
           }
+        }
+        @media screen and (max-width:600px){
+          min-width: 250%;
         }
       }
     }

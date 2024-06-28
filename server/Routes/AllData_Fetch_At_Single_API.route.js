@@ -13,13 +13,13 @@ import SocialMediaModel from '../Models/SocialMedia.model.js';
 import TestimonialModel from '../Models/Testimonial.model.js';
 import Current_VCardTemplate from '../Models/VCardTemplate.model.js';
 
-router.get('/allDataAPI',async(req,res)=>{
+router.get('/allDataAPI/:URL_Alies',async(req,res)=>{
     try {
    
-        let userName = req.query.userName;
+      let URL_Alies = req.params.URL_Alies;
         let result = {};
     
-        let getSpecificData = await BasicDetails.find({ user: userName });
+        let getSpecificData = await BasicDetails.find({    URL_Alies: URL_Alies, });
     
         if (!getSpecificData) {
           res.status(400).json({ message: "Specific Data Not Found" });
@@ -35,7 +35,7 @@ router.get('/allDataAPI',async(req,res)=>{
         //   result["ContactDetails"] = ContactDetails_data;
         // }
     
-        let ServiceDetails_data = await ServiceData.find({ user: userName });
+        let ServiceDetails_data = await ServiceData.find({   URL_Alies: URL_Alies, });
     
         if (!ServiceDetails_data) {
           res.status(400).json({ message: "Service Data Not Found" });
@@ -43,7 +43,7 @@ router.get('/allDataAPI',async(req,res)=>{
           result["ServiceData"] = ServiceDetails_data;
         }
     
-        let ProductDetails_data = await ProductModel.find({ user: userName });
+        let ProductDetails_data = await ProductModel.find({    URL_Alies: URL_Alies, });
     
         if (!ProductDetails_data) {
           res.status(400).json({ message: "Product Data Not Found" });
@@ -51,7 +51,7 @@ router.get('/allDataAPI',async(req,res)=>{
           result["ProductModel"] = ProductDetails_data;
         }
     
-        let GalleryDetails_data = await GalleryModel.find({ user: userName });
+        let GalleryDetails_data = await GalleryModel.find({    URL_Alies: URL_Alies, });
     
         if (!GalleryDetails_data) {
           res.status(400).json({ message: "Gallery Data Not Found" });
@@ -67,7 +67,7 @@ router.get('/allDataAPI',async(req,res)=>{
         //   result["QRCodeDetails"] = QRCodeDetails_data;
         // }
     
-        let SocialMediaDetails_data = await SocialMediaModel.find({ user: userName });
+        let SocialMediaDetails_data = await SocialMediaModel.find({    URL_Alies: URL_Alies, });
     
         if (!SocialMediaDetails_data) {
           res.status(400).json({ message: "SocialMedia Data Not Found" });
@@ -76,7 +76,7 @@ router.get('/allDataAPI',async(req,res)=>{
         }
     
         let TestimonialDetails_data = await TestimonialModel.find({
-          user: userName,
+          URL_Alies: URL_Alies,
         });
     
         if (!TestimonialDetails_data) {
@@ -85,7 +85,7 @@ router.get('/allDataAPI',async(req,res)=>{
           result["TestimonialModel"] = TestimonialDetails_data;
         }
         let PopUpBannerDetails_data = await PopupBannerModel.find({
-            user: userName,
+          URL_Alies: URL_Alies,
           });
       
           if (!PopUpBannerDetails_data) {
@@ -94,7 +94,7 @@ router.get('/allDataAPI',async(req,res)=>{
             result["PopupBannerModel"] = PopUpBannerDetails_data;
           }
           let PlanDetails_data = await currentPlan.find({
-            user: userName,
+            URL_Alies: URL_Alies,
           });
       
           if (!PlanDetails_data) {
@@ -103,7 +103,7 @@ router.get('/allDataAPI',async(req,res)=>{
             result["currentPlan"] = PlanDetails_data;
           }
           let VCardTemplateDetails_data = await Current_VCardTemplate.find({
-            user: userName,
+            URL_Alies: URL_Alies,
           });
       
           if (!VCardTemplateDetails_data) {

@@ -28,12 +28,14 @@ import Edit_QR_Code from "./Edit_All_Form_Component/Edit_QR_Code";
 const VCard_Form_Edit = () => {
 let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
   let navigate = useNavigate();
+  let [CurrentPlanActive,setCurrentPlanActive]=useState(0);
   let [formSliderToggle,setFormSliderToggle]=useState(false);
   let [userData, setUserData] = useState("jayakumar");
   let [ShowForm, setShowForm] = useState("Choose Your Plan");
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
-  function handleFormShow(e) {
 
+
+  useEffect(()=>{
     try{
       axios.get(`http://localhost:3001/currentplan/specificAll/${userName}`,   {
         headers: {
@@ -41,14 +43,10 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
           Authorization: `Bearer ${localStorageDatas.token}`,
         },
       }).then((res)=>{
-        console.log(res.data.data.length)
-
-        if(res.data.data.length == 1){
-          setShowForm(e.target.innerText);
+         
+        if(res.data.data.length === 1){
+          setCurrentPlanActive(res.data.data.length)
         }
-        // else if(e.target.innerText='Choose Your Plan'){
-        //   setShowForm(e.target.innerText);
-        // }
         else{
           toast.error('Choose Your Plan First!')
         }
@@ -58,6 +56,15 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
     }
     catch(error){
       toast.error(error.message)
+    }
+  },[])
+  function handleFormShow(e) {
+    setFormSliderToggle(false)
+    if(CurrentPlanActive == 1){
+      setShowForm(e.target.id);
+    }
+    else{
+      toast.error('Choose Your Plan First!')
     }
   }
   let userDetails = JSON.parse(localStorage.getItem("datas"));
@@ -71,7 +78,7 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
         console.log(error.response.data.message);
       });
   }, []);
-  console.log(formSliderToggle)
+
   return (
     <>
       <div className="vcard_form_container">
@@ -92,29 +99,29 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
           </div>
         </div>
         <div className="vcard_form_box">
-     
-        <div className="form_sidenav" id={formSliderToggle ? "slideClose":'slideOpen'}>
-
-          <div className="slider_icon" onClick={()=>setFormSliderToggle(!formSliderToggle)}>
+        <div className="slider_icon" onClick={()=>setFormSliderToggle(!formSliderToggle)}>
           <i className='bx bx-slider-alt' ></i>
           </div>
+        <div className="form_sidenav" id={!formSliderToggle ? "slideClose":'slideOpen'}>
+
+       
         <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "Choose Your Plan" ? "menu_active" : ""}
             >
               {/* <i className="bx bxs-spreadsheet" style={{ color: "green" }}></i> */}
-              <img width="24" height="24" src="https://img.icons8.com/3d-fluency/94/cash-in-hand.png" alt="cash-in-hand"/>
+              <img width="24" height="24" src="https://img.icons8.com/3d-fluency/94/cash-in-hand.png" alt="cash-in-hand" id='Choose Your Plan'/>
 
-              <small>Choose Your Plan</small>
+              <small id='Choose Your Plan'>Choose Your Plan</small>
             </div>
             <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "Basic Detail" ? "menu_active" : ""}
             >
-              <i className="bx bxs-user" style={{ color: "blue" }}></i>
-              <small>Basic Detail</small>
+              <i className="bx bxs-user" style={{ color: "blue" }} id="Basic Detail"></i>
+              <small id="Basic Detail">Basic Detail</small>
             </div>
          
             <div
@@ -122,25 +129,25 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
               onClick={handleFormShow}
               id={ShowForm === "VCard Templates" ? "menu_active" : ""}
             >
-              <i className="bx bxs-spreadsheet" style={{ color: "green" }}></i>
+              <i className="bx bxs-spreadsheet" style={{ color: "green" }} id="VCard Templates"></i>
 
-              <small>VCard Templates</small>
+              <small id="VCard Templates">VCard Templates</small>
             </div>
             <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "Social Link - Website" ? "menu_active" : ""}
             >
-              <i className="bx bxs-planet" style={{ color: "tomato" }}></i>
-              <small>Social Link - Website</small>
+              <i className="bx bxs-planet" style={{ color: "tomato" }} id="Social Link - Website"></i>
+              <small id="Social Link - Website">Social Link - Website</small>
             </div>
             <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "Services" ? "menu_active" : ""}
             >
-              <i className="bx bx-trophy" style={{ color: "black" }}></i>
-              <small>Services</small>
+              <i className="bx bx-trophy" style={{ color: "black" }} id="Services"></i>
+              <small id="Services">Services</small>
             </div>
             <div
               className="menu_item"
@@ -150,16 +157,17 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
               <i
                 className="bx bxl-product-hunt"
                 style={{ color: "orange" }}
+                id="Products"
               ></i>
-              <small>Products</small>
+              <small id='Products'>Products</small>
             </div>
             <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "Galleries" ? "menu_active" : ""}
             >
-              <i className="bx bxs-photo-album" style={{ color: "violet" }}></i>
-              <small>Galleries</small>
+              <i className="bx bxs-photo-album" style={{ color: "violet" }} id="Galleries"></i>
+              <small id="Galleries">Galleries</small>
             </div>
        
             <div
@@ -167,32 +175,33 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
               onClick={handleFormShow}
               id={ShowForm === "Testimonials" ? "menu_active" : ""}
             >
-              <i className="bx bxs-star" style={{ color: "red" }}></i>
-              <small>Testimonials</small>
+              <i className="bx bxs-star" style={{ color: "red" }} id
+              ="Testimonials"></i>
+              <small id="Testimonials">Testimonials</small>
             </div>
             <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "PopUp Banner" ? "menu_active" : ""}
             >
-              <i className="bx bxs-image-add" style={{ color: "darkGray" }}></i>
-              <small>PopUp Banner</small>
+              <i className="bx bxs-image-add" style={{ color: "darkGray" }} id='PopUp Banner'></i>
+              <small id="PopUp Banner">PopUp Banner</small>
             </div>
             <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "Business Hours" ? "menu_active" : ""}
             >
-              <i className="bx bxs-hourglass" style={{ color: "skyblue" }}></i>
-              <small>Business Hours</small>
+              <i className="bx bxs-hourglass" style={{ color: "skyblue" }} id="Business Hours"></i>
+              <small id="Business Hours">Business Hours</small>
             </div>
             <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "Customize QR Code" ? "menu_active" : ""}
             >
-              <i className="bx bx-qr-scan"></i>
-              <small>Customize QR Code</small>
+              <i className="bx bx-qr-scan" id="Customize QR Code"></i>
+              <small id="Customize QR Code">Customize QR Code</small>
             </div>
             <div
               className="menu_item"
@@ -200,24 +209,24 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
               id={ShowForm === "Privacy Policy" ? "menu_active" : ""}
             >
           
-              <i className='bx bxs-lock' style={{ color: "grey" }}></i>
-              <small>Privacy Policy</small>
+              <i className='bx bxs-lock' style={{ color: "grey" }} id="Privacy Policy"></i>
+              <small id="Privacy Policy">Privacy Policy</small>
             </div>
             <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "Terms & Conditions" ? "menu_active" : ""}
             >
-              <i className="bx bxs-notepad" style={{ color: "green" }}></i>
-              <small>Terms & Conditions</small>
+              <i className="bx bxs-notepad" style={{ color: "green" }} id="Terms & Conditions"></i>
+              <small id="Terms & Conditions">Terms & Conditions</small>
             </div>
             <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "Manage Sections" ? "menu_active" : ""}
             >
-              <i className="bx bxs-slideshow" style={{ color: "tomato" }}></i>
-              <small>Manage Sections</small>
+              <i className="bx bxs-slideshow" style={{ color: "tomato" }} id="Manage Sections"></i>
+              <small id="Manage Sections">Manage Sections</small>
             </div>
             <div className="progressing">
             <small>On Working  Progress</small>
@@ -229,16 +238,16 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
               onClick={handleFormShow}
               id={ShowForm === "Iframes" ? "menu_active" : ""}
             >
-              <i className="bx bx-shape-square" style={{ color: "grey" }}></i>
-              <small>Iframes</small>
+              <i className="bx bx-shape-square" style={{ color: "grey" }} id="Iframes"></i>
+              <small id="Iframes">Iframes</small>
             </div>
             <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "Appoinment" ? "menu_active" : ""}
             >
-              <i className="bx bxs-calendar" style={{ color: "royalBlue" }}></i>
-              <small>Appoinment</small>
+              <i className="bx bxs-calendar" style={{ color: "royalBlue" }} id="Appoinment"></i>
+              <small id='Appoinment'>Appoinment</small>
             </div>
          
          
@@ -247,16 +256,16 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
               onClick={handleFormShow}
               id={ShowForm === "Dynamic VCard" ? "menu_active" : ""}
             >
-              <i className="bx bxs-landscape" style={{ color: "orange" }}></i>
-              <small>Dynamic VCard</small>
+              <i className="bx bxs-landscape" style={{ color: "orange" }} id="Dynamic VCard"></i>
+              <small id="Dynamic VCard">Dynamic VCard</small>
             </div>
             <div
               className="menu_item"
               onClick={handleFormShow}
               id={ShowForm === "Blog" ? "menu_active" : ""}
             >
-              <i className="bx bxl-blogger" style={{ color: "purple" }}></i>
-              <small>Blog</small>
+              <i className="bx bxl-blogger" style={{ color: "purple" }} id="Blog"></i>
+              <small id="Blog">Blog</small>
             </div>
          
           
@@ -265,13 +274,13 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
               onClick={handleFormShow}
               id={ShowForm === "Fonts" ? "menu_active" : ""}
             >
-              <i className="bx bx-font-family" style={{ color: "skyblue" }}></i>
-              <small>Fonts</small>
+              <i className="bx bx-font-family" style={{ color: "skyblue" }} id="Fonts"></i>
+              <small id="Fonts">Fonts</small>
             </div>
         
            
           </div>
-          <div className="all_form_inputs">
+          <div className="all_form_inputs" id={!formSliderToggle ? "formExpand":'formMinimize'}>
             {ShowForm === "Basic Detail" ? <Edit_BasicForm /> : ""}
             {ShowForm === "Choose Your Plan" ? <Edit_Plan /> : ""}
             {ShowForm === "VCard Templates" ? <Edit_Select_Template /> : ""}

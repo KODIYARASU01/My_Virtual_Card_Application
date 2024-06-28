@@ -320,10 +320,10 @@ setGalleryCount(++GalleryCount)
             <table className="table rounded-3" id="example">
               <thead className="table-secondary rounded-3">
                 <tr>
-                  <th className="fw-bold">COUNT</th>
-                  <th className="fw-bold">IMAGE</th>
-                  <th className="fw-bold">URL</th>
-                  <th className="fw-bold">ACTIONS</th>
+                  <th className="fw-bold" style={{width:'10%'}}>COUNT</th>
+                  <th className="fw-bold" style={{width:'20%'}}>IMAGE</th>
+                  <th className="fw-bold" style={{width:'40%'}}>URL</th>
+                  <th className="fw-bold" style={{width:'30%'}}>ACTIONS</th>
                 </tr>
               </thead>
               <tbody className=" shadow-sm">

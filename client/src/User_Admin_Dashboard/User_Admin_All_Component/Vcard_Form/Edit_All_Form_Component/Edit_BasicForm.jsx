@@ -44,7 +44,11 @@ const BasicForm = () => {
   let [ContactToggleSwitch, setContactToggleSwitch] = useState(true);
 
   let [imagePath, setImagePath] = useState(null);
+  const [key, setKey] = useState(0);
 
+  const reloadComponent = () => {
+    setKey((prevKey) => prevKey + 1); // Change the key to trigger a remount
+  };
   const stripHtmlTags = (html) => {
     const div = document.createElement("div");
     div.innerHTML = html;
@@ -148,7 +152,7 @@ const BasicForm = () => {
   useEffect(() => {
     fetchURL_Form()
     fetchBasicData();
-  }, []);
+  }, [key]);
 
   // let formik = useFormik({
   //   initialValues: {
@@ -223,6 +227,7 @@ const BasicForm = () => {
           }
         )
         .then((res) => {
+          reloadComponent();
           toast.success(res.data.message);
           setFormSubmitLoader(false);
         })
@@ -261,6 +266,7 @@ const BasicForm = () => {
       },
     })
     .then((res) => {
+      reloadComponent()
       toast.success(res.data.message);
       setFormSubmitLoader(false);
 
@@ -301,6 +307,7 @@ const BasicForm = () => {
           }
         )
         .then((res) => {
+          reloadComponent()
           toast.success(res.data.message);
           setFormSubmitLoader(false);
         })

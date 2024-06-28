@@ -86,7 +86,11 @@
       align-items: center;
       justify-content: flex-start;
       h5{
-        font-weight: 600;
+  
+        font-weight: 550;
+      }
+      @media screen and (max-width:600px){
+        padding: 0rem 10px;
       }
     }
     .actions {
@@ -132,7 +136,8 @@
  
 
   .row_2 {
-    width: 100%;
+    min-width: 100%;
+    width: auto;
     // margin: 1rem 1rem;
     position: relative;
 // background-color: #6571ff;
@@ -140,12 +145,18 @@
       margin: 1rem auto;
       // padding: 1rem;
 .container{
-  width: 100%;
+  min-width: 100%;
+  width: auto;
+  overflow-x: auto;
+  margin: auto;
   .table {
-    // width: 100%;
+    min-width: 100%;
+    width: auto;
     // margin: auto;
     border-radius: 1rem;
     border: transparent;
+    margin: auto;
+
 
     thead {
       // width: 100%;
@@ -154,6 +165,7 @@
         // width: 100%;
    
         th {
+          width: auto;
           padding: 0.7rem 0.5rem;
           background-color: #f8f9fa;
           font-size: 0.8rem;
@@ -286,9 +298,21 @@ font-weight: 500;
      
       }
     }
+    @media screen and (max-width:600px){
+      min-width: 350%;
+    }
+    @media screen and (max-width:390px){
+      min-width: 450%;
+    }
+    @media screen and (max-width:800px){
+      min-width: 250%;
+    }
   }
 }
   
     }
+  }
+  @media screen and (max-width:600px){
+    padding: 2rem 0px;
   }
 }

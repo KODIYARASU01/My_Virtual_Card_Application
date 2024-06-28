@@ -21,7 +21,7 @@ const Services = () => {
     setFormSubmitLoader,
     userName,
   } = useContext(SuperAdmin_context);
-  let[ServiceCount,setServiceCount]=useState(0)
+  let [ServiceCount, setServiceCount] = useState(0);
   let [AllService, setAllService] = useState([]);
   let [serviceFormOpen, setServiceFormOpen] = useState(false);
   let [updateFormOpen, setUpdateFormOpen] = useState(false);
@@ -56,7 +56,7 @@ const Services = () => {
             setFormSubmitLoader(false);
           } else {
             setAllService(res.data.data);
-            setServiceCount(res.data.data.length)
+            setServiceCount(res.data.data.length);
             setFormSubmitLoader(false);
           }
         })
@@ -88,7 +88,7 @@ const Services = () => {
       ServiceName: "",
       ServiceURL: "",
       ServiceDescription: "",
-      ServiceImage: null,
+      ServiceImage: undefined,
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -118,7 +118,7 @@ const Services = () => {
           setFormSubmitLoader(false);
           toast.success(res.data.message);
           reloadComponent();
-          setServiceCount(++ServiceCount)
+          setServiceCount(++ServiceCount);
           setTimeout(() => {
             values.ServiceName = "";
 
@@ -259,7 +259,7 @@ const Services = () => {
         .then((res) => {
           toast.success(res.data.message);
           reloadComponent();
-          setServiceCount(--ServiceCount)
+          setServiceCount(--ServiceCount);
           setFormSubmitLoader(false);
         })
         .catch((error) => {
@@ -271,7 +271,7 @@ const Services = () => {
     }
   }
 
-
+  console.log(ServiceImage);
   return (
     <>
       <div className="update_service_container">
@@ -289,53 +289,43 @@ const Services = () => {
         <div className="plan_based_service_add_note">
           <div className="note">
             {currentPlan === "Demo" ? (
-                 <>
-            
-                 <i class='bx bx-upload ' ></i>
-                 <small>
-                 Demo Plan service access denied!    
-                 </small>
-                 </>
-        
+              <>
+                <i class="bx bx-upload "></i>
+                <small>Demo Plan service access denied!</small>
+              </>
             ) : (
               ""
             )}
 
             {currentPlan === "Basic" ? (
-                <>
-            
-                <i class='bx bx-upload ' ></i>
+              <>
+                <i class="bx bx-upload "></i>
                 <small>
-                  Max Service addOn limit :<strong> { ServiceCount} / 4 </strong>
-  
+                  Max Service addOn limit :<strong> {ServiceCount} / 4 </strong>
                 </small>
-                </>
+              </>
             ) : (
               ""
             )}
 
             {currentPlan === "Standard" ? (
               <>
-            
-              <i class='bx bx-upload ' ></i>
-              <small>
-                Max Service addOn limit :<strong> { ServiceCount} / 6 </strong>
-
-              </small>
+                <i class="bx bx-upload "></i>
+                <small>
+                  Max Service addOn limit :<strong> {ServiceCount} / 6 </strong>
+                </small>
               </>
             ) : (
               ""
             )}
 
             {currentPlan === "Enterprises" ? (
-               <>
-            
-               <i class='bx bx-upload ' ></i>
-               <small>
-                 Max Service addOn limit :<strong> { ServiceCount} / 8 </strong>
- 
-               </small>
-               </>
+              <>
+                <i class="bx bx-upload "></i>
+                <small>
+                  Max Service addOn limit :<strong> {ServiceCount} / 8 </strong>
+                </small>
+              </>
             ) : (
               ""
             )}
@@ -345,11 +335,21 @@ const Services = () => {
           <table className="table rounded-3" id="example">
             <thead className="table-secondary rounded-3">
               <tr>
-                <th className="fw-bold">ICON OR IMAGE</th>
-                <th className="fw-bold">TITLE</th>
-                <th className="fw-bold">DESCRIPTION</th>
-                <th className="fw-bold">URL</th>
-                <th className="fw-bold">ACTIONS</th>
+                <th className="fw-bold" style={{ width: "15%" }}>
+                  ICON OR IMAGE
+                </th>
+                <th className="fw-bold" style={{ width: "20%" }}>
+                  TITLE
+                </th>
+                <th className="fw-bold" style={{ width: "20%" }}>
+                  DESCRIPTION
+                </th>
+                <th className="fw-bold" style={{ width: "20%" }}>
+                  URL
+                </th>
+                <th className="fw-bold" style={{ width: "25%" }}>
+                  ACTIONS
+                </th>
               </tr>
             </thead>
             <tbody className="shadow-sm">
@@ -362,7 +362,7 @@ const Services = () => {
                         <td className="h-100 align-middle">
                           <img
                             src={
-                              data.ServiceImage != 'undefined'
+                              data.ServiceImage != "undefined"
                                 ? data.ServiceImage
                                 : `https://img.freepik.com/free-vector/flat-customer-support-illustration_23-2148899114.jpg?t=st=1719422605~exp=1719426205~hmac=bcd7dd8b57efc2e804d100a8b88ba5f9d6c24e865de29bacaa28f2ab02a248f8&w=740`
                             }
@@ -469,7 +469,7 @@ const Services = () => {
                 <label htmlFor="ServiceImage">
                   <img
                     src={
-                      ServiceImage != 'undefined'
+                      ServiceImage != undefined
                         ? ServiceImage
                         : "https://img.freepik.com/free-vector/autumn-background_23-2149054409.jpg?t=st=1715971926~exp=1715975526~hmac=064e47d99740a4e25fb7345c45d5bc744da1c1ad7f5f1e14668eaae2cc601381&w=900"
                     }
@@ -564,7 +564,7 @@ const Services = () => {
                 <label htmlFor="ServiceImage">
                   <img
                     src={
-                      ServiceImage != 'undefined'
+                      ServiceImage != "undefined"
                         ? ServiceImage
                         : "https://img.freepik.com/free-vector/flat-customer-support-illustration_23-2148899114.jpg?t=st=1719422605~exp=1719426205~hmac=bcd7dd8b57efc2e804d100a8b88ba5f9d6c24e865de29bacaa28f2ab02a248f8&w=740"
                     }
@@ -638,7 +638,7 @@ const Services = () => {
                 <div className="service_image">
                   <img
                     src={
-                      ServiceImage != 'undefined'
+                      ServiceImage != "undefined"
                         ? ServiceImage
                         : "https://img.freepik.com/free-vector/flat-customer-support-illustration_23-2148899114.jpg?t=st=1719422605~exp=1719426205~hmac=bcd7dd8b57efc2e804d100a8b88ba5f9d6c24e865de29bacaa28f2ab02a248f8&w=740"
                     }

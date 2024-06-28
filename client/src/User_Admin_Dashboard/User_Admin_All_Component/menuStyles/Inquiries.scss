@@ -5,15 +5,15 @@
 
     .inquiry_table {
         width: 100%;
-        margin: 1rem 1rem;
+        // margin: 1rem 1rem;
         position: relative;
     
         .appoinment_container {
           margin: 0.5rem auto;
-          padding: 1rem;
+          padding: 1rem 0px;
     
           .table {
-            // width: 100%;
+            min-width: 100%;
             // margin: auto;
             border-radius: 1rem;
             border: transparent;
@@ -156,6 +156,9 @@
                 }
              
               }
+            }
+            @media screen and (max-width:600px){
+              min-width:350%
             }
           }
         }

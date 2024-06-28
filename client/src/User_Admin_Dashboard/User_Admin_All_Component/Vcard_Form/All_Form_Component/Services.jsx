@@ -135,10 +135,10 @@ const Services = () => {
         <table className="table rounded-3" id="example">
             <thead className="table-secondary rounded-3">
               <tr>
-                <th className="fw-bold">ICON OR IMAGE</th>
-                <th className="fw-bold">TITLE</th>
-                <th className="fw-bold">DESCRIPTION</th>
-                <th className="fw-bold">URL</th>
+                <th className="fw-bold" style={{ width: "15%" }}>ICON OR IMAGE</th>
+                <th className="fw-bold" style={{ width: "20%" }}>TITLE</th>
+                <th className="fw-bold" style={{ width: "20%" }}>DESCRIPTION</th>
+                <th className="fw-bold" style={{ width: "25%" }}>URL</th>
                
               </tr>
             </thead>

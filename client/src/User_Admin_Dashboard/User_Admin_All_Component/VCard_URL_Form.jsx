@@ -142,7 +142,9 @@ const VCard_URL_Form = () => {
             <h5>Create Your New VCard</h5>
           </div>
 
-          <div className="close_new_vcardurl_page">
+      
+        </div>
+        <div className="close_new_vcardurl_page">
             <button
               type="button"
               onClick={() =>
@@ -152,8 +154,6 @@ const VCard_URL_Form = () => {
               Back<i className="bx bx-exit"></i>
             </button>
           </div>
-        </div>
-
         <div className="new_vcardURL_container_box">
           {/* Tooltip */}
           {tooltip ? (

@@ -335,6 +335,10 @@
       background: #d37ffa;
       border-radius: 5px;
     }
+
+    @media screen and (max-width:600px){
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
       }
       .noplans{
         width: 100%;

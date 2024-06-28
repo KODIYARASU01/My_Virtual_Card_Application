@@ -46,11 +46,12 @@ animation: lines 2s infinite;
     background-color: #EFF3F7;
 
 
+
     .content_left {
       z-index: 900;
       height: 100%;
       overflow: hidden;
-      flex: 1;
+      flex: 0.20;
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -62,65 +63,40 @@ animation: lines 2s infinite;
       filter: drop-shadow(0px 4px 5px rgba(211, 211, 211, 0.5));
       transition: all 0.5s linear;
       position: relative;
+      transform: translateX(0px);
 
       @media screen and (max-width: 900px) {
     
         width: 100%;
         display: flex;
-        flex:0.35;
+        flex:0.25;
         
         transition: all 0.5s linear;
 
       }
-      @media screen and (max-width: 747px) {
+      @media screen and (max-width: 600px) {
     
         width: 100%;
         display: flex;
-        flex: 100%;
-  
+        flex:0.75;
+        
         transition: all 0.5s linear;
 
       }
+   
      
       // @media screen and (max-width:900px){
-      //   flex: 0.40;
+      //   flex: 0.04;
       // }
     }
-    .content_left_small {
-    
-      z-index: 600;
-      overflow: hidden;
-      height: 100%;
-      flex: 0.2;
-      display: flex;
-     
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      background-color: #F7F9FB;
-      border-top: 1px solid rgb(238, 238, 238);
-      filter: drop-shadow(0px 4px 5px rgba(211, 211, 211, 0.5));
-      transition: all 0.5s linear;
+  
 
-      @media (max-width: 600px) {
-        flex: 0;
-        transition: all 0.5s linear;
-      }
-
-        @media (max-width: 600px) {
-          #close{
-            flex: 0;
-            transition: all 0.5s linear;
-          }
-   
-      }
-    }
 
     //Right::after
     .content_right{
       // padding: 2rem 1rem;
       display: flex;
-      flex: 5;
+      flex: 0.80;
       // width: 100%;
 height: 100%;
 overflow: scroll;
@@ -133,29 +109,35 @@ z-index: 800;
       //   width: 100%;
       // }
       @media screen and (max-width: 900px) {
-        position: absolute;
-        top: 0%;
-        left: 0%;
+    
         width: 100%;
         display: flex;
-        flex: 100%;
-        // flex: 0.60;
+        flex:0.75;
+        
         transition: all 0.5s linear;
-        padding: 0.5rem 2rem;
 
       }
-      @media screen and (max-width: 700px) {
-        position: absolute;
-        top: 0%;
-        left: 0%;
-        width: 100%;
-        display: flex;
-        flex: 100%;
-        // flex: 0.60;
-        transition: all 0.5s linear;
-        padding: 0.5rem 0rem;
+      // @media screen and (max-width: 600px) {
+    
+      //   width: 100%;
+      //   display: flex;
+      //   flex:0.75;
+        
+      //   transition: all 0.5s linear;
 
-      }
+      // }
+      // @media screen and (max-width: 700px) {
+      //   position: absolute;
+      //   top: 0%;
+      //   left: 0%;
+      //   width: 100%;
+      //   display: flex;
+      //   flex: 100%;
+      //   // flex: 0.60;
+      //   transition: all 0.5s linear;
+      //   padding: 0.5rem 0rem;
+
+      // }
       &::-webkit-scrollbar {
         width: 4px;
         height: 4px;
@@ -454,3 +436,25 @@ position: relative;
   transform: translateY(0px) translate(-50%,-10%);
   transition: transform 0.8s ease;
 }
+
+
+@media screen and (max-width:600px){
+#slideNavClose{
+  flex: 0;
+  transform: translateX(-300px);
+}
+#SideNavOpen{
+  transform: translateX(0px);
+}
+}
+@media screen and (max-width:600px){
+  #content_right_expand{
+    flex: 1;
+    width: 100%;
+    display: block;
+  }
+  #content_right_minimize{
+    transform: translateX(0px);
+    display: none;
+  }
+  }

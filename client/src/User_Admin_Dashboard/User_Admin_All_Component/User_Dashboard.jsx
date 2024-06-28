@@ -19,7 +19,7 @@ const User_Dashboard = () => {
 
               <div className="details">
                 <h4>10</h4>
-                <small>Total Active VCards</small>
+                <small>Active VCards</small>
               </div>
               <ul class="background">
                 <li></li>
