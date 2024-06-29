@@ -91,10 +91,10 @@ const VCard_URL_Form = () => {
           setURL_Alies(res.data.data.URL_Alies);
           localStorage.setItem('URL_Alies',res.data.data.URL_Alies)
           setTimeout(() => {
-            // navigate(
-            //   `/${userName}/uadmin/vcard_form_edit/${res.data.data.URL_Alies}`
-            // );
-             window.location.pathname = `/${userName}/uadmin/vcard_form_edit/${res.data.data.URL_Alies}`
+            navigate(
+              `/${userName}/uadmin/vcard_form_edit/${res.data.data.URL_Alies}`
+            );
+            //  window.location.pathname = `/${userName}/uadmin/vcard_form_edit/${res.data.data.URL_Alies}`
           }, 1000);
           setFormSubmitLoader(false);
         })
@@ -148,7 +148,7 @@ const VCard_URL_Form = () => {
             <button
               type="button"
               onClick={() =>
-                (window.location.pathname = `/${userName}/uadmin/user_vcard`)
+                navigate(`/${userName}/uadmin/user_vcard`)
               }
             >
               Back<i className="bx bx-exit"></i>

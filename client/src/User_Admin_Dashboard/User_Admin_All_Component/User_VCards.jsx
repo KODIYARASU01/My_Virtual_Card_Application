@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./menuStyles/User_VCards.scss";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import SuperAdmin_context from "../../SuperAdmin_Context/SuperAdmin_context";
 // import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -8,7 +8,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import {useParams} from 'react-router-dom'
 const User_VCards = () => {
-
+let navigate=useNavigate();
   let { userName, setFormSubmitLoader } = useContext(SuperAdmin_context);
 let[CurrentPlan,setCurrentPlan]=useState()
   let [VcardDeleteToggle, setVcardDeleteToggle] = useState(false);
@@ -131,7 +131,7 @@ let[CurrentPlan,setCurrentPlan]=useState()
                       console.log(res);
                       if (res.data.length < 5) {
                         setFormSubmitLoader(false)(
-                          (window.location.pathname = `/${userName}/uadmin/create_new_vcard`)
+                          navigate(`/${userName}/uadmin/create_new_vcard`)
                         );
                       } else {
                         setFormSubmitLoader(false);
@@ -255,7 +255,7 @@ let[CurrentPlan,setCurrentPlan]=useState()
                                   "URL_Alies",
                                   data.URL_Alies
                                 );
-                                window.location.pathname = `/${userName}/uadmin/vcard_form_edit/${data.URL_Alies}`;
+                                navigate(`/${userName}/uadmin/vcard_form_edit/${data.URL_Alies}`);
                               }}
                             ></i>
                             <i

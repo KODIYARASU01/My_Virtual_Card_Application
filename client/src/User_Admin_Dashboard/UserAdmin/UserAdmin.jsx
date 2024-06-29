@@ -59,8 +59,8 @@ const UserAdmin = () => {
       toast.success("LogOut successfully");
       setTimeout(() => {
         setUser(null);
-        <Navigate to="/" />;
-        window.location.pathname = "/";
+        navigate('/')
+        // window.location.pathname = "/";
       }, 2000);
     } catch (err) {
       console.log(err);
@@ -181,7 +181,7 @@ const UserAdmin = () => {
               <div
                 className="list"
                 onClick={() => {
-                  (window.location.pathname = `/${userName}/uadmin/account_setting`),
+                  navigate(`/${userName}/uadmin/account_setting`),
                     // navigate(`${userData.firstName}/uadmin/account_setting`)
                     setProfileOpen(false);
                 }}

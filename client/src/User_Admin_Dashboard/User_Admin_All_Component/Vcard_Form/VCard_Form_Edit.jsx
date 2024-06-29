@@ -90,7 +90,7 @@ let{userName,currentPlan, setCurrentPlan,}=useContext(SuperAdmin_context)
             <button
             className="back"
               onClick={() =>
-                (window.location.pathname = `/${userName}/uadmin/user_vcard`)
+                navigate(`/${userName}/uadmin/user_vcard`)
               }
             >
               Back
