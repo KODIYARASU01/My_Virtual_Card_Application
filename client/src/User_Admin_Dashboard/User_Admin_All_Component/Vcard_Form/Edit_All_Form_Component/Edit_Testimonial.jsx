@@ -10,7 +10,6 @@ import { useParams } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import { convertToBase64ClientImage } from "../../../../Helper/convert";
 import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_context";
-import { set } from "mongoose";
 const Testimonial = () => {
   let { URL_Alies } = useParams();
   let [viewTestimonialDetail, setViewTestimonialDetail] = useState(false);
