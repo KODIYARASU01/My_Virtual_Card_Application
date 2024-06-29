@@ -55,7 +55,7 @@ const ResetPassword = () => {
       setLoginLoader(true);
 
       await axios
-        .post(`http://localhost:3001/auth/reset_password/${id}/${token}`, values)
+        .post(`https://my-virtual-card-application.onrender.com/auth/reset_password/${id}/${token}`, values)
         .then((res) => {
           toast.success(res.data.message);
           setLoginLoader(false)

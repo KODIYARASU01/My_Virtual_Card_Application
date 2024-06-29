@@ -41,7 +41,7 @@ const Gallery = () => {
     try {
       await axios
         .get(
-          `http://localhost:3001/galleryDetail/${URL_Alies}`,
+          `https://my-virtual-card-application.onrender.com/galleryDetail/${URL_Alies}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -101,7 +101,7 @@ const Gallery = () => {
       formData.append("GalleryURL", values.GalleryURL);
       setFormSubmitLoader(true);
       await axios
-        .post(`http://localhost:3001/galleryDetail/${URL_Alies}`, formData, {
+        .post(`https://my-virtual-card-application.onrender.com/galleryDetail/${URL_Alies}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -129,7 +129,7 @@ setGalleryCount(++GalleryCount)
     setFormSubmitLoader(true);
     try {
       axios
-        .get(`http://localhost:3001/galleryDetail/specificID/${id}`, {
+        .get(`https://my-virtual-card-application.onrender.com/galleryDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -152,7 +152,7 @@ setGalleryCount(++GalleryCount)
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/galleryDetail/specificID/${id}`, {
+        .get(`https://my-virtual-card-application.onrender.com/galleryDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -193,7 +193,7 @@ setGalleryCount(++GalleryCount)
     };
     try {
       axios
-        .put(`http://localhost:3001/galleryDetail/updateID/${GalleryId}`, data, {
+        .put(`https://my-virtual-card-application.onrender.com/galleryDetail/updateID/${GalleryId}`, data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -222,7 +222,7 @@ setGalleryCount(++GalleryCount)
     setFormSubmitLoader(true);
     try {
       axios
-        .delete(`http://localhost:3001/galleryDetail/deleteID/${id}`, {
+        .delete(`https://my-virtual-card-application.onrender.com/galleryDetail/deleteID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,

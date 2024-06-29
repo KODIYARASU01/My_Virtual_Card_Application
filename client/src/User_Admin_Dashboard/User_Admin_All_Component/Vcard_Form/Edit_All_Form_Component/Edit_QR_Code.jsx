@@ -39,7 +39,7 @@ const Edit_QR_Code = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/QRCodeDetail/${URL_Alies}`, {
+        .get(`https://my-virtual-card-application.onrender.com/QRCodeDetail/${URL_Alies}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -89,7 +89,7 @@ const Edit_QR_Code = () => {
       formData.append("QRCodeImage", values.QRCodeImage);
       setFormSubmitLoader(true);
       await axios
-        .post(`http://localhost:3001/QRCodeDetail/${URL_Alies}`, formData, {
+        .post(`https://my-virtual-card-application.onrender.com/QRCodeDetail/${URL_Alies}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -117,7 +117,7 @@ const Edit_QR_Code = () => {
     setFormSubmitLoader(true);
     try {
       axios
-        .get(`http://localhost:3001/QRCodeDetail/specificID/${id}`, {
+        .get(`https://my-virtual-card-application.onrender.com/QRCodeDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -140,7 +140,7 @@ const Edit_QR_Code = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/QRCodeDetail/specificID/${id}`, {
+        .get(`https://my-virtual-card-application.onrender.com/QRCodeDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -178,7 +178,7 @@ const Edit_QR_Code = () => {
     };
     try {
       axios
-        .put(`http://localhost:3001/QRCodeDetail/updateID/${QRCodeId}`, data, {
+        .put(`https://my-virtual-card-application.onrender.com/QRCodeDetail/updateID/${QRCodeId}`, data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -207,7 +207,7 @@ const Edit_QR_Code = () => {
     setFormSubmitLoader(true);
     try {
       axios
-        .delete(`http://localhost:3001/QRCodeDetail/deleteID/${id}`, {
+        .delete(`https://my-virtual-card-application.onrender.com/QRCodeDetail/deleteID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,

@@ -48,7 +48,7 @@ const VCard_URL_Form = () => {
   };
   useEffect(() => {
     axios
-      .get("http://localhost:3001/vcard_URL", {
+      .get("https://my-virtual-card-application.onrender.com/vcard_URL", {
         headers: {
           Authorization: `Bearer ${localStorageDatas.token}`,
         },
@@ -79,7 +79,7 @@ const VCard_URL_Form = () => {
       values.Description = stripHtmlTags(Description);
       setFormSubmitLoader(true);
       await axios
-        .post("http://localhost:3001/vcard_URL", values, {
+        .post("https://my-virtual-card-application.onrender.com/vcard_URL", values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,

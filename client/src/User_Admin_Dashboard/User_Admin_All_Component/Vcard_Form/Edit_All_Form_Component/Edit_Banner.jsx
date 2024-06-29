@@ -37,7 +37,7 @@ let [BannerLength,setBannerLength]=useState();
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/popupBannerDetail/${URL_Alies}`, {
+        .get(`https://my-virtual-card-application.onrender.com/popupBannerDetail/${URL_Alies}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -83,7 +83,7 @@ let [BannerLength,setBannerLength]=useState();
     };
     try {
       await axios
-        .post(`http://localhost:3001/popupBannerDetail/${URL_Alies}`, data, {
+        .post(`https://my-virtual-card-application.onrender.com/popupBannerDetail/${URL_Alies}`, data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -117,7 +117,7 @@ let [BannerLength,setBannerLength]=useState();
     try {
       await axios
         .put(
-          `http://localhost:3001/popupBannerDetail/update/${URL_Alies}`,
+          `https://my-virtual-card-application.onrender.com/popupBannerDetail/update/${URL_Alies}`,
           data,
           {
             headers: {

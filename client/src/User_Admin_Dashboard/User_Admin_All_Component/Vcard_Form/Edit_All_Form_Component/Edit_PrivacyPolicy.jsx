@@ -25,7 +25,7 @@ const Edit_PrivacyPolicy = () => {
   };
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/privacyPolicyDetail/${URL_Alies}`, {
+      .get(`https://my-virtual-card-application.onrender.com/privacyPolicyDetail/${URL_Alies}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorageDatas.token}`,
@@ -57,7 +57,7 @@ const Edit_PrivacyPolicy = () => {
       setFormSubmitLoader(true);
       await axios
         .post(
-          `http://localhost:3001/privacyPolicyDetail/${URL_Alies}`,
+          `https://my-virtual-card-application.onrender.com/privacyPolicyDetail/${URL_Alies}`,
           values,
           {
             headers: {
@@ -92,7 +92,7 @@ e.preventDefault();
       setFormSubmitLoader(true);
       await axios
         .put(
-          `http://localhost:3001/privacyPolicyDetail/update/${URL_Alies}`,
+          `https://my-virtual-card-application.onrender.com/privacyPolicyDetail/update/${URL_Alies}`,
           data,
           {
             headers: {

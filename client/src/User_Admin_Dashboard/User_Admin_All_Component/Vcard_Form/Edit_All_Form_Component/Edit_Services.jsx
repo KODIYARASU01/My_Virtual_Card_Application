@@ -43,7 +43,7 @@ const Services = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/serviceDetail/${URL_Alies}`, {
+        .get(`https://my-virtual-card-application.onrender.com/serviceDetail/${URL_Alies}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -108,7 +108,7 @@ const Services = () => {
       );
 
       await axios
-        .post(`http://localhost:3001/serviceDetail/${URL_Alies}`, formData, {
+        .post(`https://my-virtual-card-application.onrender.com/serviceDetail/${URL_Alies}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -139,7 +139,7 @@ const Services = () => {
     setViewServiceDetail(true);
     try {
       await axios
-        .get(`http://localhost:3001/serviceDetail/specificID/${id}`, {
+        .get(`https://my-virtual-card-application.onrender.com/serviceDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -171,7 +171,7 @@ const Services = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/serviceDetail/specificID/${id}`, {
+        .get(`https://my-virtual-card-application.onrender.com/serviceDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -215,7 +215,7 @@ const Services = () => {
     try {
       axios
         .put(
-          `http://localhost:3001/serviceDetail/updateID/${ServiceId}`,
+          `https://my-virtual-card-application.onrender.com/serviceDetail/updateID/${ServiceId}`,
           data,
           {
             headers: {
@@ -250,7 +250,7 @@ const Services = () => {
     setFormSubmitLoader(true);
     try {
       axios
-        .delete(`http://localhost:3001/serviceDetail/deleteID/${id}`, {
+        .delete(`https://my-virtual-card-application.onrender.com/serviceDetail/deleteID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,

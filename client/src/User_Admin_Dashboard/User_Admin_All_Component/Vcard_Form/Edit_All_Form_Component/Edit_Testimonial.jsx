@@ -35,7 +35,7 @@ const Testimonial = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/testimonialDetail/${URL_Alies}`, {
+        .get(`https://my-virtual-card-application.onrender.com/testimonialDetail/${URL_Alies}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -89,7 +89,7 @@ const Testimonial = () => {
       values.ClientFeedback = stripHtmlTags(ClientFeedback);
       setFormSubmitLoader(true);
       await axios
-        .post(`http://localhost:3001/testimonialDetail/${URL_Alies}`, values, {
+        .post(`https://my-virtual-card-application.onrender.com/testimonialDetail/${URL_Alies}`, values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -120,7 +120,7 @@ const Testimonial = () => {
     setViewTestimonialDetail(true);
     try {
       await axios
-        .get(`http://localhost:3001/testimonialDetail/specificID/${id}`, {
+        .get(`https://my-virtual-card-application.onrender.com/testimonialDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -152,7 +152,7 @@ const Testimonial = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/testimonialDetail/specificID/${id}`, {
+        .get(`https://my-virtual-card-application.onrender.com/testimonialDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -198,7 +198,7 @@ const Testimonial = () => {
     try {
       axios
         .put(
-          `http://localhost:3001/testimonialDetail/updateID/${testimonialId}`,
+          `https://my-virtual-card-application.onrender.com/testimonialDetail/updateID/${testimonialId}`,
           data,
           {
             headers: {
@@ -233,7 +233,7 @@ const Testimonial = () => {
     setFormSubmitLoader(true);
     try {
       axios
-        .delete(`http://localhost:3001/testimonialDetail/deleteID/${id}`, {
+        .delete(`https://my-virtual-card-application.onrender.com/testimonialDetail/deleteID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,

@@ -26,7 +26,7 @@ let[CurrentPlan,setCurrentPlan]=useState()
   useEffect(() => {
     setFormSubmitLoader(true);
     axios
-      .get(`http://localhost:3001/vcard_URL/${userName}`, {
+      .get(`https://my-virtual-card-application.onrender.com/vcard_URL/${userName}`, {
         headers: {
           Authorization: `Bearer ${userData.token}`,
         },
@@ -43,7 +43,7 @@ let[CurrentPlan,setCurrentPlan]=useState()
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/currentplan/specificAll/${userName}`, {
+      .get(`https://my-virtual-card-application.onrender.com/currentplan/specificAll/${userName}`, {
         headers: {
           Authorization: `Bearer ${userData.token}`,
         },
@@ -60,7 +60,7 @@ let[CurrentPlan,setCurrentPlan]=useState()
     try {
       await axios
         .delete(
-          `http://localhost:3001/vcard/all_Data_Delete_API/${URL_Alies}`,
+          `https://my-virtual-card-application.onrender.com/vcard/all_Data_Delete_API/${URL_Alies}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -122,7 +122,7 @@ let[CurrentPlan,setCurrentPlan]=useState()
                 onClick={async () => {
                   setFormSubmitLoader(true);
                   await axios
-                    .get(`http://localhost:3001/vcard_URL/${userName}`, {
+                    .get(`https://my-virtual-card-application.onrender.com/vcard_URL/${userName}`, {
                       headers: {
                         Authorization: `Bearer ${userData.token}`,
                       },
@@ -181,14 +181,14 @@ let[CurrentPlan,setCurrentPlan]=useState()
 
                     <th
                       className="text-center fw-semibold "
-                      style={{ width: "10%" }}
+                      style={{ width: "15%" }}
                     >
                       PLAN
                     </th>
 
                     <th
                       className="text-center fw-semibold "
-                      style={{ width: "10%" }}
+                      style={{ width: "5%" }}
                     >
                       SUBSCRIBERS
                     </th>

@@ -53,7 +53,7 @@ const BasicForm = () => {
   };
   let localStorageDatas = JSON.parse(localStorage.getItem("datas"));
   useEffect(()=>{
-    axios.get(`http://localhost:3001/vcard_URL/specific_vcard/${URL_Alies}`,{
+    axios.get(`https://my-virtual-card-application.onrender.com/vcard_URL/specific_vcard/${URL_Alies}`,{
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorageDatas.token}`,
@@ -110,7 +110,7 @@ const BasicForm = () => {
       values.Description = stripHtmlTags(Description);
       setFormSubmitLoader(true);
       await axios
-        .post(`http://localhost:3001/basicDetail/${URL_Alies}`, values, {
+        .post(`https://my-virtual-card-application.onrender.com/basicDetail/${URL_Alies}`, values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,

@@ -26,7 +26,7 @@ const SocialMedias = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`http://localhost:3001/socialMediaDetail/${URL_Alies}`, {
+        .get(`https://my-virtual-card-application.onrender.com/socialMediaDetail/${URL_Alies}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -77,7 +77,7 @@ const SocialMedias = () => {
     try {
       axios
         .put(
-          `http://localhost:3001/socialMediaDetail/update_by_vcard_URL/${URL_Alies}`,
+          `https://my-virtual-card-application.onrender.com/socialMediaDetail/update_by_vcard_URL/${URL_Alies}`,
           data,
           {
             headers: {
@@ -117,7 +117,7 @@ const SocialMedias = () => {
     try {
       axios
         .post(
-          `http://localhost:3001/socialMediaDetail/${URL_Alies}`,
+          `https://my-virtual-card-application.onrender.com/socialMediaDetail/${URL_Alies}`,
           data,
           {
             headers: {
