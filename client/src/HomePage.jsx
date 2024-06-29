@@ -1206,17 +1206,7 @@ const HomePage = () => {
               variants={plan_box_slide_5Anime}
               id={planExpand ? "expand" : "default"}
             >
-              <Lottie
-                options={sparkOptions}
-                style={{
-                  height: 150,
-                  width: 150,
-                  position: "absolute",
-                  top: -45,
-                  left: -70,
-                  mixBlendMode: "multiply",
-                }}
-              />
+           
               <m.div
                 className="down_arrow"
                 onClick={() => setPlanExpand(!planExpand)}
@@ -1270,17 +1260,7 @@ const HomePage = () => {
               variants={plan_box_slide_5Anime}
               id={standardPlanExpand ? "expand" : "default"}
             >
-              <Lottie
-                options={sparkOptions}
-                style={{
-                  height: 150,
-                  width: 150,
-                  position: "absolute",
-                  top: -45,
-                  left: -70,
-                  mixBlendMode: "multiply",
-                }}
-              />
+              
               <div
                 className="down_arrow"
                 onClick={() => setStandardPlanExpand(!standardPlanExpand)}
@@ -1334,17 +1314,7 @@ const HomePage = () => {
               variants={plan_box_slide_5Anime}
               id={PremiumPlanExpand ? "expand" : "default"}
             >
-              <Lottie
-                options={sparkOptions}
-                style={{
-                  height: 150,
-                  width: 150,
-                  position: "absolute",
-                  top: -45,
-                  left: -70,
-                  mixBlendMode: "multiply",
-                }}
-              />
+             
               <div
                 className="down_arrow"
                 onClick={() => setPremiumPlanExpand(!PremiumPlanExpand)}
