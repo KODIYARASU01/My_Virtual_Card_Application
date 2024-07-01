@@ -11,10 +11,10 @@ import card7 from "../../../../assets/Digicards/7.png";
 import card8 from "../../../../assets/Digicards/8.png";
 import card9 from "../../../../assets/Digicards/9.png";
 import Footer from "../../../UserAdmin_Footer/Footer";
-import selected_gif from "../../../../assets/animations/selected.gif";
+import selected_gif from "../../../../assets/animations/vcard_selected.gif";
 import touch_gif from "../../../../assets/animations/touch.gif";
 import SuperAdmin_context from "../../../../SuperAdmin_Context/SuperAdmin_context";
-import {useParams} from 'react-router-dom'
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
 let FreeTemplate = [
@@ -123,8 +123,7 @@ let EnterpriceTemplate = [
 ];
 
 const Select_Template = () => {
-
-  let {URL_Alies}=useParams();
+  let { URL_Alies } = useParams();
   let {
     FormSubmitLoader,
     setFormSubmitLoader,
@@ -135,6 +134,7 @@ const Select_Template = () => {
     setSavedPlan,
   } = useContext(SuperAdmin_context);
   let [currentTemplate, setCurrentTemplate] = useState(null);
+  let [VCardAdded, setVCardAdded] = useState(0);
   let [savedTemplate, setSavedTemplate] = useState(null);
   function handle_Template_Selection(getCurrentId) {
     setCurrentTemplate(getCurrentId === currentTemplate ? null : getCurrentId);
@@ -152,7 +152,7 @@ const Select_Template = () => {
   // useEffect(() => {
   //   axios
   //     .get(
-  //       `https://my-virtual-card-application.onrender.com/templateDetail/specificAll/${localStorageDatas.userName}`,
+  //       `http://localhost:3001/templateDetail/specificAll/${localStorageDatas.userName}`,
   //       {
   //         headers: {
   //           "Content-Type": "application/json",
@@ -176,7 +176,7 @@ const Select_Template = () => {
   // useEffect(() => {
   //   axios
   //     .get(
-  //       `https://my-virtual-card-application.onrender.com/currentplan/specificAll/${localStorageDatas.userName}`,
+  //       `http://localhost:3001/currentplan/specificAll/${localStorageDatas.userName}`,
   //       {
   //         headers: {
   //           "Content-Type": "application/json",
@@ -199,16 +199,14 @@ const Select_Template = () => {
   async function fetchCurrentTemplate() {
     try {
       await axios
-        .get(
-          `https://my-virtual-card-application.onrender.com/templateDetail/specificAll/${URL_Alies}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorageDatas.token}`,
-            },
-          }
-        )
+        .get(`http://localhost:3001/templateDetail/specificAll/${URL_Alies}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorageDatas.token}`,
+          },
+        })
         .then((res) => {
+          setVCardAdded(res.data.data.length);
           if (res.data.data.length <= 0) {
             setCurrentTemplate(null);
           } else {
@@ -228,7 +226,7 @@ const Select_Template = () => {
 
   let formik = useFormik({
     initialValues: {
-      URL_Alies:URL_Alies,
+      URL_Alies: URL_Alies,
       currentTemplate: null,
     },
     validateOnChange: false,
@@ -238,10 +236,10 @@ const Select_Template = () => {
     onSubmit: async (values) => {
       setFormSubmitLoader(true);
       values.currentTemplate = currentTemplate;
-      values.URL_Alies=URL_Alies;
+      values.URL_Alies = URL_Alies;
       await axios
-        .put(
-          `https://my-virtual-card-application.onrender.com/templateDetail/update_with_userName/${URL_Alies}`,
+        .post(
+          `http://localhost:3001/templateDetail/${URL_Alies}`,
           values,
           {
             headers: {
@@ -262,6 +260,30 @@ const Select_Template = () => {
     },
   });
 
+  async function handleTemplateUpdate() {
+setFormSubmitLoader(true)
+    let data={
+      URL_Alies: URL_Alies,
+      currentTemplate
+    }
+    axios
+      .put(`http://localhost:3001/templateDetail/update_with_URL/${URL_Alies}`,data,  {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorageDatas.token}`,
+        },
+      })
+      .then((res) => {
+        setFormSubmitLoader(false);
+        toast.success(res.data.message);
+     
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message)
+
+        setFormSubmitLoader(false)
+      });
+  }
   return (
     <>
       <div className="select_vcard_template_container">
@@ -277,13 +299,16 @@ const Select_Template = () => {
             </h6>
           )}
 
-          {currentTemplate != savedTemplate || savedTemplate == null ? (
+          {VCardAdded == 0 ? (
             <button onClick={formik.handleSubmit} type="submit">
-              {currentTemplate !=null ? 'Update' : 'Save' }
+              Save
             </button>
           ) : (
-            ""
+            <button onClick={handleTemplateUpdate} type="submit">
+              Update
+            </button>
           )}
+
           {/* {savedTemplate==null   ? (
             <button onClick={formik.handleSubmit} type="submit">
               Save

@@ -1,7 +1,7 @@
 import express from 'express';
 import { getTemplateData, postTemplateData,  
     getSpecificUserAllData,
-    getSpecificIdData,
+    getSpecificUserNameData,
     updateSpecificUserData_id,
     updateSpecificUserData,
     deleteSpecificUserAllData,
@@ -10,14 +10,14 @@ import { verifyToken } from '../Middleware/verifyToken.js';
 let router=express.Router();
 
 
-router.get('/',verifyToken,getTemplateData);
-router.post('/',verifyToken,postTemplateData);
+router.get('/:URL_Alies',verifyToken,getTemplateData);
+router.post('/:URL_Alies',verifyToken,postTemplateData);
  //Read Specific user all Data:
  router.get("/specificAll/:URL_Alies", verifyToken, getSpecificUserAllData);
  //Read Specific ID Data:
- router.get("/specific/:id", verifyToken, getSpecificIdData);
+ router.get("/specific/:userName", verifyToken, getSpecificUserNameData);
  //Update Specific user Single Data:
-router.put("/update_with_userName/:id", verifyToken, updateSpecificUserData);
+router.put("/update_with_URL/:URL_Alies", verifyToken, updateSpecificUserData);
 //Update Specific user Single Data:
 router.put("/update_with_id/:id", verifyToken, updateSpecificUserData_id);
 //Delete Specific user all Data in Basic Detail:

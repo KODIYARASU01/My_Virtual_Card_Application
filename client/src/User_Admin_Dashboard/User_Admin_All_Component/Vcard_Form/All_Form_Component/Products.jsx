@@ -34,7 +34,7 @@ const Products = () => {
     try {
       await axios
         .get(
-          `https://my-virtual-card-application.onrender.com/productDetail/specificAll/${localStorageDatas.userName}`,
+          `http://localhost:3001/productDetail/specificAll/${localStorageDatas.userName}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -102,7 +102,7 @@ const Products = () => {
      
       setFormSubmitLoader(true);
       await axios
-        .post("https://my-virtual-card-application.onrender.com/productDetail", formData, {
+        .post("http://localhost:3001/productDetail", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,

@@ -73,7 +73,7 @@ const UserAdmin = () => {
   useEffect(() => {
 
     axios
-      .get(`https://my-virtual-card-application.onrender.com/auth/register/${userDetails.id}`)
+      .get(`http://localhost:3001/auth/register/${userDetails.id}`)
       .then((res) => {
         console.log(res)
         setUserData(res.data.data);

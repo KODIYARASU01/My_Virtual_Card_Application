@@ -25,7 +25,7 @@ const Terms_Conditions = () => {
     };
     useEffect(() => {
       axios
-        .get(`https://my-virtual-card-application.onrender.com/termConditionDetail/${URL_Alies}`, {
+        .get(`http://localhost:3001/termConditionDetail/${URL_Alies}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -57,7 +57,7 @@ const Terms_Conditions = () => {
       values.Terms_Conditions = stripHtmlTags(Terms_Conditions);
       setFormSubmitLoader(true);
       await axios
-        .post(`https://my-virtual-card-application.onrender.com/termConditionDetail/${URL_Alies}`, values, {
+        .post(`http://localhost:3001/termConditionDetail/${URL_Alies}`, values, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -87,7 +87,7 @@ const Terms_Conditions = () => {
           setFormSubmitLoader(true);
           await axios
             .put(
-              `https://my-virtual-card-application.onrender.com/termConditionDetail/update/${URL_Alies}`,
+              `http://localhost:3001/termConditionDetail/update/${URL_Alies}`,
               data,
               {
                 headers: {

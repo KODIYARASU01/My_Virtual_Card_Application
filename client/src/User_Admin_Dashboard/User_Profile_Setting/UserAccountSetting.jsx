@@ -41,7 +41,7 @@ const UserAccountSetting = () => {
     setLoader(true);
     setFormSubmitLoader(true)
     axios
-      .get(`https://my-virtual-card-application.onrender.com/auth/register/${UserData.id}`)
+      .get(`http://localhost:3001/auth/register/${UserData.id}`)
       .then((responce) => {
 
         setFormSubmitLoader(false)
@@ -97,7 +97,7 @@ const UserAccountSetting = () => {
         mobileNumber,
       };
       axios
-        .put(`https://my-virtual-card-application.onrender.com/auth/register/${UserData.id}`, data)
+        .put(`http://localhost:3001/auth/register/${UserData.id}`, data)
         .then((res) => {
           setFormSubmitLoader(false)
           toast.success(res.data.message);

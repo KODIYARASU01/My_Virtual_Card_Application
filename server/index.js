@@ -39,6 +39,7 @@ dotenv.config();
 //Port initializing:
 let PORT = process.env.PORT || 3000;
 //Cors Policy connect frontend and backend with same port:
+// app.use(cors());
 app.use(cors());
 //This will help you to send data to server in json formate:
 app.use(express.json({limit:'60mb'}));

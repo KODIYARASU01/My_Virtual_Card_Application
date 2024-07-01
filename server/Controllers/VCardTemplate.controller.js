@@ -8,7 +8,7 @@ export const postTemplateData = async (req, res) => {
       return res.status(401).json({ message: "Select Your VCard Template!" });
     } 
 
-    let checkVardActive=await Current_VCardTemplate.find({user:req.user.userName});
+    let checkVardActive=await Current_VCardTemplate.find({URL_Alies:req.params.URL_Alies});
 
     if(checkVardActive.length > 0){
       return res.status(401).json({ message: "Already VCard selected!" });  
@@ -75,10 +75,10 @@ export const getSpecificUserAllData = async (req, res) => {
   }
 };
 // //Read or get Specific User all Data  :
-export const getSpecificIdData = async (req, res) => {
+export const getSpecificUserNameData = async (req, res) => {
   try {
     let { id } = req.params;
-    let getSpecificData = await Current_VCardTemplate.findById(id);
+    let getSpecificData = await Current_VCardTemplate.find({user:req.user.userName});
 
     if (!getSpecificData) {
       res.status(400).json({ message: "Data Not Found!" });

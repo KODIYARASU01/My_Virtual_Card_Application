@@ -70,7 +70,7 @@ const BasicForm = () => {
       setFormSubmitLoader(true);
       axios
         .get(
-          `https://my-virtual-card-application.onrender.com/vcard_URL/specific_vcard/${URL_Alies}`,
+          `http://localhost:3001/vcard_URL/specific_vcard/${URL_Alies}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -102,7 +102,7 @@ const BasicForm = () => {
       setFormSubmitLoader(true);
       axios
         .get(
-          `https://my-virtual-card-application.onrender.com/basicDetail/${URL_Alies}`,
+          `http://localhost:3001/basicDetail/${URL_Alies}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -186,7 +186,7 @@ const BasicForm = () => {
   //     values.Description = stripHtmlTags(Description);
   //     setFormSubmitLoader(true);
   //     await axios
-  //       .put(`https://my-virtual-card-application.onrender.com/basicDetail/update_by_userName/${localStorageDatas.userName}`, values, {
+  //       .put(`http://localhost:3001/basicDetail/update_by_userName/${localStorageDatas.userName}`, values, {
   //         headers: {
   //           "Content-Type": "application/json",
   //           Authorization: `Bearer ${localStorageDatas.token}`,
@@ -217,7 +217,7 @@ const BasicForm = () => {
     try {
       axios
         .put(
-          `https://my-virtual-card-application.onrender.com/vcard_URL/update_by_vcardUrl/${URL_Alies}`,
+          `http://localhost:3001/vcard_URL/update_by_vcardUrl/${URL_Alies}`,
           data,
           {
             headers: {
@@ -259,7 +259,7 @@ const BasicForm = () => {
       ContactToggleSwitch,
     };
     await axios
-    .post(`https://my-virtual-card-application.onrender.com/basicDetail/${URL_Alies}`, data, {
+    .post(`http://localhost:3001/basicDetail/${URL_Alies}`, data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorageDatas.token}`,
@@ -297,7 +297,7 @@ const BasicForm = () => {
     try {
       axios
         .put(
-          `https://my-virtual-card-application.onrender.com/basicDetail/update_by_vcard_URL/${URL_Alies}`,
+          `http://localhost:3001/basicDetail/update_by_vcard_URL/${URL_Alies}`,
           data,
           {
             headers: {

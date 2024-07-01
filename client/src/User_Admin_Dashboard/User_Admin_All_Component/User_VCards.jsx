@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./menuStyles/User_VCards.scss";
-import { Link,useNavigate } from "react-router-dom";
+import { Link,useNavigate,useParams } from "react-router-dom";
 import SuperAdmin_context from "../../SuperAdmin_Context/SuperAdmin_context";
 // import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import axios from "axios";
 import toast from "react-hot-toast";
-import {useParams} from 'react-router-dom'
 const User_VCards = () => {
+  let {userName}=useParams();
 let navigate=useNavigate();
-  let { userName, setFormSubmitLoader } = useContext(SuperAdmin_context);
-let[CurrentPlan,setCurrentPlan]=useState()
+  let { setFormSubmitLoader } = useContext(SuperAdmin_context);
+let[CurrentPlan,setCurrentPlan]=useState();
+let [savedVCardTemplate,setSavedVCardTemplate]=useState([]);
   let [VcardDeleteToggle, setVcardDeleteToggle] = useState(false);
   let [Yes, setYes] = useState(false);
   let [VCardCount, setVCardCount] = useState();
@@ -26,7 +27,7 @@ let[CurrentPlan,setCurrentPlan]=useState()
   useEffect(() => {
     setFormSubmitLoader(true);
     axios
-      .get(`https://my-virtual-card-application.onrender.com/vcard_URL/${userName}`, {
+      .get(`http://localhost:3001/vcard_URL/${userName}`, {
         headers: {
           Authorization: `Bearer ${userData.token}`,
         },
@@ -43,7 +44,7 @@ let[CurrentPlan,setCurrentPlan]=useState()
 
   useEffect(() => {
     axios
-      .get(`https://my-virtual-card-application.onrender.com/currentplan/specificAll/${userName}`, {
+      .get(`http://localhost:3001/currentplan/specificAll/${userName}`, {
         headers: {
           Authorization: `Bearer ${userData.token}`,
         },
@@ -60,7 +61,7 @@ let[CurrentPlan,setCurrentPlan]=useState()
     try {
       await axios
         .delete(
-          `https://my-virtual-card-application.onrender.com/vcard/all_Data_Delete_API/${URL_Alies}`,
+          `http://localhost:3001/vcard/all_Data_Delete_API/${URL_Alies}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -90,6 +91,22 @@ let[CurrentPlan,setCurrentPlan]=useState()
     toast.success("Link Copied!");
     setTimeout(() => setCopied(false), 2000); // Reset the copied state after 2 seconds
   };
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/templateDetail/specific/${userName}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorageDatas.token}`,
+        },
+      })
+      .then((res) => {
+        setSavedVCardTemplate(res.data.data)
+        console.log(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   return (
     <>
       <div className="user_vcards_container">
@@ -122,7 +139,7 @@ let[CurrentPlan,setCurrentPlan]=useState()
                 onClick={async () => {
                   setFormSubmitLoader(true);
                   await axios
-                    .get(`https://my-virtual-card-application.onrender.com/vcard_URL/${userName}`, {
+                    .get(`http://localhost:3001/vcard_URL/${userName}`, {
                       headers: {
                         Authorization: `Bearer ${userData.token}`,
                       },
@@ -218,13 +235,13 @@ let[CurrentPlan,setCurrentPlan]=useState()
                           <td className="fw-light text-center align-items-center">
                             {" "}
                             <a
-                              href={`https://myvirtualcard.in/${data.URL_Alies}`}
+                              href={`http://localhost:5173/${data.URL_Alies}`}
                               target="_blank"
                             >
-                              https://myvirtualcard.in/{data.URL_Alies}
+                              http://localhost:5173/{data.URL_Alies}
                             </a>
                             <CopyToClipboard
-                              text={`https://myvirtualcard.in/${data.URL_Alies}`}
+                              text={`http://localhost:5173/${data.URL_Alies}`}
                               onCopy={handleCopyURL}
                             >
                               <i className="bx bx-copy"></i>

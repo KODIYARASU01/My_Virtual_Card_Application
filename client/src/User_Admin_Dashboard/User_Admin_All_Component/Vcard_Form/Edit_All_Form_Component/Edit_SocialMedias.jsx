@@ -26,7 +26,7 @@ const SocialMedias = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`https://my-virtual-card-application.onrender.com/socialMediaDetail/${URL_Alies}`, {
+        .get(`http://localhost:3001/socialMediaDetail/${URL_Alies}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -45,7 +45,7 @@ const SocialMedias = () => {
             setFormSubmitLoader(false);
             setUpdateToggle(true);
           } else {
-            toast.error("Data not added!");
+            // toast.error("Data not added!");
             setUpdateToggle(false);
             setFormSubmitLoader(false);
           }
@@ -77,7 +77,7 @@ const SocialMedias = () => {
     try {
       axios
         .put(
-          `https://my-virtual-card-application.onrender.com/socialMediaDetail/update_by_vcard_URL/${URL_Alies}`,
+          `http://localhost:3001/socialMediaDetail/update_by_vcard_URL/${URL_Alies}`,
           data,
           {
             headers: {
@@ -117,7 +117,7 @@ const SocialMedias = () => {
     try {
       axios
         .post(
-          `https://my-virtual-card-application.onrender.com/socialMediaDetail/${URL_Alies}`,
+          `http://localhost:3001/socialMediaDetail/${URL_Alies}`,
           data,
           {
             headers: {

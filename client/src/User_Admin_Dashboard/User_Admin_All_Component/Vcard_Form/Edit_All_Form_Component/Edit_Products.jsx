@@ -50,7 +50,7 @@ const Products = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`https://my-virtual-card-application.onrender.com/productDetail/${URL_Alies}`, {
+        .get(`http://localhost:3001/productDetail/${URL_Alies}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -58,7 +58,7 @@ const Products = () => {
         })
         .then((res) => {
           if (res.data.data.length == 0) {
-            toast.error("No Product added!");
+            // toast.error("No Product added!");
             setFormSubmitLoader(false);
           } else {
             setAllProduct(res.data.data);
@@ -107,7 +107,7 @@ const Products = () => {
 
       setFormSubmitLoader(true);
       await axios
-        .post(`https://my-virtual-card-application.onrender.com/productDetail/${URL_Alies}`, formData, {
+        .post(`http://localhost:3001/productDetail/${URL_Alies}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -139,7 +139,7 @@ const Products = () => {
     setProductViewToggle(true);
     try {
       await axios
-        .get(`https://my-virtual-card-application.onrender.com/productDetail/specificID/${id}`, {
+        .get(`http://localhost:3001/productDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -171,7 +171,7 @@ const Products = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`https://my-virtual-card-application.onrender.com/productDetail/specificID/${id}`, {
+        .get(`http://localhost:3001/productDetail/specificID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -218,7 +218,7 @@ const Products = () => {
     try {
       axios
         .put(
-          `https://my-virtual-card-application.onrender.com/productDetail/updateID/${ProductId}`,
+          `http://localhost:3001/productDetail/updateID/${ProductId}`,
           data,
           {
             headers: {
@@ -250,7 +250,7 @@ const Products = () => {
     setFormSubmitLoader(true);
     try {
       axios
-        .delete(`https://my-virtual-card-application.onrender.com/productDetail/deleteID/${id}`, {
+        .delete(`http://localhost:3001/productDetail/deleteID/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorageDatas.token}`,

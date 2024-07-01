@@ -402,7 +402,7 @@ const Plan = () => {
         PlanPrice,
       };
       await axios
-        .post("https://my-virtual-card-application.onrender.com/currentplan", data, {
+        .post("http://localhost:3001/currentplan", data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -426,7 +426,7 @@ const Plan = () => {
   useEffect(() => {
     axios
       .get(
-        `https://my-virtual-card-application.onrender.com/currentplan/specificAll/${userName}`,
+        `http://localhost:3001/currentplan/specificAll/${userName}`,
         {
           headers: {
             "Content-Type": "application/json",

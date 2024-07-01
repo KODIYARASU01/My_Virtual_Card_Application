@@ -28,7 +28,7 @@ const Business_Hour = () => {
     setFormSubmitLoader(true);
     try {
       await axios
-        .get(`https://my-virtual-card-application.onrender.com/bussinessDetail/${URL_Alies}`, {
+        .get(`http://localhost:3001/bussinessDetail/${URL_Alies}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -69,7 +69,7 @@ const Business_Hour = () => {
               setFormSubmitLoader(false);
             setUpdateToggle(true);
           } else {
-            toast.error("Data not added!");
+            // toast.error("Data not added!");
             setUpdateToggle(false);
             setFormSubmitLoader(false);
           }
@@ -103,7 +103,7 @@ const Business_Hour = () => {
     setFormSubmitLoader(true);
     try {
       axios
-        .post(`https://my-virtual-card-application.onrender.com/bussinessDetail/${URL_Alies}`, data, {
+        .post(`http://localhost:3001/bussinessDetail/${URL_Alies}`, data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorageDatas.token}`,
@@ -141,7 +141,7 @@ const Business_Hour = () => {
     try {
       axios
         .put(
-          `https://my-virtual-card-application.onrender.com/bussinessDetail/update_by_vcard_URL/${URL_Alies}`,
+          `http://localhost:3001/bussinessDetail/update_by_vcard_URL/${URL_Alies}`,
           data,
           {
             headers: {

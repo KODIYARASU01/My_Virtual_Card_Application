@@ -39,11 +39,12 @@ import toast from "react-hot-toast";
 import VCard_URL_Form from "./User_Admin_Dashboard/User_Admin_All_Component/VCard_URL_Form";
 import Plan from "./User_Admin_Dashboard/User_Admin_All_Component/Vcard_Form/All_Form_Component/Plan";
 import Inquiries from "./User_Admin_Dashboard/User_Admin_All_Component/Inquiries";
+import NewCardDesign5 from "./All_VCards/NewCardDesign5";
+import NewCardDesign7 from "./All_VCards/NewCardDesign7";
 
 const App = () => {
-
   //URL Name state:
-  let [URL_Alies,setURL_Alies]=useState('');
+  let [URL_Alies, setURL_Alies] = useState("");
 
   let [SideNavActions, setSideNavActions] = useState(false);
   let [profileOpen, setProfileOpen] = useState(false);
@@ -202,18 +203,19 @@ const App = () => {
     if (Token) {
       setUser(Token);
       setUserName(Token.userName);
-   
     } else {
       setUserName("Jayakumar");
     }
   }, [navigate]);
+  const localStorageDatas = JSON.parse(localStorage.getItem("datas"));
 
   return (
     <>
       <div className="App_container">
         <SuperAdmin_context.Provider
           value={{
-            URL_Alies,setURL_Alies,
+            URL_Alies,
+            setURL_Alies,
 
             currentTemplate,
             setCurrentTemplate,
@@ -221,7 +223,8 @@ const App = () => {
             setSavedTemplate,
             SavedPlan,
             setSavedPlan,
-            currentPlan, setCurrentPlan,
+            currentPlan,
+            setCurrentPlan,
             Index,
             setIndex,
             userData,
@@ -470,6 +473,17 @@ const App = () => {
             />
             <Route path="/" element={<HomePage />} />
             <Route path="/new_card3" element={<NewCardDesign3 />} />
+            {currentTemplate == 1 ? (
+              <Route path="/:URL_Alies" element={<NewCardDesign5 />} />
+            ) : (
+              ""
+            )}
+            {currentTemplate == 4 ? (
+              <Route path="/:URL_Alies" element={<NewCardDesign7 />} />
+            ) : (
+              ""
+            )}
+
             <Route path="/sadmin" element={<SuperAdmin />}>
               <Route path="/sadmin/dashboard" element={<Dashboard />} />
 
@@ -508,20 +522,20 @@ const App = () => {
                 path={`/${userName}/uadmin/user_vcard`}
                 element={<User_VCards />}
               />
-                 <Route
+              <Route
                 path={`/${userName}/uadmin/vcard_form/:URL_Alies`}
                 element={<VCard_Form />}
               />
               <Route
                 path={`/${userName}/uadmin/create_new_vcard`}
-                element={<VCard_URL_Form/>}
+                element={<VCard_URL_Form />}
               />
-             
+
               <Route
                 path={`/${userName}/uadmin/vcard_form_edit/:URL_Alies`}
                 element={<VCard_Form_Edit />}
               />
-                 <Route
+              <Route
                 path={`/${userName}/uadmin/inquiries`}
                 element={<Inquiries />}
               />
